@@ -9,7 +9,7 @@ const sizes = {
   tablet: 1024,
   phone: 768,
 };
-
+//
 // 자동으로 media 쿼리 함수를 만들어 준다.
 const media = Object.keys(sizes).reduce((acc, label) => {
   acc[label] = (...args) => css`
