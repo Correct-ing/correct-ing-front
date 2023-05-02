@@ -50,15 +50,15 @@ const CateGoryWrap = styled.div`
 `;
 
 const HideMenu = styled.div`
-display: none;
-margin-right: 5rem;
-gap: 5rem;
-a {
-  color: black;
-  font-weight: 400;
-}
-${media.tablet`display: flex;`};
-${media.phone`display: flex;`};
+  display: none;
+  margin-right: 5rem;
+  gap: 5rem;
+  a {
+    color: black;
+    font-weight: 400;
+  }
+  ${media.tablet`display: flex;`};
+  ${media.phone`display: flex;`};
 `;
 
 const StyledButton = styled.button`
@@ -129,7 +129,7 @@ const Header = () => {
           </CateGoryWrap>
 
           <HideMenu>
-            <Sidebar/>
+            <Sidebar />
           </HideMenu>
 
           <AuthWrap>

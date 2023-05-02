@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import correctLogo from '../../assets/correct-logo.png';
+import axios from 'axios';
 
 const sizes = {
   tablet: 1024,
@@ -150,7 +151,92 @@ const JoinWrap = styled.div`
   }
 `;
 
+const ErrorMessage = styled.div`
+  color: red;
+  font-size: 0.8rem;
+  font-weight: 700;
+`;
+
 const Login = () => {
+  const JWT_EXPIRY_TIME = 24 * 3600 * 1000;
+  const navigate = useNavigate();
+  const [error, setError] = useState(null);
+  const [check, setCheck] = useState(null);
+  const [input, setInput] = useState({
+    id: '',
+    password: '',
+  });
+
+  const { id, password } = input;
+
+  const onChange = (e) => {
+    const { value, name } = e.target;
+    setInput({
+      ...input,
+      [name]: value,
+    });
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    setError(null);
+
+    if ([id, password].includes('')) {
+      setError('빈 칸을 모두 입력하세요.');
+      return;
+    }
+
+    axios
+      .post(
+        'http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/users/login',
+        {
+          id: id,
+          password: password,
+        },
+      )
+      .then((response) => {
+        console.log(response);
+        onLoginSuccess(response.data.accessToken, response.data.refreshToken);
+        setCheck(true);
+      })
+      .catch((error) => {
+        setError('로그인에 실패하였습니다.');
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    if (check) {
+      navigate('/');
+    }
+  }, [navigate, check]);
+
+  const onSilentRefresh = (accessToken, refreshToken) => {
+    console.log(accessToken, refreshToken);
+    axios
+      .post(
+        'http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/users/token',
+        {
+          accessToken: accessToken,
+          refreshToken: refreshToken,
+        },
+      )
+      .then((response) => {
+        console.log(response);
+        onLoginSuccess(response.data.accessToken, response.data.refreshToken);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const onLoginSuccess = (accessToken, refreshToken) => {
+    console.log(accessToken, refreshToken);
+    axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+
+    setTimeout(onSilentRefresh(accessToken, refreshToken), JWT_EXPIRY_TIME - 60000);
+  };
+
   return (
     <MainWrap>
       <GreenWrap />
@@ -163,16 +249,23 @@ const Login = () => {
           <h1>로그인</h1>
           <p>Welcome back! Please enter your details.</p>
         </IntroWrap>
-        <FormWrap>
+        <FormWrap onSubmit={onSubmit}>
           <FormInput>
-            <label htmlFor="id">Id</label>
-            <input id="id" placeholder="Enter your id" />
+            <label htmlFor="id">ID</label>
+            <input id="id" placeholder="Enter your id" value={id} onChange={onChange} name="id" />
           </FormInput>
           <FormInput>
             <label htmlFor="password">Password</label>
-            <input id="password" placeholder="Enter your password" />
+            <input
+              id="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={onChange}
+              name="password"
+            />
           </FormInput>
-          <SubmitBtn>로그인</SubmitBtn>
+          {error && <ErrorMessage>{error}</ErrorMessage>}
+          <SubmitBtn type="submit">로그인</SubmitBtn>
         </FormWrap>
         <JoinWrap>
           <p>계정이 없으신가요?</p>

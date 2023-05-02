@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
 import correctLogo from '../../assets/correct-logo.png';
+import axios from 'axios';
 
 const sizes = {
   tablet: 1024,
@@ -127,7 +128,133 @@ const SubmitBtn = styled.button`
   }
 `;
 
+const DupCheckBtn = styled.button`
+  background-color: #e0f2f6;
+  border: none;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  :hover {
+    background-color: #cae7e2;
+    transition: all 0.2s;
+  }
+`;
+
+const IdWrap = styled.div`
+  display: flex;
+  gap: 1rem;
+  input {
+    width: 70%;
+  }
+  button {
+    width: 25%;
+  }
+`;
+
+const ErrorMessage = styled.div`
+  color: red;
+  font-size: 0.8rem;
+  font-weight: 700;
+`;
+
+const CheckMessage = styled.div`
+  color: #6ac7b2;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-top: 1rem;
+`;
+
 const Register = () => {
+  const [error, setError] = useState(null);
+  const [message, setMessage] = useState(null);
+  const [check, setCheck] = useState(false);
+  const [input, setInput] = useState({
+    email: '',
+    id: '',
+    password: '',
+    passwordConfirm: '',
+  });
+
+  const { email, id, password, passwordConfirm } = input;
+
+  const onChange = (e) => {
+    const { value, name } = e.target;
+    setInput({
+      ...input,
+      [name]: value,
+    });
+  };
+
+  const onCheck = (e) => {
+    e.preventDefault();
+    axios
+      .get(
+        `http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/users/${id}/exists`,
+        {
+          username: id,
+        },
+      )
+      .then((response) => {
+        console.log(response);
+        if (response.data === true) {
+          setMessage(null);
+          setError('이미 존재하는 계정명입니다.');
+          setCheck(false);
+          setInput({
+            ...input,
+            id: '',
+          });
+        }
+
+        if (response.data === false) {
+          setMessage('사용 가능한 계정명입니다.');
+          setCheck(true);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    setError(null);
+
+    if ([email, id, password, passwordConfirm].includes('')) {
+      setError('빈 칸을 모두 입력하세요.');
+      return;
+    }
+
+    if (password !== passwordConfirm) {
+      setError('비밀번호가 일치하지 않습니다.');
+      setInput({
+        ...input,
+        password: '',
+        passwordConfirm: '',
+      });
+    }
+
+    if (check === false) {
+      setError('아이디 중복 확인을 해주세요.');
+      return;
+    }
+
+    axios
+      .post('http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/users', {
+        id: id,
+        email: email,
+        password: password,
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <MainWrap>
       <IntroWrap>
@@ -138,23 +265,46 @@ const Register = () => {
         <h1>회원가입</h1>
         <p>닉네임, 아이디, 비밀번호를 입력해주세요!</p>
       </IntroWrap>
-      <FormWrap>
+      <FormWrap onSubmit={onSubmit}>
         <FormInput>
-          <label htmlFor="username">Nickname</label>
-          <input id="username" placeholder="Enter your nickname" />
+          <label htmlFor="email">Nickname</label>
+          <input
+            id="email"
+            placeholder="Enter your nickname"
+            name="email"
+            onChange={onChange}
+            value={email}
+          />
         </FormInput>
         <FormInput>
-          <label htmlFor="id">Id</label>
-          <input id="id" placeholder="Enter your id" />
+          <label htmlFor="id">ID</label>
+          <IdWrap>
+            <input id="id" placeholder="Enter your id" name="id" onChange={onChange} value={id} />
+            <DupCheckBtn onClick={onCheck}>중복 확인</DupCheckBtn>
+          </IdWrap>
+          {message && <CheckMessage>{message}</CheckMessage>}
         </FormInput>
         <FormInput>
           <label htmlFor="password">Password</label>
-          <input id="password" placeholder="Enter your password" />
+          <input
+            id="password"
+            placeholder="Enter your password"
+            name="password"
+            onChange={onChange}
+            value={password}
+          />
         </FormInput>
         <FormInput>
           <label htmlFor="passwordConfirm">Password Confirm</label>
-          <input id="passwordConfrim" placeholder="Enter your password" />
+          <input
+            id="passwordConfrim"
+            placeholder="Enter your password"
+            name="passwordConfirm"
+            onChange={onChange}
+            value={passwordConfirm}
+          />
         </FormInput>
+        {error && <ErrorMessage>{error}</ErrorMessage>}
         <SubmitBtn>가입하기</SubmitBtn>
       </FormWrap>
     </MainWrap>
