@@ -171,13 +171,13 @@ const Register = () => {
   const [message, setMessage] = useState(null);
   const [check, setCheck] = useState(false);
   const [input, setInput] = useState({
-    email: '',
     id: '',
+    email: '',
     password: '',
     passwordConfirm: '',
   });
 
-  const { email, id, password, passwordConfirm } = input;
+  const { id, email, password, passwordConfirm } = input;
 
   const onChange = (e) => {
     const { value, name } = e.target;
@@ -250,8 +250,8 @@ const Register = () => {
       .then((response) => {
         console.log(response);
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((err) => {
+        console.log(err);
       });
   };
 
@@ -292,20 +292,22 @@ const Register = () => {
             name="password"
             onChange={onChange}
             value={password}
+            type="password"
           />
         </FormInput>
         <FormInput>
           <label htmlFor="passwordConfirm">Password Confirm</label>
           <input
-            id="passwordConfrim"
+            id="passwordConfirm"
             placeholder="Enter your password"
             name="passwordConfirm"
             onChange={onChange}
             value={passwordConfirm}
+            type="password"
           />
         </FormInput>
         {error && <ErrorMessage>{error}</ErrorMessage>}
-        <SubmitBtn>가입하기</SubmitBtn>
+        <SubmitBtn type="submit">가입하기</SubmitBtn>
       </FormWrap>
     </MainWrap>
   );

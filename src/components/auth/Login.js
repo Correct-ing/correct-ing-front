@@ -213,6 +213,7 @@ const Login = () => {
 
   const onSilentRefresh = (accessToken, refreshToken) => {
     console.log(accessToken, refreshToken);
+
     axios
       .post(
         'http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/users/token',
@@ -258,6 +259,7 @@ const Login = () => {
             <label htmlFor="password">Password</label>
             <input
               id="password"
+              type="password"
               placeholder="Enter your password"
               value={password}
               onChange={onChange}
