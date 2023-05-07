@@ -178,13 +178,13 @@ const Register = ({ form, onChange, onSubmit, error, onCheck }) => {
       </IntroWrap>
       <FormWrap onSubmit={onSubmit}>
         <FormInput>
-          <label htmlFor="email">Nickname</label>
+          <label htmlFor="name">Nickname</label>
           <input
-            id="email"
+            id="name"
             placeholder="Enter your nickname"
-            name="email"
+            name="name"
             onChange={onChange}
-            value={form.email}
+            value={form.name}
           />
         </FormInput>
         <FormInput>

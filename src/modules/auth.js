@@ -28,9 +28,9 @@ export const changeField = createAction(
 
 export const initializeForm = createAction(INITIALIZE_FORM, (form) => form);
 
-export const register = createAction(REGISTER, ({ id, email, password }) => ({
+export const register = createAction(REGISTER, ({ id, name, password }) => ({
   id,
-  email,
+  name,
   password,
 }));
 
@@ -56,7 +56,7 @@ export function* authSaga() {
 const initialState = {
   register: {
     id: '', // 아이디 값
-    email: '', // 닉네임 값
+    name: '', // 닉네임 값
     password: '', // 비밀번호 값
     passwordConfirm: '', // 비밀번호 확인 값
   },

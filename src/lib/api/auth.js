@@ -5,8 +5,8 @@ export const login = ({ id, password }) =>
   client.post('/api/v1/users/login', { id, password });
 
 // 회원가입
-export const register = ({ id, email, password }) =>
-  client.post('/api/v1/users', { id, email, password });
+export const register = ({ id, name, password }) =>
+  client.post('/api/v1/users', { id, name, password });
 
 // 회원가입 시 아이디 중복 체크
 export const isIdDup = ({ username }) =>

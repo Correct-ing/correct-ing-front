@@ -30,11 +30,11 @@ const RegisterForm = () => {
   const onSubmit = (e) => {
     e.preventDefault(); // 새로고침 방지
 
-    const { email, id, password, passwordConfirm } = form;
+    const { name, id, password, passwordConfirm } = form;
     if (password !== passwordConfirm) {
       return;
     }
-    dispatch(register({ id, email, password }));
+    dispatch(register({ id, name, password }));
   };
 
   const onCheck = (e) => {
