@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styled, { css } from 'styled-components';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import correctLogo from '../../assets/correct-logo.png';
-import axios from 'axios';
 
 const sizes = {
   tablet: 1024,
   phone: 768,
 };
 
-// 자동으로 media 쿼리 함수를 만들어 준다.
 const media = Object.keys(sizes).reduce((acc, label) => {
   acc[label] = (...args) => css`
     @media (max-width: ${sizes[label] / 16}em) {
@@ -157,87 +155,7 @@ const ErrorMessage = styled.div`
   font-weight: 700;
 `;
 
-const Login = () => {
-  const JWT_EXPIRY_TIME = 24 * 3600 * 1000;
-  const navigate = useNavigate();
-  const [error, setError] = useState(null);
-  const [check, setCheck] = useState(null);
-  const [input, setInput] = useState({
-    id: '',
-    password: '',
-  });
-
-  const { id, password } = input;
-
-  const onChange = (e) => {
-    const { value, name } = e.target;
-    setInput({
-      ...input,
-      [name]: value,
-    });
-  };
-
-  const onSubmit = (e) => {
-    e.preventDefault();
-    setError(null);
-
-    if ([id, password].includes('')) {
-      setError('빈 칸을 모두 입력하세요.');
-      return;
-    }
-
-    axios
-      .post(
-        'http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/users/login',
-        {
-          id: id,
-          password: password,
-        },
-      )
-      .then((response) => {
-        console.log(response);
-        onLoginSuccess(response.data.accessToken, response.data.refreshToken);
-        setCheck(true);
-      })
-      .catch((error) => {
-        setError('로그인에 실패하였습니다.');
-        console.log(error);
-      });
-  };
-
-  useEffect(() => {
-    if (check) {
-      navigate('/');
-    }
-  }, [navigate, check]);
-
-  const onSilentRefresh = (accessToken, refreshToken) => {
-    console.log(accessToken, refreshToken);
-
-    axios
-      .post(
-        'http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/users/token',
-        {
-          accessToken: accessToken,
-          refreshToken: refreshToken,
-        },
-      )
-      .then((response) => {
-        console.log(response);
-        onLoginSuccess(response.data.accessToken, response.data.refreshToken);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const onLoginSuccess = (accessToken, refreshToken) => {
-    console.log(accessToken, refreshToken);
-    axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-
-    setTimeout(onSilentRefresh(accessToken, refreshToken), JWT_EXPIRY_TIME - 60000);
-  };
-
+const Login = ({ form, onChange, onSubmit, error }) => {
   return (
     <MainWrap>
       <GreenWrap />
@@ -253,7 +171,13 @@ const Login = () => {
         <FormWrap onSubmit={onSubmit}>
           <FormInput>
             <label htmlFor="id">ID</label>
-            <input id="id" placeholder="Enter your id" value={id} onChange={onChange} name="id" />
+            <input
+              id="id"
+              placeholder="Enter your id"
+              value={form.id}
+              onChange={onChange}
+              name="id"
+            />
           </FormInput>
           <FormInput>
             <label htmlFor="password">Password</label>
@@ -261,7 +185,7 @@ const Login = () => {
               id="password"
               type="password"
               placeholder="Enter your password"
-              value={password}
+              value={form.password}
               onChange={onChange}
               name="password"
             />

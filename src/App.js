@@ -1,24 +1,30 @@
 import './App.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import GlobalStyles from './GlobalStyles';
 import Home from './components/home/Home';
-import Login from './components/auth/Login';
-import Register from './components/auth/Register';
 import Header from './components/common/Header';
+import MyPage from './components/profile/MyPage';
+import Chat from './components/chat/Chat';
+import Test from './components/test/Test';
+import Game from './components/game/Game';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 
 function App() {
   return (
     <>
       <GlobalStyles />
-      <BrowserRouter>
-        <Routes>
-          <Route element={<Header />}>
-            <Route path="/" element={<Home />}></Route>
-          </Route>
-          <Route path="/login" element={<Login />}></Route>
-          <Route path="/register" element={<Register />}></Route>
-        </Routes>
-      </BrowserRouter>
+      <Routes>
+        <Route element={<Header />}>
+          <Route path="/" element={<Home />}></Route>
+          <Route path="/mypage" element={<MyPage />}></Route>
+          <Route path="/chat" element={<Chat />}></Route>
+          <Route path="/test" element={<Test />}></Route>
+          <Route path="/game" element={<Game />}></Route>
+        </Route>
+        <Route path="/login" element={<LoginPage />}></Route>
+        <Route path="/register" element={<RegisterPage />}></Route>
+      </Routes>
     </>
   );
 }

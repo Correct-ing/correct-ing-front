@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
 import correctLogo from '../../assets/correct-logo.png';
-import axios from 'axios';
 
 const sizes = {
   tablet: 1024,
@@ -158,103 +157,15 @@ const ErrorMessage = styled.div`
   font-weight: 700;
 `;
 
-const CheckMessage = styled.div`
-  color: #6ac7b2;
-  text-align: center;
-  font-size: 0.8rem;
-  font-weight: 700;
-  margin-top: 1rem;
-`;
+// const CheckMessage = styled.div`
+//   color: #6ac7b2;
+//   text-align: center;
+//   font-size: 0.8rem;
+//   font-weight: 700;
+//   margin-top: 1rem;
+// `;
 
-const Register = () => {
-  const [error, setError] = useState(null);
-  const [message, setMessage] = useState(null);
-  const [check, setCheck] = useState(false);
-  const [input, setInput] = useState({
-    id: '',
-    email: '',
-    password: '',
-    passwordConfirm: '',
-  });
-
-  const { id, email, password, passwordConfirm } = input;
-
-  const onChange = (e) => {
-    const { value, name } = e.target;
-    setInput({
-      ...input,
-      [name]: value,
-    });
-  };
-
-  const onCheck = (e) => {
-    e.preventDefault();
-    axios
-      .get(
-        `http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/users/${id}/exists`,
-        {
-          username: id,
-        },
-      )
-      .then((response) => {
-        console.log(response);
-        if (response.data === true) {
-          setMessage(null);
-          setError('이미 존재하는 계정명입니다.');
-          setCheck(false);
-          setInput({
-            ...input,
-            id: '',
-          });
-        }
-
-        if (response.data === false) {
-          setMessage('사용 가능한 계정명입니다.');
-          setCheck(true);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const onSubmit = (e) => {
-    e.preventDefault();
-    setError(null);
-
-    if ([email, id, password, passwordConfirm].includes('')) {
-      setError('빈 칸을 모두 입력하세요.');
-      return;
-    }
-
-    if (password !== passwordConfirm) {
-      setError('비밀번호가 일치하지 않습니다.');
-      setInput({
-        ...input,
-        password: '',
-        passwordConfirm: '',
-      });
-    }
-
-    if (check === false) {
-      setError('아이디 중복 확인을 해주세요.');
-      return;
-    }
-
-    axios
-      .post('http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/users', {
-        id: id,
-        email: email,
-        password: password,
-      })
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
+const Register = ({ form, onChange, onSubmit, error, onCheck }) => {
   return (
     <MainWrap>
       <IntroWrap>
@@ -273,16 +184,22 @@ const Register = () => {
             placeholder="Enter your nickname"
             name="email"
             onChange={onChange}
-            value={email}
+            value={form.email}
           />
         </FormInput>
         <FormInput>
           <label htmlFor="id">ID</label>
           <IdWrap>
-            <input id="id" placeholder="Enter your id" name="id" onChange={onChange} value={id} />
+            <input
+              id="id"
+              placeholder="Enter your id"
+              name="id"
+              onChange={onChange}
+              value={form.id}
+            />
             <DupCheckBtn onClick={onCheck}>중복 확인</DupCheckBtn>
           </IdWrap>
-          {message && <CheckMessage>{message}</CheckMessage>}
+          {/* {message && <CheckMessage>{message}</CheckMessage>} */}
         </FormInput>
         <FormInput>
           <label htmlFor="password">Password</label>
@@ -291,7 +208,7 @@ const Register = () => {
             placeholder="Enter your password"
             name="password"
             onChange={onChange}
-            value={password}
+            value={form.password}
             type="password"
           />
         </FormInput>
@@ -302,7 +219,7 @@ const Register = () => {
             placeholder="Enter your password"
             name="passwordConfirm"
             onChange={onChange}
-            value={passwordConfirm}
+            value={form.passwordConfirm}
             type="password"
           />
         </FormInput>
