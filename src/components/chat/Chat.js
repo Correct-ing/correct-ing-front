@@ -6,6 +6,8 @@ import { IoSendSharp } from "react-icons/io5";
 import { FiSearch } from "react-icons/fi";
 import { FiChevronLeft } from "react-icons/fi";  
 import ChatInfo from './ChatInfo';
+import GptChat from './GptChat';
+import MyChat from './MyChat';
 
 const sizes = {
   phone: 768,
@@ -23,6 +25,7 @@ const media = Object.keys(sizes).reduce((acc, label) => {
 
 {/* 메인 */}
 const MainWrap = styled.div`
+  margin-left: 1rem;
   display: flex;
   justify-content: center;
 `;
@@ -185,6 +188,7 @@ const ChatResume = styled.button`
 {/* 채팅 중단 DIV */}
 const ChatGptMiddle = styled.div`
   display: flex;
+  flex-direction: column;
   width: 100%;
   height: 60%;
   background: white;
@@ -317,6 +321,17 @@ const Chat = () => {
 
             {/* Subject가 null일경우 출력*/}
             {!Subject && (<ChatInfo> </ChatInfo>)}
+            {Subject && (<GptChat text={"hello"}></GptChat>)}
+            {Subject && (<MyChat text={"hello"}></MyChat>)}
+            {Subject && (<GptChat text={"hello"}></GptChat>)}
+            {Subject && (<MyChat text={"hello"}></MyChat>)}
+            {Subject && (<GptChat text={"hello"}></GptChat>)}
+            {Subject && (<MyChat text={"hello"}></MyChat>)}
+            {Subject && (<GptChat text={"hello"}></GptChat>)}
+            {Subject && (<MyChat text={"hello"}></MyChat>)}
+            {Subject && (<GptChat text={"hello"}></GptChat>)}
+            {Subject && (<MyChat text={"hello"}></MyChat>)}
+
 
           </ChatGptMiddle>
 
@@ -381,6 +396,16 @@ const Chat = () => {
 
             {/* Subject가 null일경우 출력*/}
             {!Subject && (<ChatInfo> </ChatInfo>)}
+            {Subject && (<GptChat text={"hello"}></GptChat>)}
+            {Subject && (<MyChat text={"hello"}></MyChat>)}
+            {Subject && (<GptChat text={"hello"}></GptChat>)}
+            {Subject && (<MyChat text={"hello"}></MyChat>)}
+            {Subject && (<GptChat text={"hello"}></GptChat>)}
+            {Subject && (<MyChat text={"hello"}></MyChat>)}
+            {Subject && (<GptChat text={"hello"}></GptChat>)}
+            {Subject && (<MyChat text={"hello"}></MyChat>)}
+            {Subject && (<GptChat text={"hello"}></GptChat>)}
+            {Subject && (<MyChat text={"hello"}></MyChat>)}
 
           </ChatGptMiddle>
 
