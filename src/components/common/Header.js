@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components';
 import correctLogo from '../../assets/correct-logo.png';
 import { AiOutlineMenu } from 'react-icons/ai';
 import { BsPersonCircle } from 'react-icons/bs';
+import { useNavigate } from "react-router-dom";
 import Sidebar from './Sidebar';
 
 const sizes = {
@@ -99,6 +100,7 @@ const LogoWrap = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  cursor: pointer;
   img {
     width: 2rem;
     ${media.phone`width: 1.5rem;`};
@@ -115,11 +117,17 @@ const LogoWrap = styled.div`
 `;
 
 const Header = ({ loginRes, onLogout }) => {
+
+  const navigate = useNavigate();
+  const navigateToHome= () => {
+    navigate("/");
+  };
+
   return (
     <div>
       <StyledHeader>
         <LogoWrap>
-          <img src={correctLogo} alt="correcting 로고" />
+          <img src={correctLogo} alt="correcting 로고" onClick={navigateToHome}/>
           <Link to="/">Correct-ing</Link>
         </LogoWrap>
         <div className="right-wrap">
