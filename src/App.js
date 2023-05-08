@@ -2,20 +2,20 @@ import './App.css';
 import { Routes, Route } from 'react-router-dom';
 import GlobalStyles from './GlobalStyles';
 import Home from './components/home/Home';
-import Header from './components/common/Header';
 import MyPage from './components/profile/MyPage';
 import Chat from './components/chat/Chat';
 import Test from './components/test/Test';
 import Game from './components/game/Game';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import HeaderForm from './containers/common/HeaderForm';
 
 function App() {
   return (
     <>
       <GlobalStyles />
       <Routes>
-        <Route element={<Header />}>
+        <Route element={<HeaderForm />}>
           <Route path="/" element={<Home />}></Route>
           <Route path="/mypage" element={<MyPage />}></Route>
           <Route path="/chat" element={<Chat />}></Route>

@@ -2,18 +2,16 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeField, initializeForm, login } from '../../modules/auth';
 import Login from '../../components/auth/Login';
-import { check } from '../../modules/user';
 import { useNavigate } from '../../../node_modules/react-router-dom/dist/index';
 
 const LoginForm = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { form, auth, authError, user } = useSelector(({ auth, user }) => ({
+  const { form, auth, authError } = useSelector(({ auth }) => ({
     form: auth.login, // 상태 값 설정
     auth: auth.auth,
     authError: auth.authError,
-    user: user.user,
   }));
 
   // input 변경 감지
@@ -33,6 +31,13 @@ const LoginForm = () => {
     e.preventDefault(); // 새로고침 방지
 
     const { id, password } = form;
+
+    // input 칸을 다 입력 안했을 경우
+    if ([id, password].includes('')) {
+      setError('빈 칸을 모두 입력하세요.');
+      return;
+    }
+
     dispatch(login({ id, password }));
   };
 
@@ -51,15 +56,10 @@ const LoginForm = () => {
 
     if (auth) {
       console.log('로그인 성공');
-      dispatch(check());
-    }
-  }, [auth, authError, dispatch]);
-
-  useEffect(() => {
-    if (user) {
+      console.log(auth);
       navigate('/');
     }
-  }, [navigate, user]);
+  }, [auth, authError, navigate]);
 
   return (
     <Login form={form} onChange={onChange} onSubmit={onSubmit} error={error} />

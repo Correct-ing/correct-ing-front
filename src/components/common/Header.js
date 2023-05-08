@@ -3,6 +3,7 @@ import { Outlet, Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import correctLogo from '../../assets/correct-logo.png';
 import { AiOutlineMenu } from 'react-icons/ai';
+import { BsPersonCircle } from 'react-icons/bs';
 import Sidebar from './Sidebar';
 
 const sizes = {
@@ -64,6 +65,11 @@ const HideMenu = styled.div`
 const StyledButton = styled.button`
   background-color: transparent;
   border: none;
+  font-size: 0.9rem;
+  ${media.phone`font-size: 0.8rem;`};
+  color: #c6c4c4;
+  font-weight: 500;
+  cursor: pointer;
   a {
     text-decoration: none;
     font-size: 0.9rem;
@@ -74,17 +80,18 @@ const StyledButton = styled.button`
 
 const AuthWrap = styled.div`
   display: flex;
-  gap: 1rem;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+  div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   ${media.phone`gap: 0.3rem;`};
   a {
     color: #c6c4c4;
     font-weight: 500;
-  }
-  svg {
-    margin-left: 0.5rem;
-    @media screen and (min-width: 1025px) {
-      display: none;
-    }
   }
 `;
 
@@ -107,7 +114,7 @@ const LogoWrap = styled.div`
   }
 `;
 
-const Header = () => {
+const Header = ({ auth, onLogout }) => {
   return (
     <div>
       <StyledHeader>
@@ -132,17 +139,35 @@ const Header = () => {
             <Sidebar />
           </HideMenu>
 
-          <AuthWrap>
-            <StyledButton>
-              <Link to="/login">로그인</Link>
-            </StyledButton>
+          {auth ? (
+            <AuthWrap>
+              <div>
+                <BsPersonCircle />
+                <StyledButton>
+                  <Link
+                    to="/myPage"
+                    style={{ color: '#142231', fontWeight: '700' }}
+                  >
+                    {auth.name}
+                  </Link>
+                </StyledButton>
+              </div>
 
-            <StyledButton>
-              <Link to="/register">회원가입</Link>
-            </StyledButton>
+              <StyledButton onClick={onLogout}>로그아웃</StyledButton>
+            </AuthWrap>
+          ) : (
+            <AuthWrap>
+              <StyledButton>
+                <Link to="/login">로그인</Link>
+              </StyledButton>
 
-            <AiOutlineMenu />
-          </AuthWrap>
+              <StyledButton>
+                <Link to="/register">회원가입</Link>
+              </StyledButton>
+
+              <AiOutlineMenu />
+            </AuthWrap>
+          )}
         </div>
       </StyledHeader>
       <main>
