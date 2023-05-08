@@ -8,10 +8,10 @@ const LoginForm = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { form, auth, authError } = useSelector(({ auth }) => ({
+  const { form, loginRes, loginErr } = useSelector(({ auth }) => ({
     form: auth.login, // 상태 값 설정
-    auth: auth.auth,
-    authError: auth.authError,
+    loginRes: auth.loginRes,
+    loginErr: auth.loginErr,
   }));
 
   // input 변경 감지
@@ -47,19 +47,19 @@ const LoginForm = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (authError) {
+    if (loginErr) {
       console.log('오류 발생');
-      console.log(authError);
+      console.log(loginErr);
       setError('로그인 실패');
       return;
     }
 
-    if (auth) {
+    if (loginRes) {
       console.log('로그인 성공');
-      console.log(auth);
+      console.log(loginRes);
       navigate('/');
     }
-  }, [auth, authError, navigate]);
+  }, [loginRes, loginErr, navigate]);
 
   return (
     <Login form={form} onChange={onChange} onSubmit={onSubmit} error={error} />

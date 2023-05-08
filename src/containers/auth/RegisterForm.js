@@ -8,10 +8,10 @@ const RegisterForm = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { form, auth, authError } = useSelector(({ auth }) => ({
+  const { form, registerRes, registerErr } = useSelector(({ auth }) => ({
     form: auth.register,
-    auth: auth.auth,
-    authError: auth.authError,
+    registerRes: auth.registerRes,
+    registerErr: auth.registerErr,
   }));
 
   // input 변경 감지
@@ -51,18 +51,18 @@ const RegisterForm = () => {
 
   // 회원가입 성공/실패 처리
   useEffect(() => {
-    if (authError) {
+    if (registerErr) {
       console.log('오류 발생');
-      console.log(authError);
+      console.log(registerErr);
       setError('회원가입 오류');
       return;
     }
-    if (auth) {
+    if (registerRes) {
       console.log('회원가입 성공');
-      console.log(auth);
+      console.log(registerRes);
       navigate('/login');
     }
-  }, [auth, authError, navigate]);
+  }, [registerRes, registerErr, navigate]);
 
   return (
     <Register

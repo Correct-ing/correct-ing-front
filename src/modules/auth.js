@@ -64,8 +64,12 @@ const initialState = {
     id: '', // 아이디 값
     password: '', // 비밀번호 값
   },
-  auth: null,
-  authError: null,
+  loginRes: null,
+  loginErr: null,
+  dupRes: null,
+  dupErr: null,
+  registerRes: null,
+  registerErr: null,
 };
 
 const auth = handleActions(
@@ -77,34 +81,36 @@ const auth = handleActions(
     [INITIALIZE_FORM]: (state, { payload: form }) => ({
       ...state,
       [form]: initialState[form],
-      authError: null,
+      loginErr: null,
+      dupErr: null,
+      registerErr: null,
     }),
-    [DUP_SUCCESS]: (state, { payload: auth }) => ({
+    [DUP_SUCCESS]: (state, { payload: dupRes }) => ({
       ...state,
-      authError: null,
-      auth,
+      dupErr: null,
+      dupRes,
     }),
     [DUP_FAILURE]: (state, { payload: error }) => ({
       ...state,
-      authError: error,
+      dupErr: error,
     }),
-    [REGISTER_SUCCESS]: (state, { payload: auth }) => ({
+    [REGISTER_SUCCESS]: (state, { payload: registerRes }) => ({
       ...state,
-      authError: null,
-      auth,
+      registerErr: null,
+      registerRes: true,
     }),
     [REGISTER_FAILURE]: (state, { payload: error }) => ({
       ...state,
-      authError: error,
+      registerErr: error,
     }),
-    [LOGIN_SUCCESS]: (state, { payload: auth }) => ({
+    [LOGIN_SUCCESS]: (state, { payload: loginRes }) => ({
       ...state,
-      authError: null,
-      auth,
+      loginErr: null,
+      loginRes,
     }),
     [LOGIN_FAILURE]: (state, { payload: error }) => ({
       ...state,
-      authError: error,
+      loginErr: error,
     }),
   },
   initialState,

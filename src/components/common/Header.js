@@ -114,7 +114,7 @@ const LogoWrap = styled.div`
   }
 `;
 
-const Header = ({ auth, onLogout }) => {
+const Header = ({ loginRes, onLogout }) => {
   return (
     <div>
       <StyledHeader>
@@ -139,7 +139,7 @@ const Header = ({ auth, onLogout }) => {
             <Sidebar />
           </HideMenu>
 
-          {auth ? (
+          {loginRes ? (
             <AuthWrap>
               <div>
                 <BsPersonCircle />
@@ -148,7 +148,7 @@ const Header = ({ auth, onLogout }) => {
                     to="/myPage"
                     style={{ color: '#142231', fontWeight: '700' }}
                   >
-                    {auth.name}
+                    {loginRes.name}
                   </Link>
                 </StyledButton>
               </div>
