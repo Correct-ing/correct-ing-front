@@ -1,14 +1,13 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import axios from 'axios';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { IoSendSharp } from "react-icons/io5";
 import { FiSearch } from "react-icons/fi";
 import { FiChevronLeft } from "react-icons/fi";  
 import ChatInfo from './ChatInfo';
 
 const sizes = {
-  tablet: 1024,
   phone: 768,
 };
 
@@ -32,6 +31,7 @@ const MainWrap = styled.div`
 const ListSectionWrap = styled.section`
   width: 30vw;
   height: 100vh;
+  ${media.phone`width: 100vw;`};
   justify-content: center;
   display: flex;
 `
@@ -40,6 +40,7 @@ const ListSectionWrap = styled.section`
 const ChatSectionWrap = styled.section`
   width: 70vw;
   height: 100vh;
+  ${media.phone`width: 100vw;`};
   justify-content: center;
 `
 
@@ -103,6 +104,7 @@ const ChatText = styled.input`
   position: absolute;
   height: 5%;
   width: 23%;
+  ${media.phone`width: 80%;`};
   border-radius: 1rem;
   border-style: hidden;
   background-color: rgba(217, 217, 217, 0.4);
@@ -226,6 +228,7 @@ const ChatInput = styled.input`
   position: absolute;
   height: 7%;
   width: 50%;
+  ${media.phone`width: 80%;`};
   border-radius: 3rem;
   border-style: hidden;
   background-color: rgba(127, 168, 157, 0.3);
@@ -239,6 +242,20 @@ const Chat = () => {
 
   const [Subject, setSubject] = useState();
   const [isSelect, setisOn] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    function handleResize() {
+      const { innerWidth: width } = window;
+      setIsMobile(width < 768);
+      setIsDesktop(width >= 768);
+    }
+    window.addEventListener('resize', handleResize);
+    handleResize(); // 초기값 설정
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
 
   // List 클릭 시 토글
   const ListClick = (name, e) => {
@@ -248,7 +265,9 @@ const Chat = () => {
 
   return (
     <MainWrap>
-      <ListSectionWrap>
+
+{/*    모바일  버전           */}
+      {isMobile && !isSelect && <ListSectionWrap>
         <ChatListWrap>
           
           <ChatListTop>
@@ -281,9 +300,9 @@ const Chat = () => {
           </ChatListBottom>
 
         </ChatListWrap>
-      </ListSectionWrap>
+      </ListSectionWrap>}
 
-      <ChatSectionWrap>
+      {isSelect && isMobile && <ChatSectionWrap>
 
         <ChatGptWrap>
 
@@ -307,8 +326,73 @@ const Chat = () => {
 
         </ChatGptWrap>
 
-      </ChatSectionWrap>
+      </ChatSectionWrap>}
       
+
+{/*    PC 버전   */}
+
+    {isDesktop && <ListSectionWrap>
+        <ChatListWrap>
+          
+          <ChatListTop>
+            <h1>Chat List</h1>
+          </ChatListTop>
+          
+          <ChatListMiddle>
+            <ChatText placeholder='Search'/>
+          </ChatListMiddle>
+
+          <ChatListBottom>
+
+            <RecordList onClick={(e) => {ListClick("Business", e)}}>
+              <h1>Business</h1>
+              <h2>6:56 PM</h2>
+            </RecordList>
+            <RecordList onClick={(e) => {ListClick("Daily Life", e)}}>
+              <h1>Daily Life</h1>
+              <h2>Yesterday</h2>
+            </RecordList>
+            <RecordList onClick={(e) => {ListClick("Education", e)}}>
+              <h1>Education</h1>
+              <h2>Yesterday</h2>
+            </RecordList>
+            <RecordList onClick={(e) => {ListClick("Interest", e)}}>
+              <h1>Interest</h1>
+              <h2>Tuesday</h2>
+            </RecordList>
+
+          </ChatListBottom>
+
+        </ChatListWrap>
+      </ListSectionWrap>}
+
+      {isDesktop && <ChatSectionWrap>
+
+        <ChatGptWrap>
+
+          <ChatGptTop>
+            <ChatResume onClick={(e) => {ListClick(null, e)}}>
+              <FiChevronLeft size="4rem" color="#6AC7B2"></FiChevronLeft>
+            </ChatResume>
+            <h1>{Subject}</h1>
+          </ChatGptTop>
+
+          <ChatGptMiddle>
+
+            {/* Subject가 null일경우 출력*/}
+            {!Subject && (<ChatInfo> </ChatInfo>)}
+
+          </ChatGptMiddle>
+
+          <ChatGptBottom>
+            <ChatInput placeholder='Type your message here'></ChatInput>
+          </ChatGptBottom>
+
+        </ChatGptWrap>
+
+      </ChatSectionWrap>}
+
+
     </MainWrap>
   );
 };
