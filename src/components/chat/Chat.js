@@ -1,10 +1,10 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import axios from 'axios';
+// import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { IoSendSharp } from "react-icons/io5";
-import { FiSearch } from "react-icons/fi";
-import { FiChevronLeft } from "react-icons/fi";  
+// import { IoSendSharp } from 'react-icons/io5';
+// import { FiSearch } from 'react-icons/fi';
+import { FiChevronLeft } from 'react-icons/fi';
 import ChatInfo from './ChatInfo';
 import GptChat from './GptChat';
 import MyChat from './MyChat';
@@ -23,31 +23,31 @@ const media = Object.keys(sizes).reduce((acc, label) => {
   return acc;
 }, {});
 
-{/* 메인 */}
+// 메인
 const MainWrap = styled.div`
   margin-left: 1rem;
   display: flex;
   justify-content: center;
 `;
 
-{/* 챗리스트 Section 전체 */}
+// 챗리스트 Section 전체
 const ListSectionWrap = styled.section`
   width: 30vw;
   height: 100vh;
   ${media.phone`width: 100vw;`};
   justify-content: center;
   display: flex;
-`
+`;
 
-{/* 채팅 Section 전체 */}
+// 채팅 Section 전체
 const ChatSectionWrap = styled.section`
   width: 70vw;
   height: 100vh;
   ${media.phone`width: 100vw;`};
   justify-content: center;
-`
+`;
 
-{/* 챗리스트 DIV */}
+// 챗리스트 DIV
 const ChatListWrap = styled.section`
   margin: 3rem auto;
   width: 90%;
@@ -55,12 +55,11 @@ const ChatListWrap = styled.section`
   justify-content: center;
   background-color: black;
   border-radius: 5rem;
-  background: #FFFFFF;
+  background: #ffffff;
   box-shadow: 0rem 0.1rem 0.5rem 0.1rem rgba(0, 0, 0, 0.1);
+`;
 
-`
-
-{/* 채팅 DIV */}
+// 채팅 DIV
 const ChatGptWrap = styled.div`
   justify-content: center;
   margin: 3rem auto;
@@ -68,20 +67,18 @@ const ChatGptWrap = styled.div`
   height: 80%;
   background-color: black;
   border-radius: 5rem;
-  background: #FFFFFF;
+  background: #ffffff;
   box-shadow: 0rem 0.1rem 0.5rem 0.1rem rgba(0, 0, 0, 0.1);
+`;
 
-`
-
-{/* 챗리스트 상단 DIV */}
+// 챗리스트 상단 DIV
 const ChatListTop = styled.div`
   display: flex;
   width: 100%;
   height: 5rem;
   margin-top: 2rem;
 
-  h1{
-
+  h1 {
     position: absolute;
     font-style: normal;
     font-size: 2rem;
@@ -89,20 +86,18 @@ const ChatListTop = styled.div`
     align-items: center;
     margin: 1rem 2.5rem;
     font-weight: 600;
-    color: #6AC7B2;
+    color: #6ac7b2;
   }
+`;
 
-`
-
-{/* 챗리스트 중단 DIV */}
+// 챗리스트 중단 DIV
 const ChatListMiddle = styled.div`
   display: flex;
   width: 100%;
   height: 4rem;
   justify-content: center;
-
-`
-{/* 챗리스트 검색창 */}
+`;
+// 챗리스트 검색창
 const ChatText = styled.input`
   position: absolute;
   height: 5%;
@@ -113,24 +108,23 @@ const ChatText = styled.input`
   background-color: rgba(217, 217, 217, 0.4);
   font-size: 1.5rem;
   text-indent: 2rem;
-
-`
-{/* 챗리스트 하단 DIV */}
+`;
+// 챗리스트 하단 DIV
 const ChatListBottom = styled.div`
   width: 90%;
   height: 27rem;
   justify-content: center;
   margin: 1.5rem auto;
-`
+`;
 
-{/* 챗리스트 List */}
+// 챗리스트 List
 const RecordList = styled.li`
   display: flex;
   width: 90%;
   height: 4rem;
   margin: 1rem auto;
 
-  h1{
+  h1 {
     width: 100%;
     margin: 0.4rem auto;
     font-family: 'Roboto';
@@ -140,7 +134,7 @@ const RecordList = styled.li`
     border-bottom: 0.1rem solid rgba(130, 130, 130, 0.4);
   }
 
-  h2{
+  h2 {
     width: 40%;
     margin: 0.4rem auto;
     font-family: 'Roboto';
@@ -150,31 +144,30 @@ const RecordList = styled.li`
     border-bottom: 0.1rem solid rgba(130, 130, 130, 0.4);
   }
 
-  button{
-    
+  button {
   }
-`
-{/* 채팅 상단 DIV */}
+`;
+// 채팅 상단 DIV
 const ChatGptTop = styled.div`
-  display: flex;                       
+  display: flex;
   width: 100%;
   height: 30%;
   border-radius: 5rem;
   background: rgba(224, 224, 224, 0.4);
   max-height: 20rem;
 
-  h1{
+  h1 {
     width: 100%;
     margin: 3rem auto;
     margin-left: 4rem;
     font-style: normal;
     font-weight: 600;
     font-size: 1.5rem;
-    color: black
+    color: black;
   }
-`
+`;
 
-{/* 채팅 상단 Button */}
+// 채팅 상단 Button
 const ChatResume = styled.button`
   border: none;
   margin-top: 1.5rem;
@@ -183,9 +176,9 @@ const ChatResume = styled.button`
   cursor: pointer;
   width: 0rem;
   height: 0rem;
-`
+`;
 
-{/* 채팅 중단 DIV */}
+// 채팅 중단 DIV
 const ChatGptMiddle = styled.div`
   display: flex;
   flex-direction: column;
@@ -202,20 +195,20 @@ const ChatGptMiddle = styled.div`
     border-radius: 5rem; /* 스크롤바 둥근 테두리 */
   }
   ::-webkit-scrollbar-track {
-    background: white;  /*스크롤바 뒷 배경 색상*/
+    background: white; /*스크롤바 뒷 배경 색상*/
   }
-  h1{
+  h1 {
     width: 100%;
     margin: 3.5rem auto;
     margin-left: 4rem;
     font-style: normal;
     font-weight: 600;
     font-size: 1.5rem;
-    color: black
+    color: black;
   }
-`
+`;
 
-{/* 채팅 하단 DIV */}
+// 채팅 하단 DIV
 const ChatGptBottom = styled.div`
   display: flex;
   width: 100%;
@@ -224,10 +217,9 @@ const ChatGptBottom = styled.div`
   background: white;
   border-radius: 5rem;
   margin-top: 2rem;
+`;
 
-`
-
-{/* 채팅 입력창 */}
+//  채팅 입력창
 const ChatInput = styled.input`
   position: absolute;
   height: 7%;
@@ -238,12 +230,9 @@ const ChatInput = styled.input`
   background-color: rgba(127, 168, 157, 0.3);
   font-size: 1.5rem;
   text-indent: 2rem;
-
-
-`
+`;
 
 const Chat = () => {
-
   const [Subject, setSubject] = useState();
   const [isSelect, setisOn] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -260,7 +249,6 @@ const Chat = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-
   // List 클릭 시 토글
   const ListClick = (name, e) => {
     setSubject(name);
@@ -269,155 +257,178 @@ const Chat = () => {
 
   return (
     <MainWrap>
+      {/*    모바일  버전           */}
+      {isMobile && !isSelect && (
+        <ListSectionWrap>
+          <ChatListWrap>
+            <ChatListTop>
+              <h1>Chat List</h1>
+            </ChatListTop>
 
-{/*    모바일  버전           */}
-      {isMobile && !isSelect && <ListSectionWrap>
-        <ChatListWrap>
-          
-          <ChatListTop>
-            <h1>Chat List</h1>
-          </ChatListTop>
-          
-          <ChatListMiddle>
-            <ChatText placeholder='Search'/>
-          </ChatListMiddle>
+            <ChatListMiddle>
+              <ChatText placeholder="Search" />
+            </ChatListMiddle>
 
-          <ChatListBottom>
+            <ChatListBottom>
+              <RecordList
+                onClick={(e) => {
+                  ListClick('Business', e);
+                }}
+              >
+                <h1>Business</h1>
+                <h2>6:56 PM</h2>
+              </RecordList>
+              <RecordList
+                onClick={(e) => {
+                  ListClick('Daily Life', e);
+                }}
+              >
+                <h1>Daily Life</h1>
+                <h2>Yesterday</h2>
+              </RecordList>
+              <RecordList
+                onClick={(e) => {
+                  ListClick('Education', e);
+                }}
+              >
+                <h1>Education</h1>
+                <h2>Yesterday</h2>
+              </RecordList>
+              <RecordList
+                onClick={(e) => {
+                  ListClick('Interest', e);
+                }}
+              >
+                <h1>Interest</h1>
+                <h2>Tuesday</h2>
+              </RecordList>
+            </ChatListBottom>
+          </ChatListWrap>
+        </ListSectionWrap>
+      )}
 
-            <RecordList onClick={(e) => {ListClick("Business", e)}}>
-              <h1>Business</h1>
-              <h2>6:56 PM</h2>
-            </RecordList>
-            <RecordList onClick={(e) => {ListClick("Daily Life", e)}}>
-              <h1>Daily Life</h1>
-              <h2>Yesterday</h2>
-            </RecordList>
-            <RecordList onClick={(e) => {ListClick("Education", e)}}>
-              <h1>Education</h1>
-              <h2>Yesterday</h2>
-            </RecordList>
-            <RecordList onClick={(e) => {ListClick("Interest", e)}}>
-              <h1>Interest</h1>
-              <h2>Tuesday</h2>
-            </RecordList>
+      {isSelect && isMobile && (
+        <ChatSectionWrap>
+          <ChatGptWrap>
+            <ChatGptTop>
+              <ChatResume
+                onClick={(e) => {
+                  ListClick(null, e);
+                }}
+              >
+                <FiChevronLeft size="4rem" color="#6AC7B2"></FiChevronLeft>
+              </ChatResume>
+              <h1>{Subject}</h1>
+            </ChatGptTop>
 
-          </ChatListBottom>
+            <ChatGptMiddle>
+              {/* Subject가 null일경우 출력*/}
+              {!Subject && <ChatInfo> </ChatInfo>}
+              {Subject && <GptChat text={'hello'}></GptChat>}
+              {Subject && <MyChat text={'hello'}></MyChat>}
+              {Subject && <GptChat text={'hello'}></GptChat>}
+              {Subject && <MyChat text={'hello'}></MyChat>}
+              {Subject && <GptChat text={'hello'}></GptChat>}
+              {Subject && <MyChat text={'hello'}></MyChat>}
+              {Subject && <GptChat text={'hello'}></GptChat>}
+              {Subject && <MyChat text={'hello'}></MyChat>}
+              {Subject && <GptChat text={'hello'}></GptChat>}
+              {Subject && <MyChat text={'hello'}></MyChat>}
+            </ChatGptMiddle>
 
-        </ChatListWrap>
-      </ListSectionWrap>}
+            <ChatGptBottom>
+              <ChatInput placeholder="Type your message here"></ChatInput>
+            </ChatGptBottom>
+          </ChatGptWrap>
+        </ChatSectionWrap>
+      )}
 
-      {isSelect && isMobile && <ChatSectionWrap>
+      {/*    PC 버전   */}
 
-        <ChatGptWrap>
+      {isDesktop && (
+        <ListSectionWrap>
+          <ChatListWrap>
+            <ChatListTop>
+              <h1>Chat List</h1>
+            </ChatListTop>
 
-          <ChatGptTop>
-            <ChatResume onClick={(e) => {ListClick(null, e)}}>
-              <FiChevronLeft size="4rem" color="#6AC7B2"></FiChevronLeft>
-            </ChatResume>
-            <h1>{Subject}</h1>
-          </ChatGptTop>
+            <ChatListMiddle>
+              <ChatText placeholder="Search" />
+            </ChatListMiddle>
 
-          <ChatGptMiddle>
+            <ChatListBottom>
+              <RecordList
+                onClick={(e) => {
+                  ListClick('Business', e);
+                }}
+              >
+                <h1>Business</h1>
+                <h2>6:56 PM</h2>
+              </RecordList>
+              <RecordList
+                onClick={(e) => {
+                  ListClick('Daily Life', e);
+                }}
+              >
+                <h1>Daily Life</h1>
+                <h2>Yesterday</h2>
+              </RecordList>
+              <RecordList
+                onClick={(e) => {
+                  ListClick('Education', e);
+                }}
+              >
+                <h1>Education</h1>
+                <h2>Yesterday</h2>
+              </RecordList>
+              <RecordList
+                onClick={(e) => {
+                  ListClick('Interest', e);
+                }}
+              >
+                <h1>Interest</h1>
+                <h2>Tuesday</h2>
+              </RecordList>
+            </ChatListBottom>
+          </ChatListWrap>
+        </ListSectionWrap>
+      )}
 
-            {/* Subject가 null일경우 출력*/}
-            {!Subject && (<ChatInfo> </ChatInfo>)}
-            {Subject && (<GptChat text={"hello"}></GptChat>)}
-            {Subject && (<MyChat text={"hello"}></MyChat>)}
-            {Subject && (<GptChat text={"hello"}></GptChat>)}
-            {Subject && (<MyChat text={"hello"}></MyChat>)}
-            {Subject && (<GptChat text={"hello"}></GptChat>)}
-            {Subject && (<MyChat text={"hello"}></MyChat>)}
-            {Subject && (<GptChat text={"hello"}></GptChat>)}
-            {Subject && (<MyChat text={"hello"}></MyChat>)}
-            {Subject && (<GptChat text={"hello"}></GptChat>)}
-            {Subject && (<MyChat text={"hello"}></MyChat>)}
+      {isDesktop && (
+        <ChatSectionWrap>
+          <ChatGptWrap>
+            <ChatGptTop>
+              <ChatResume
+                onClick={(e) => {
+                  ListClick(null, e);
+                }}
+              >
+                <FiChevronLeft size="4rem" color="#6AC7B2"></FiChevronLeft>
+              </ChatResume>
+              <h1>{Subject}</h1>
+            </ChatGptTop>
 
+            <ChatGptMiddle>
+              {/* Subject가 null일경우 출력*/}
+              {!Subject && <ChatInfo> </ChatInfo>}
+              {Subject && <GptChat text={'hello'}></GptChat>}
+              {Subject && <MyChat text={'hello'}></MyChat>}
+              {Subject && <GptChat text={'hello'}></GptChat>}
+              {Subject && <MyChat text={'hello'}></MyChat>}
+              {Subject && <GptChat text={'hello'}></GptChat>}
+              {Subject && <MyChat text={'hello'}></MyChat>}
+              {Subject && <GptChat text={'hello'}></GptChat>}
+              {Subject && <MyChat text={'hello'}></MyChat>}
+              {Subject && <GptChat text={'hello'}></GptChat>}
+              {Subject && <MyChat text={'hello'}></MyChat>}
+            </ChatGptMiddle>
 
-          </ChatGptMiddle>
-
-          <ChatGptBottom>
-            <ChatInput placeholder='Type your message here'></ChatInput>
-          </ChatGptBottom>
-
-        </ChatGptWrap>
-
-      </ChatSectionWrap>}
-      
-
-{/*    PC 버전   */}
-
-    {isDesktop && <ListSectionWrap>
-        <ChatListWrap>
-          
-          <ChatListTop>
-            <h1>Chat List</h1>
-          </ChatListTop>
-          
-          <ChatListMiddle>
-            <ChatText placeholder='Search'/>
-          </ChatListMiddle>
-
-          <ChatListBottom>
-
-            <RecordList onClick={(e) => {ListClick("Business", e)}}>
-              <h1>Business</h1>
-              <h2>6:56 PM</h2>
-            </RecordList>
-            <RecordList onClick={(e) => {ListClick("Daily Life", e)}}>
-              <h1>Daily Life</h1>
-              <h2>Yesterday</h2>
-            </RecordList>
-            <RecordList onClick={(e) => {ListClick("Education", e)}}>
-              <h1>Education</h1>
-              <h2>Yesterday</h2>
-            </RecordList>
-            <RecordList onClick={(e) => {ListClick("Interest", e)}}>
-              <h1>Interest</h1>
-              <h2>Tuesday</h2>
-            </RecordList>
-
-          </ChatListBottom>
-
-        </ChatListWrap>
-      </ListSectionWrap>}
-
-      {isDesktop && <ChatSectionWrap>
-
-        <ChatGptWrap>
-
-          <ChatGptTop>
-            <ChatResume onClick={(e) => {ListClick(null, e)}}>
-              <FiChevronLeft size="4rem" color="#6AC7B2"></FiChevronLeft>
-            </ChatResume>
-            <h1>{Subject}</h1>
-          </ChatGptTop>
-
-          <ChatGptMiddle>
-
-            {/* Subject가 null일경우 출력*/}
-            {!Subject && (<ChatInfo> </ChatInfo>)}
-            {Subject && (<GptChat text={"hello"}></GptChat>)}
-            {Subject && (<MyChat text={"hello"}></MyChat>)}
-            {Subject && (<GptChat text={"hello"}></GptChat>)}
-            {Subject && (<MyChat text={"hello"}></MyChat>)}
-            {Subject && (<GptChat text={"hello"}></GptChat>)}
-            {Subject && (<MyChat text={"hello"}></MyChat>)}
-            {Subject && (<GptChat text={"hello"}></GptChat>)}
-            {Subject && (<MyChat text={"hello"}></MyChat>)}
-            {Subject && (<GptChat text={"hello"}></GptChat>)}
-            {Subject && (<MyChat text={"hello"}></MyChat>)}
-
-          </ChatGptMiddle>
-
-          <ChatGptBottom>
-            <ChatInput placeholder='Type your message here'></ChatInput>
-          </ChatGptBottom>
-
-        </ChatGptWrap>
-
-      </ChatSectionWrap>}
-
-
+            <ChatGptBottom>
+              <ChatInput placeholder="Type your message here"></ChatInput>
+            </ChatGptBottom>
+          </ChatGptWrap>
+        </ChatSectionWrap>
+      )}
     </MainWrap>
   );
 };
