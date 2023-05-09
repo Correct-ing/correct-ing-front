@@ -79,7 +79,7 @@ const ChatListTop = styled.div`
   margin-top: 2rem;
 
   h1 {
-    position: absolute;
+    position: flex;
     font-style: normal;
     font-size: 2rem;
     display: flex;
@@ -99,9 +99,9 @@ const ChatListMiddle = styled.div`
 `;
 // 챗리스트 검색창
 const ChatText = styled.input`
-  position: absolute;
-  height: 5%;
-  width: 23%;
+  position: flex;
+  height: 70%;
+  width: 80%;
   ${media.phone`width: 80%;`};
   border-radius: 1rem;
   border-style: hidden;
@@ -169,13 +169,14 @@ const ChatGptTop = styled.div`
 
 // 채팅 상단 Button
 const ChatResume = styled.button`
+  display: flex;
   border: none;
   margin-top: 1.5rem;
-  background: rgba(240, 240, 240, 0.4);
+  background: rgba(242, 242, 242, 0.4);
   margin-left: 2rem;
   cursor: pointer;
-  width: 0rem;
-  height: 0rem;
+  width: 5rem;
+  height: 5rem;
 `;
 
 // 채팅 중단 DIV
@@ -219,11 +220,11 @@ const ChatGptBottom = styled.div`
   margin-top: 2rem;
 `;
 
-//  채팅 입력창
+// 채팅 입력창
 const ChatInput = styled.input`
-  position: absolute;
-  height: 7%;
-  width: 50%;
+  position: flex;
+  height: 80%;
+  width: 80%;
   ${media.phone`width: 80%;`};
   border-radius: 3rem;
   border-style: hidden;
