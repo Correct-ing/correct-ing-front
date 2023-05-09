@@ -6,6 +6,7 @@ import { AiOutlineMenu } from 'react-icons/ai';
 import { BsPersonCircle } from 'react-icons/bs';
 import { useNavigate } from "react-router-dom";
 import Sidebar from './Sidebar';
+import { useLocation } from 'react-router-dom';
 
 const sizes = {
   tablet: 1024,
@@ -44,8 +45,8 @@ const CateGoryWrap = styled.div`
   margin-right: 5rem;
   gap: 5rem;
   a {
-    color: black;
-    font-weight: 400;
+    color: inherit;
+    font-weight: inherit;
   }
   ${media.tablet`display: none;`};
   ${media.phone`display: none;`};
@@ -68,14 +69,20 @@ const StyledButton = styled.button`
   border: none;
   font-size: 0.9rem;
   ${media.phone`font-size: 0.8rem;`};
-  color: #c6c4c4;
+  color: black;
   font-weight: 500;
   cursor: pointer;
+
   a {
     text-decoration: none;
     font-size: 0.9rem;
     ${media.phone`font-size: 0.8rem;`};
     letter-spacing: 0.03rem;
+  }
+
+  &.active {
+    color: #6AC7B2;
+    font-weight: 800;
   }
 `;
 
@@ -116,7 +123,10 @@ const LogoWrap = styled.div`
   }
 `;
 
+
 const Header = ({ loginRes, onLogout }) => {
+  const location = useLocation();
+  console.log(location);
 
   const navigate = useNavigate();
   const navigateToHome= () => {
@@ -132,14 +142,14 @@ const Header = ({ loginRes, onLogout }) => {
         </LogoWrap>
         <div className="right-wrap">
           <CateGoryWrap>
-            <StyledButton>
-              <Link to={loginRes ? '/chat' : '/login'}>챗봇</Link>
+            <StyledButton className={location.pathname === '/chat' ? 'active' : ''}>
+              <Link to="/chat">챗봇</Link>
             </StyledButton>
-            <StyledButton>
-              <Link to={loginRes ? '/test' : '/login'}>테스트</Link>
+            <StyledButton className={location.pathname === '/test' ? 'active' : ''}>
+              <Link to="/test">테스트</Link>
             </StyledButton>
-            <StyledButton>
-              <Link to={loginRes ? '/game' : '/login'}>게임</Link>
+            <StyledButton className={location.pathname === '/game' ? 'active' : ''}>
+              <Link to="/game">게임</Link>
             </StyledButton>
           </CateGoryWrap>
 
