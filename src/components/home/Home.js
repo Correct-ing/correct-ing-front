@@ -154,7 +154,7 @@ const WeakButton = styled.button`
   border-radius: 25px;
 `;
 
-const Home = () => {
+const Home = ({ loginRes }) => {
   return (
     <MainWrap>
       <IntroWrap>
@@ -175,7 +175,7 @@ const Home = () => {
             <p>하면서 공부해요.</p>
           </div>
           <ChatButton>
-            <Link to="/chat">채팅하러 가기</Link>
+            <Link to={loginRes ? '/chat' : '/login'}>채팅하러 가기</Link>
           </ChatButton>
         </InfoWrap>
       </ChatWrap>
@@ -188,7 +188,7 @@ const Home = () => {
             <p>실력을 향상시켜요.</p>
           </div>
           <WeakButton>
-            <Link to="/myPage">취약점 분석</Link>
+            <Link to={loginRes ? '/myPage' : '/login'}>취약점 분석</Link>
           </WeakButton>
         </InfoWrap>
         <img src={weakImg} alt="취약점 분석 이미지" />

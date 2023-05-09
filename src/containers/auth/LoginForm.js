@@ -56,7 +56,9 @@ const LoginForm = () => {
 
     if (loginRes) {
       console.log('로그인 성공');
-      console.log(loginRes);
+      localStorage.clear(); // localStorage 초기화
+      localStorage.setItem('accessToken', loginRes.accessToken); // accessToken localStorage에 저장
+      localStorage.setItem('refreshToken', loginRes.refreshToken); // refreshToken localStorage에 저장
       navigate('/');
     }
   }, [loginRes, loginErr, navigate]);

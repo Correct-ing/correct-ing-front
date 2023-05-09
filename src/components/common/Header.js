@@ -133,13 +133,13 @@ const Header = ({ loginRes, onLogout }) => {
         <div className="right-wrap">
           <CateGoryWrap>
             <StyledButton>
-              <Link to="/chat">챗봇</Link>
+              <Link to={loginRes ? '/chat' : '/login'}>챗봇</Link>
             </StyledButton>
             <StyledButton>
-              <Link to="/test">테스트</Link>
+              <Link to={loginRes ? '/test' : '/login'}>테스트</Link>
             </StyledButton>
             <StyledButton>
-              <Link to="/game">게임</Link>
+              <Link to={loginRes ? '/game' : '/login'}>게임</Link>
             </StyledButton>
           </CateGoryWrap>
 
