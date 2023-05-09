@@ -157,15 +157,15 @@ const ErrorMessage = styled.div`
   font-weight: 700;
 `;
 
-// const CheckMessage = styled.div`
-//   color: #6ac7b2;
-//   text-align: center;
-//   font-size: 0.8rem;
-//   font-weight: 700;
-//   margin-top: 1rem;
-// `;
+const CheckMessage = styled.div`
+  color: #6ac7b2;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-top: 1rem;
+`;
 
-const Register = ({ form, onChange, onSubmit, error, onCheck }) => {
+const Register = ({ form, onChange, onSubmit, error, onCheck, message }) => {
   return (
     <MainWrap>
       <IntroWrap>
@@ -199,7 +199,7 @@ const Register = ({ form, onChange, onSubmit, error, onCheck }) => {
             />
             <DupCheckBtn onClick={onCheck}>중복 확인</DupCheckBtn>
           </IdWrap>
-          {/* {message && <CheckMessage>{message}</CheckMessage>} */}
+          {message && <CheckMessage>{message}</CheckMessage>}
         </FormInput>
         <FormInput>
           <label htmlFor="password">Password</label>

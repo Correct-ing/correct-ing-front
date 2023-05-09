@@ -8,10 +8,6 @@ export const login = ({ id, password }) =>
 export const register = ({ id, name, password }) =>
   client.post('/api/v1/users', { id, name, password });
 
-// 회원가입 시 아이디 중복 체크
-export const isIdDup = ({ username }) =>
-  client.get(`/api/v1/users/${username}/exists`, { username });
-
 // token 재발급
 export const getNewToken = ({ accessToken, refreshToken }) =>
   client.post('/api/v1/users/token', { accessToken, refreshToken });

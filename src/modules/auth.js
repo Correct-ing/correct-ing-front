@@ -15,8 +15,6 @@ const [REGISTER, REGISTER_SUCCESS, REGISTER_FAILURE] =
 const [LOGIN, LOGIN_SUCCESS, LOGIN_FAILURE] =
   createRequestActionTypes('auth/LOGIN');
 
-const [DUP, DUP_SUCCESS, DUP_FAILURE] = createRequestActionTypes('auth/DUP');
-
 export const changeField = createAction(
   CHANGE_FIELD,
   ({ form, key, value }) => ({
@@ -39,16 +37,10 @@ export const login = createAction(LOGIN, ({ id, password }) => ({
   password,
 }));
 
-export const dup = createAction(DUP, ({ username }) => ({
-  username,
-}));
-
-const dupSaga = createRequestSaga(DUP, authAPI.isIdDup);
 const registerSaga = createRequestSaga(REGISTER, authAPI.register);
 const loginSaga = createRequestSaga(LOGIN, authAPI.login);
 
 export function* authSaga() {
-  yield takeLatest(DUP, dupSaga);
   yield takeLatest(REGISTER, registerSaga);
   yield takeLatest(LOGIN, loginSaga);
 }
@@ -84,15 +76,6 @@ const auth = handleActions(
       loginErr: null,
       dupErr: null,
       registerErr: null,
-    }),
-    [DUP_SUCCESS]: (state, { payload: dupRes }) => ({
-      ...state,
-      dupErr: null,
-      dupRes,
-    }),
-    [DUP_FAILURE]: (state, { payload: error }) => ({
-      ...state,
-      dupErr: error,
     }),
     [REGISTER_SUCCESS]: (state, { payload: registerRes }) => ({
       ...state,
