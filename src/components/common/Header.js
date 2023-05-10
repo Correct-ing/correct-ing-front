@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState}  from 'react';
 import { Outlet, Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import correctLogo from '../../assets/correct-logo.png';
@@ -33,7 +33,6 @@ const StyledHeader = styled.header`
   align-items: center;
   justify-content: space-between;
   height: 3.5rem;
-
   .right-wrap {
     display: flex;
     gap: 2rem;
@@ -50,18 +49,6 @@ const CateGoryWrap = styled.div`
   }
   ${media.tablet`display: none;`};
   ${media.phone`display: none;`};
-`;
-
-const HideMenu = styled.div`
-  display: none;
-  margin-right: 5rem;
-  gap: 5rem;
-  a {
-    color: black;
-    font-weight: 400;
-  }
-  ${media.tablet`display: flex;`};
-  ${media.phone`display: flex;`};
 `;
 
 const StyledButton = styled.button`
@@ -87,19 +74,25 @@ const StyledButton = styled.button`
 
 const AuthWrap = styled.div`
   display: flex;
-  gap: 0.5rem;
-  justify-content: center;
-  align-items: center;
+  gap: 1rem;
+  ${media.phone`gap: 0.3rem;`};
+  
   div {
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  ${media.phone`gap: 0.3rem;`};
   a {
     color: #c6c4c4;
     font-weight: 500;
   }
+  svg {
+    margin-left: 0.5rem;
+    @media screen and (min-width: 1025px) {
+      display: none;
+    }
+  }
+
 `;
 
 const LogoWrap = styled.div`
@@ -111,7 +104,6 @@ const LogoWrap = styled.div`
     width: 2rem;
     ${media.phone`width: 1.5rem;`};
   }
-
   a {
     color: #6ac7b2;
     font-weight: 500;
@@ -128,6 +120,14 @@ const Header = ({ loginRes, onLogout }) => {
 
   const navigateToHome = () => {
     navigate('/');
+  };
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const toggleSidebarOpen = () => {
+    setIsSidebarOpen(true);
+  };
+  const toggleSidebarClose = () => {
+    setIsSidebarOpen(false);
   };
 
   return (
@@ -160,10 +160,6 @@ const Header = ({ loginRes, onLogout }) => {
             </StyledButton>
           </CateGoryWrap>
 
-          <HideMenu>
-            <Sidebar />
-          </HideMenu>
-
           {loginRes ? (
             <AuthWrap>
               <div>
@@ -179,6 +175,8 @@ const Header = ({ loginRes, onLogout }) => {
               </div>
 
               <StyledButton onClick={onLogout}>로그아웃</StyledButton>
+              <AiOutlineMenu onClick={toggleSidebarOpen} />
+              <Sidebar isOpen={isSidebarOpen} onClose={toggleSidebarClose} />
             </AuthWrap>
           ) : (
             <AuthWrap>
@@ -190,7 +188,8 @@ const Header = ({ loginRes, onLogout }) => {
                 <Link to="/register">회원가입</Link>
               </StyledButton>
 
-              <AiOutlineMenu />
+              <AiOutlineMenu onClick={toggleSidebarOpen} />
+              <Sidebar isOpen={isSidebarOpen} onClose={toggleSidebarClose} />
             </AuthWrap>
           )}
         </div>
@@ -201,5 +200,4 @@ const Header = ({ loginRes, onLogout }) => {
     </div>
   );
 };
-
 export default Header;

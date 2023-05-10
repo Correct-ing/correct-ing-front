@@ -10,7 +10,6 @@ const sizes = {
   tablet: 1024,
   phone: 768,
 };
-
 // 자동으로 media 쿼리 함수를 만들어 준다.
 const media = Object.keys(sizes).reduce((acc, label) => {
   acc[label] = (...args) => css`
@@ -83,7 +82,6 @@ const InfoWrap = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-
   p {
     text-align: center;
     margin-bottom: 0.2rem;
@@ -99,15 +97,17 @@ const InfoWrap = styled.div`
 
 const ChatButton = styled.button`
   margin-top: 3rem;
-  a {
-    font-weight: 700;
-    font-size: 1.3rem;
-    ${media.tablet`font-size: 1.2rem;`};
-    ${media.phone`font-size: 1rem;`};
-    text-decoration: none;
-    color: black;
+  font-weight: 700;
+  font-size: 1.3rem;
+  ${media.tablet`font-size: 1.2rem;`};
+  ${media.phone`font-size: 1rem;`};
+  text-decoration: none;
+  color: black;
+  &:hover {
+    background-color: #CAE7E2;
+    cursor: pointer;
   }
-
+  transition: background-color 0.3s ease-in-out;
   background-color: #ecedf5;
   border: none;
   padding: 1.3rem 2.5rem;
@@ -137,15 +137,17 @@ const WeaknessWrap = styled.div`
 
 const WeakButton = styled.button`
   margin-top: 3rem;
-  a {
-    font-weight: 700;
-    font-size: 1.3rem;
-    ${media.tablet`font-size: 1.2rem;`};
-    ${media.phone`font-size: 1rem;`};
-    text-decoration: none;
-    color: black;
+  font-weight: 700;
+  font-size: 1.3rem;
+  ${media.tablet`font-size: 1.2rem;`};
+  ${media.phone`font-size: 1rem;`};
+  text-decoration: none;
+  color: black;
+  &:hover {
+    background-color: #ecedf5;
+    cursor: pointer;
   }
-
+  transition: background-color 0.3s ease-in-out;
   background-color: white;
   border: none;
   padding: 1.3rem 2.5rem;
@@ -174,9 +176,11 @@ const Home = ({ loginRes }) => {
             <p>그에 적합한 대화를</p>
             <p>하면서 공부해요.</p>
           </div>
+          <Link to={loginRes ? '/chat' : '/login'}>
           <ChatButton>
-            <Link to={loginRes ? '/chat' : '/login'}>채팅하러 가기</Link>
+            채팅하러 가기
           </ChatButton>
+          </Link>
         </InfoWrap>
       </ChatWrap>
       <WeaknessWrap>
@@ -187,14 +191,15 @@ const Home = ({ loginRes }) => {
             <p>부족한 부분을 중심으로 공부하여</p>
             <p>실력을 향상시켜요.</p>
           </div>
+          <Link to={loginRes ? '/myPage' : '/login'}>
           <WeakButton>
-            <Link to={loginRes ? '/myPage' : '/login'}>취약점 분석</Link>
+            취약점 분석
           </WeakButton>
+          </Link>
         </InfoWrap>
         <img src={weakImg} alt="취약점 분석 이미지" />
       </WeaknessWrap>
     </MainWrap>
   );
 };
-
 export default Home;

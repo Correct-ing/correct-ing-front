@@ -1,7 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useRef, useEffect} from 'react';
 import styled, { css } from 'styled-components';
-
+import { Link } from 'react-router-dom';
+import correctLogo from '../../assets/correct-logo.png';
+import { ImExit } from 'react-icons/im';
+import { IoGameController } from "react-icons/io5";
+import { IoIosClose } from "react-icons/io";
+import { BsFillClipboard2CheckFill } from "react-icons/bs";
+import { BsChatLeftTextFill } from "react-icons/bs";
 const sizes = {
   tablet: 1024,
   phone: 768,
@@ -17,113 +22,164 @@ const media = Object.keys(sizes).reduce((acc, label) => {
   return acc;
 }, {});
 
-const StyledButton = styled.button`
-  background-color: transparent;
-  border: none;
+const MainWrap = styled.div`
+ @media screen and (min-width: 1025px) {
+    display: none;
+  }
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  top: 0;
+  right: 0;
+  width: 45vw;
+  height: 100vh;
+  background-color: white;
+  padding: 1rem;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+  transform: ${({ isOpen }) => (isOpen ? 'translateX(0)' : 'translateX(100%)')};
+ 
+`;
+
+const LogoWrap = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  div {
+    display: flex;
+    gap: 0.8rem;
+    align-items: center;
+  }
+  img {
+    width: 2rem;
+    ${media.phone`width: 1.5rem;`};
+  }
   a {
+    color: #6ac7b2;
+    font-weight: 500;
+    font-size: 1.1rem;
+    ${media.phone`font-size: 0.9rem;`};
     text-decoration: none;
-    font-size: 0.9rem;
-    ${media.phone`font-size: 0.8rem;`};
     letter-spacing: 0.03rem;
   }
 `;
+const MenuWrap = styled.div`
+  margin: 3rem 0 1rem 0;
+  width: 90%;
+  padding-bottom: 0.3rem;
+  font-size: 0.9rem;
+  font-weight: 400;
+  p {
+    color: #142231;
+  }
+  border-bottom: 1px solid #142231;
+`;
 
-const MainWrap = styled.div`
-  .container {
-    background-color: #e3ecf1;
-  }
-  .sidebar {
-    background-color: #e3ecf1;
-    border-left: 4px solid #202020;
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    transition: 0.4s ease;
-    color: #202020;
-    height: 100%;
-    z-index: 99;
-  }
-  .menu-btn {
-    position: relative;
-    left: -50px;
-    top: 10px;
-    width: 40px;
-    height: 40px;
-    z-index: 99;
-    transition: 0.8s ease;
-    border: 2px solid #202020;
-    border-radius: 40px;
-    overflow: hidden;
-  }
-  .openBtn {
-    width: 100%;
-    height: 100%;
-  }
-  .content {
-    padding: 40px 40px 0 20px;
-    position: relative;
-    width: 100%;
-  }
-  .icon {
-    margin: 0;
-    color: #202020;
+const SelectWrap = styled.div`
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 0.5rem;
+  gap: 1.5rem;
+
+  button {
+    &:last-child {
+      color: red;
+    }
   }
 `;
 
-const Sidebar = ({ width = 280 }) => {
-  const [isOpen, setOpen] = useState(false);
-  const [xPosition, setX] = useState(-width);
-  const side = useRef();
+const StyledButton = styled.button`
+  width: 90%;
+  display: flex;
+  //justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  background-color: white;
+  padding: 1rem 3rem;
+  ${media.phone`padding: 0.5rem 1.5rem;`};
+  border: none;
+  border-radius: 0.8rem;
+   a {
+      color: #142231;
+      transition: color 0.3s ease-in-out;
+      text-decoration: none;
+      font-size: 1.2rem;
+      ${media.phone`font-size: 0.9rem;`};
+      font-weight: 700;
+      flex-grow: 1;
+   }
+   &:hover {
+        background-color: #E0F2F6;
+  }
 
-  // button 클릭 시 토글
-  const toggleMenu = () => {
-    if (xPosition < 0) {
-      setX(0);
-      setOpen(true);
-    } else {
-      setX(-width);
-      setOpen(false);
-    }
-  };
+  svg {
+    margin: 0;
+  }
 
-  // 사이드바 외부 클릭시 닫히는 함수
-  const handleClose = async (e) => {
-    let sideArea = side.current;
-    let sideCildren = side.current.contains(e.target);
-    if (isOpen && (!sideArea || !sideCildren)) {
-      await setX(-width);
-      await setOpen(false);
-    }
-  };
-
+  
+`;
+const Sidebar = ({ isOpen, onClose,loginRes, onLogout }) => {
+  const sidebarRef = useRef(null);
   useEffect(() => {
-    window.addEventListener('click', handleClose);
-    return () => {
-      window.removeEventListener('click', handleClose);
+    const handleClickOutside = (event) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        onClose();
+      }
     };
-  });
+
+    window.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      window.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [onClose]);
 
   return (
-    <MainWrap>
-      <div
-        ref={side}
-        className="sidebar"
-        style={{ width: `${width}px`, height: '100%', transform: `translatex(${-xPosition}px)` }}
-      >
-        <button onClick={() => toggleMenu()} className="menu-btn"></button>
-        <div className="content">
-          <StyledButton>
-            <Link to="/chat">챗봇</Link>
-          </StyledButton>
-          <StyledButton>
-            <Link to="/test">테스트</Link>
-          </StyledButton>
-          <StyledButton>
-            <Link to="/game">게임</Link>
-          </StyledButton>
+    <MainWrap ref={sidebarRef} isOpen={isOpen}>
+      <LogoWrap>
+        <div>
+        <img src={correctLogo} alt="correcting 로고" />
+        <Link to="/">Correct-ing</Link>
         </div>
-      </div>
+          <IoIosClose size="25" color="black" onClick={onClose}></IoIosClose>
+      </LogoWrap>
+      <MenuWrap>
+        <p>menu</p>
+      </MenuWrap>
+      <SelectWrap>
+        <StyledButton>
+          <BsChatLeftTextFill size="25"/>
+          <Link to="/chat" onClick={onClose}>
+              챗봇
+          </Link>
+        </StyledButton>
+        <StyledButton>
+          <BsFillClipboard2CheckFill size="25"/>
+        <Link to="/test" onClick={onClose}>
+            테스트
+          </Link>
+        </StyledButton>
+
+        <StyledButton>
+          <IoGameController size="25" />
+          <Link to="/game" onClick={onClose}>
+              게임하기
+          </Link>
+        </StyledButton>
+        <StyledButton>
+            <ImExit size="25" />
+            <Link to="/game" onClick={onClose}>
+              로그아웃
+            </Link>
+        </StyledButton>
+      </SelectWrap>
+
+      
     </MainWrap>
   );
 };
