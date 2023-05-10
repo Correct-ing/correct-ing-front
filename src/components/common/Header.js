@@ -1,4 +1,4 @@
-import React, {useState}  from 'react';
+import React, { useState } from 'react';
 import { Outlet, Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import correctLogo from '../../assets/correct-logo.png';
@@ -76,7 +76,7 @@ const AuthWrap = styled.div`
   display: flex;
   gap: 1rem;
   ${media.phone`gap: 0.3rem;`};
-  
+
   div {
     display: flex;
     align-items: center;
@@ -92,7 +92,6 @@ const AuthWrap = styled.div`
       display: none;
     }
   }
-
 `;
 
 const LogoWrap = styled.div`
