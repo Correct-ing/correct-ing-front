@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components';
 import correctLogo from '../../assets/correct-logo.png';
 import { AiOutlineMenu } from 'react-icons/ai';
 import { BsPersonCircle } from 'react-icons/bs';
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import { useLocation } from 'react-router-dom';
 
@@ -79,9 +79,8 @@ const StyledButton = styled.button`
     ${media.phone`font-size: 0.8rem;`};
     letter-spacing: 0.03rem;
   }
-
   &.active {
-    color: #6AC7B2;
+    color: #6ac7b2;
     font-weight: 800;
   }
 `;
@@ -123,33 +122,41 @@ const LogoWrap = styled.div`
   }
 `;
 
-
 const Header = ({ loginRes, onLogout }) => {
-  const location = useLocation();
-  console.log(location);
-
   const navigate = useNavigate();
-  const navigateToHome= () => {
-    navigate("/");
+  const location = useLocation();
+
+  const navigateToHome = () => {
+    navigate('/');
   };
 
   return (
     <div>
       <StyledHeader>
         <LogoWrap>
-          <img src={correctLogo} alt="correcting 로고" onClick={navigateToHome}/>
+          <img
+            src={correctLogo}
+            alt="correcting 로고"
+            onClick={navigateToHome}
+          />
           <Link to="/">Correct-ing</Link>
         </LogoWrap>
         <div className="right-wrap">
           <CateGoryWrap>
-            <StyledButton className={location.pathname === '/chat' ? 'active' : ''}>
-              <Link to="/chat">챗봇</Link>
+            <StyledButton
+              className={location.pathname === '/chat' ? 'active' : ''}
+            >
+              <Link to={loginRes ? '/chat' : '/login'}>챗봇</Link>
             </StyledButton>
-            <StyledButton className={location.pathname === '/test' ? 'active' : ''}>
-              <Link to="/test">테스트</Link>
+            <StyledButton
+              className={location.pathname === '/test' ? 'active' : ''}
+            >
+              <Link to={loginRes ? '/test' : '/login'}>테스트</Link>
             </StyledButton>
-            <StyledButton className={location.pathname === '/game' ? 'active' : ''}>
-              <Link to="/game">게임</Link>
+            <StyledButton
+              className={location.pathname === '/game' ? 'active' : ''}
+            >
+              <Link to={loginRes ? '/game' : '/login'}>게임</Link>
             </StyledButton>
           </CateGoryWrap>
 
