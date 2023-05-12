@@ -7,13 +7,15 @@ import { IoGameController } from 'react-icons/io5';
 import { IoIosClose } from 'react-icons/io';
 import { BsFillClipboard2CheckFill } from 'react-icons/bs';
 import { BsChatLeftTextFill } from 'react-icons/bs';
+import { ImEnter } from 'react-icons/im';
+//import { BsFillPersonPlusFill } from 'react-icons/bs';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from '../../../node_modules/react-redux/es/exports';
 const sizes = {
   tablet: 1024,
   phone: 768,
 };
-//
+
 // 자동으로 media 쿼리 함수를 만들어 준다.
 const media = Object.keys(sizes).reduce((acc, label) => {
   acc[label] = (...args) => css`
@@ -41,7 +43,6 @@ const MainWrap = styled.div`
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease-in-out;
   transform: ${({ isOpen }) => (isOpen ? 'translateX(0)' : 'translateX(100%)')};
-  z-index: 99;
 `;
 
 const LogoWrap = styled.div`
@@ -85,7 +86,7 @@ const SelectWrap = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 0.5rem;
+  margin-top: 1.2rem;
   gap: 1.5rem;
 
   button {
@@ -94,7 +95,6 @@ const SelectWrap = styled.div`
     }
   }
 `;
-
 const StyledButton = styled.button`
   width: 90%;
   display: flex;
@@ -156,6 +156,7 @@ const Sidebar = ({ isOpen, onClose }) => {
       <MenuWrap>
         <p>menu</p>
       </MenuWrap>
+      
       <SelectWrap>
         <StyledButton className={location.pathname === '/chat' ? 'active' : ''}>
           <BsChatLeftTextFill size="25" />
@@ -176,13 +177,25 @@ const Sidebar = ({ isOpen, onClose }) => {
             게임하기
           </Link>
         </StyledButton>
-        <StyledButton>
+        
+        {loginRes ? (
+       
+          <StyledButton>
           <ImExit size="25" />
           <Link to="/game" onClick={onClose}>
             로그아웃
           </Link>
-        </StyledButton>
-      </SelectWrap>
+          </StyledButton>
+        ): (
+          <StyledButton>
+            <ImEnter size="25"/>
+            <Link to="/login" onClick={onClose}>
+              로그인
+            </Link>
+          </StyledButton>
+        
+        )}
+      </SelectWrap>  
     </MainWrap>
   );
 };

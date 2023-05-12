@@ -1,8 +1,8 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
-import { useState, useEffect } from 'react';
+import styled from 'styled-components';
+//import { useState, useEffect } from 'react';
 
-{/* 메인 */}
+/* 메인 */
 const MainWrap = styled.div`
   width: 100%;
   height: 50rem;
@@ -75,7 +75,7 @@ const GameBottomWrap = styled.div`
 
 const Game = () => {
 
-  const [Progress, setProgress] = useState();
+  //const [Progress, setProgress] = useState();
 
   return (
   
