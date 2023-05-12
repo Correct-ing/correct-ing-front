@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
 import correctLogo from '../../assets/correct-logo.png';
@@ -27,9 +27,6 @@ const media = Object.keys(sizes).reduce((acc, label) => {
 }, {});
 
 const MainWrap = styled.div`
-  @media screen and (min-width: 1025px) {
-    display: none;
-  }
   position: fixed;
   display: flex;
   flex-direction: column;
@@ -98,7 +95,6 @@ const SelectWrap = styled.div`
 const StyledButton = styled.button`
   width: 90%;
   display: flex;
-  //justify-content: center;
   align-items: center;
   gap: 1rem;
   background-color: white;
@@ -123,26 +119,48 @@ const StyledButton = styled.button`
     margin: 0;
   }
 `;
-const Sidebar = ({ isOpen, onClose }) => {
+const Sidebar = ({ isOpen: initialIsOpen, onClose }) => {
   const { loginRes } = useSelector(({ auth }) => ({
     loginRes: auth.loginRes,
   }));
 
   const sidebarRef = useRef(null);
   const location = useLocation();
+  /*초기값을 'initialIsOpen' prop로 전달된 값으로 설정*/
+  const [isOpen, setIsOpen] = useState(initialIsOpen);
+
+  /* 밖 클릭시 닫히는 코드 */
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
         onClose();
       }
     };
-
     window.addEventListener('mousedown', handleClickOutside);
 
     return () => {
       window.removeEventListener('mousedown', handleClickOutside);
     };
   }, [onClose]);
+
+/* 화면 크기가 변경될 때마다 isOpen 상태를 업데이트. 너비가 1025px 이상이면 isOpen 상태를 false로 변경 */
+    useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1025) {
+        setIsOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+  /* 'initialIsOpen' prop 값이 변경될 때마다 isOpen 상태업뎃 */
+  useEffect(() => {
+    setIsOpen(initialIsOpen);
+  }, [initialIsOpen]);
 
   return (
     <MainWrap ref={sidebarRef} isOpen={isOpen}>
