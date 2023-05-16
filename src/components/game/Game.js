@@ -1,103 +1,169 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 import styled from 'styled-components';
-//import { useState, useEffect } from 'react';
 
-/* 메인 */
-const MainWrap = styled.div`
-  width: 100%;
-  height: 50rem;
-  margin-left: 1rem;
-  display: flex;
-  justify-content: center;
-`;
+const words = [
+  "the quick brown fox jumps",
+  "life is short make it",
+  "keep calm and code on",
+  "practice makes perfect",
+  "dream big work hard",
+  "stay focused and never give up",
+  "be yourself everyone else is taken",
+  "success is the sum of small efforts",
+  "believe in yourself and all that you are",
+  "do what you love love what you do",
+];
 
-// 채팅 DIV
-const GameWrap = styled.div`
-  justify-content: center;
-  margin: 3rem auto;
-  width: 50rem;
-  height: 40rem;
-  background-color: black;
-  border-radius: 5rem;
-  background: #ffffff;
-  box-shadow: 0rem 0.1rem 0.5rem 0.1rem rgba(0, 0, 0, 0.1);
-`;
-
-// 게임 상단 DIV
-const GameTopWrap = styled.div`
-  display: flex;
-  width: 100%;
-  height: 30%;
-  border-radius: 5rem;
-  background: rgba(224, 224, 224, 0.4);
-  max-height: 20rem;
-
-  h1 {
-    width: 100%;
-    margin: 3rem auto;
-    margin-left: 4rem;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 1.5rem;
-    color: black;
-  }
-`;
-
-// 채팅 중단 DIV
-const GameMiddleWrap = styled.div`
+// GRAPH DIV
+const GameDiv = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
-  height: 60%;
-  background: green;
-  margin-top: -5rem;
-  overflow-y: scroll;
-
-  h1 {
-    width: 100%;
-    margin: 3.5rem auto;
-    margin-left: 4rem;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 1.5rem;
-    color: black;
-  }
+  margin: 3rem auto;
+  width: 80%;
+  height: 40rem;
+  background-color: black;
+  align-items: center;
+  border-radius: 5rem;
+  background: #ffffff;
 `;
 
-// 채팅 하단 DIV
-const GameBottomWrap = styled.div`
-  display: flex;
-  width: 100%;
-  height: 10%;
-  justify-content: center;
-  background: blue;
+const TimeBarDiv = styled.div`
+  height: 2rem;
+  margin: 1rem auto;
+  background-color: white;
+  border-radius: 1rem;
+`;
+
+const TextInput = styled.input`
+  font-size: 2rem;
+  width: 50%;
+  margin: 4rem; auto;
+  padding: 1rem;
+  border-radius: 1rem;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+`;
+
+const ProblemWrap = styled.div`
+    width: 85%;
+    height:80%;
+    background-color:#FFFFFF;
+    border-radius: 50px;
+    border: 1px solid #D9D9D9;
+    align-items: center;
+    text-align: center;
+    margin-top: 1rem;
+    p{
+      line-height: 2em;
+    }
+    h1{
+      font-size: 3rem;
+      margin: 5rem auto;
+    }
+`;
+const AnswerWrap = styled.div`
+    width: 100%;
+    height:50%;
+    align-items: center;
+    text-align: center;
+    background-color:#EAF5F3;
+    border-radius: 50px 50px 0px 0px;
+
+    p{
+      line-height: 8em;
+      font-size: 2rem;
+    }
 `;
 
 const Game = () => {
+  const [currentWord, setCurrentWord] = useState("");
+  const [userInput, setUserInput] = useState("");
+  const [score, setScore] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(10);
+  const [gameOver, setGameOver] = useState(false);
 
-  //const [Progress, setProgress] = useState();
+  useEffect(() => {
+    if (timeLeft > -1) {
+      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+      return () => clearTimeout(timer);
+    } else if (timeLeft === -1){
+      setGameOver(true);
+    }
+  }, [timeLeft]);
+
+  const handleInput = (event) => {
+    setUserInput(event.target.value);
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      const input = userInput.trim();
+      if (input === currentWord) {
+        setScore(score + 1);
+        const nextWord = words[Math.floor(Math.random() * words.length)];
+        setCurrentWord(nextWord);
+        setUserInput("");
+        setTimeLeft(10);
+      }
+      setUserInput("");
+    }
+  };
+
+  useEffect(() => {
+    setCurrentWord(words[Math.floor(Math.random() * words.length)]);
+  }, []);
+
+  const getBarColor = (timeLeft) => {
+    if (timeLeft <= 2) {
+      return "red";
+    } else if (timeLeft <= 4) {
+      return "yellow";
+    } else {
+      return "green";
+    }
+  };
+
+  const barStyle = {
+    width: `${(timeLeft / 60) * 300}%`,
+    transition: "width 1s linear",
+    backgroundColor: getBarColor(timeLeft),
+  };
+
+  if (gameOver) {
+    return (
+      <GameDiv>
+        <ProblemWrap>
+          <h1>게임 오버</h1>
+          <br/>
+          <h1>최종 점수: {score}</h1>
+        </ProblemWrap>
+      </GameDiv>
+    );
+  }
 
   return (
-  
-    <MainWrap>
-      <GameWrap>
-
-        <GameTopWrap>
-
-        </GameTopWrap>
-
-        <GameMiddleWrap>
-
-        </GameMiddleWrap>
-
-        <GameBottomWrap>
-
-        </GameBottomWrap>
-
-      </GameWrap>
-    </MainWrap>
-  
-  )
+    <div>
+      <GameDiv>
+        <TimeBarDiv style={barStyle}/>
+        <ProblemWrap>
+          <AnswerWrap>
+            <p>{currentWord}</p>
+          </AnswerWrap>
+            <TextInput
+              type="text"
+              value={userInput}
+              onChange={handleInput}
+              onKeyPress={handleKeyPress}
+            />
+          <p>남은 시간: {timeLeft}초</p>
+          <p>점수: {score}</p>
+        </ProblemWrap>
+        
+      </GameDiv>
+      
+    </div>
+  );
 };
 
 export default Game;
+
