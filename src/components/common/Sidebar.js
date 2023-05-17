@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
 import correctLogo from '../../assets/correct-logo.png';
@@ -7,10 +7,8 @@ import { IoGameController } from 'react-icons/io5';
 import { IoIosClose } from 'react-icons/io';
 import { BsFillClipboard2CheckFill } from 'react-icons/bs';
 import { BsChatLeftTextFill } from 'react-icons/bs';
-import { ImEnter } from 'react-icons/im';
-//import { BsFillPersonPlusFill } from 'react-icons/bs';
 import { useLocation } from 'react-router-dom';
-import { useSelector } from '../../../node_modules/react-redux/es/exports';
+
 const sizes = {
   tablet: 1024,
   phone: 768,
@@ -27,6 +25,9 @@ const media = Object.keys(sizes).reduce((acc, label) => {
 }, {});
 
 const MainWrap = styled.div`
+  @media screen and (min-width: 1025px) {
+    display: none;
+  }
   position: fixed;
   display: flex;
   flex-direction: column;
@@ -40,6 +41,7 @@ const MainWrap = styled.div`
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease-in-out;
   transform: ${({ isOpen }) => (isOpen ? 'translateX(0)' : 'translateX(100%)')};
+  z-index: 99;
 `;
 
 const LogoWrap = styled.div`
@@ -83,7 +85,7 @@ const SelectWrap = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 1.2rem;
+  margin-top: 0.5rem;
   gap: 1.5rem;
 
   button {
@@ -91,10 +93,13 @@ const SelectWrap = styled.div`
       color: red;
     }
   }
+  border-bottom: 1px solid #142231;
 `;
+
 const StyledButton = styled.button`
   width: 90%;
   display: flex;
+  //justify-content: center;
   align-items: center;
   gap: 1rem;
   background-color: white;
@@ -119,17 +124,9 @@ const StyledButton = styled.button`
     margin: 0;
   }
 `;
-const Sidebar = ({ isOpen: initialIsOpen, onClose }) => {
-  const { loginRes } = useSelector(({ auth }) => ({
-    loginRes: auth.loginRes,
-  }));
-
+const Sidebar = ({ nickname, isOpen, onClose }) => {
   const sidebarRef = useRef(null);
   const location = useLocation();
-  /*초기값을 'initialIsOpen' prop로 전달된 값으로 설정*/
-  const [isOpen, setIsOpen] = useState(initialIsOpen);
-
-  /* 밖 클릭시 닫히는 코드 */
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
@@ -143,25 +140,6 @@ const Sidebar = ({ isOpen: initialIsOpen, onClose }) => {
     };
   }, [onClose]);
 
-/* 화면 크기가 변경될 때마다 isOpen 상태를 업데이트. 너비가 1025px 이상이면 isOpen 상태를 false로 변경 */
-    useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 1025) {
-        setIsOpen(false);
-      }
-    };
-
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-  /* 'initialIsOpen' prop 값이 변경될 때마다 isOpen 상태업뎃 */
-  useEffect(() => {
-    setIsOpen(initialIsOpen);
-  }, [initialIsOpen]);
-
   return (
     <MainWrap ref={sidebarRef} isOpen={isOpen}>
       <LogoWrap>
@@ -174,46 +152,33 @@ const Sidebar = ({ isOpen: initialIsOpen, onClose }) => {
       <MenuWrap>
         <p>menu</p>
       </MenuWrap>
-      
       <SelectWrap>
         <StyledButton className={location.pathname === '/chat' ? 'active' : ''}>
           <BsChatLeftTextFill size="25" />
-          <Link to={loginRes ? '/chat' : '/login'} onClick={onClose}>
+          <Link to={nickname ? '/chat' : '/login'} onClick={onClose}>
             챗봇
           </Link>
         </StyledButton>
         <StyledButton>
           <BsFillClipboard2CheckFill size="25" />
-          <Link to={loginRes ? '/test' : '/login'} onClick={onClose}>
+          <Link to={nickname ? '/test' : '/login'} onClick={onClose}>
             테스트
           </Link>
         </StyledButton>
 
         <StyledButton>
           <IoGameController size="25" />
-          <Link to={loginRes ? '/game' : '/login'} onClick={onClose}>
+          <Link to={nickname ? '/game' : '/login'} onClick={onClose}>
             게임하기
           </Link>
         </StyledButton>
-        
-        {loginRes ? (
-       
-          <StyledButton>
+        <StyledButton>
           <ImExit size="25" />
           <Link to="/game" onClick={onClose}>
             로그아웃
           </Link>
-          </StyledButton>
-        ): (
-          <StyledButton>
-            <ImEnter size="25"/>
-            <Link to="/login" onClick={onClose}>
-              로그인
-            </Link>
-          </StyledButton>
-        
-        )}
-      </SelectWrap>  
+        </StyledButton>
+      </SelectWrap>
     </MainWrap>
   );
 };

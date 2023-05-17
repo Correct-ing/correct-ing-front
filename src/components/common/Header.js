@@ -113,7 +113,7 @@ const LogoWrap = styled.div`
   }
 `;
 
-const Header = ({ loginRes, onLogout }) => {
+const Header = ({ nickname, onLogout }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -145,21 +145,21 @@ const Header = ({ loginRes, onLogout }) => {
             <StyledButton
               className={location.pathname === '/chat' ? 'active' : ''}
             >
-              <Link to={loginRes ? '/chat' : '/login'}>챗봇</Link>
+              <Link to={nickname ? '/chat' : '/login'}>챗봇</Link>
             </StyledButton>
             <StyledButton
               className={location.pathname === '/test' ? 'active' : ''}
             >
-              <Link to={loginRes ? '/test' : '/login'}>테스트</Link>
+              <Link to={nickname ? '/test' : '/login'}>테스트</Link>
             </StyledButton>
             <StyledButton
               className={location.pathname === '/game' ? 'active' : ''}
             >
-              <Link to={loginRes ? '/game' : '/login'}>게임</Link>
+              <Link to={nickname ? '/game' : '/login'}>게임</Link>
             </StyledButton>
           </CateGoryWrap>
 
-          {loginRes ? (
+          {nickname ? (
             <AuthWrap>
               <div>
                 <BsPersonCircle />
@@ -168,14 +168,18 @@ const Header = ({ loginRes, onLogout }) => {
                     to="/myPage"
                     style={{ color: '#142231', fontWeight: '700' }}
                   >
-                    {loginRes.name}
+                    {nickname}
                   </Link>
                 </StyledButton>
               </div>
 
               <StyledButton onClick={onLogout}>로그아웃</StyledButton>
               <AiOutlineMenu onClick={toggleSidebarOpen} />
-              <Sidebar isOpen={isSidebarOpen} onClose={toggleSidebarClose} />
+              <Sidebar
+                isOpen={isSidebarOpen}
+                onClose={toggleSidebarClose}
+                nickname={nickname}
+              />
             </AuthWrap>
           ) : (
             <AuthWrap>
@@ -188,7 +192,11 @@ const Header = ({ loginRes, onLogout }) => {
               </StyledButton>
 
               <AiOutlineMenu onClick={toggleSidebarOpen} />
-              <Sidebar isOpen={isSidebarOpen} onClose={toggleSidebarClose} />
+              <Sidebar
+                isOpen={isSidebarOpen}
+                onClose={toggleSidebarClose}
+                nickname={nickname}
+              />
             </AuthWrap>
           )}
         </div>

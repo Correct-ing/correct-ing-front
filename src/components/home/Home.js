@@ -104,7 +104,7 @@ const ChatButton = styled.button`
   text-decoration: none;
   color: black;
   &:hover {
-    background-color: #CAE7E2;
+    background-color: #cae7e2;
     cursor: pointer;
   }
   transition: background-color 0.3s ease-in-out;
@@ -156,7 +156,7 @@ const WeakButton = styled.button`
   border-radius: 25px;
 `;
 
-const Home = ({ loginRes }) => {
+const Home = ({ nickname }) => {
   return (
     <MainWrap>
       <IntroWrap>
@@ -176,10 +176,8 @@ const Home = ({ loginRes }) => {
             <p>그에 적합한 대화를</p>
             <p>하면서 공부해요.</p>
           </div>
-          <Link to={loginRes ? '/chat' : '/login'}>
-          <ChatButton>
-            채팅하러 가기
-          </ChatButton>
+          <Link to={nickname ? '/chat' : '/login'}>
+            <ChatButton>채팅하러 가기</ChatButton>
           </Link>
         </InfoWrap>
       </ChatWrap>
@@ -191,10 +189,8 @@ const Home = ({ loginRes }) => {
             <p>부족한 부분을 중심으로 공부하여</p>
             <p>실력을 향상시켜요.</p>
           </div>
-          <Link to={loginRes ? '/myPage' : '/login'}>
-          <WeakButton>
-            취약점 분석
-          </WeakButton>
+          <Link to={nickname ? '/myPage' : '/login'}>
+            <WeakButton>취약점 분석</WeakButton>
           </Link>
         </InfoWrap>
         <img src={weakImg} alt="취약점 분석 이미지" />

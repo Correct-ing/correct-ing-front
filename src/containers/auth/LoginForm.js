@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeField, initializeForm, login } from '../../modules/auth';
+//import { getToken } from '../../modules/user';
 import Login from '../../components/auth/Login';
 import { useNavigate } from '../../../node_modules/react-router-dom/dist/index';
+import client from '../../lib/api/client';
 
 const LoginForm = () => {
   const [error, setError] = useState(null);
@@ -13,6 +15,11 @@ const LoginForm = () => {
     loginRes: auth.loginRes,
     loginErr: auth.loginErr,
   }));
+
+  // const { tokenRes, tokenErr } = useSelector(({ user }) => ({
+  //   tokenRes: user.tokenRes,
+  //   tokenErr: user.tokenErr,
+  // }));
 
   // input 변경 감지
   const onChange = (e) => {
@@ -56,9 +63,17 @@ const LoginForm = () => {
 
     if (loginRes) {
       console.log('로그인 성공');
+      console.log(loginRes);
+
       localStorage.clear(); // localStorage 초기화
       localStorage.setItem('accessToken', loginRes.accessToken); // accessToken localStorage에 저장
       localStorage.setItem('refreshToken', loginRes.refreshToken); // refreshToken localStorage에 저장
+      localStorage.setItem('nickname', loginRes.name); // 사용자 닉네임 localStorage에 저장
+
+      client.defaults.headers.common[
+        'Authorization'
+      ] = `Bearer ${loginRes.accessToken}`; // 헤더에 accessToken 값 저장
+
       navigate('/');
     }
   }, [loginRes, loginErr, navigate]);

@@ -1,13 +1,13 @@
 import React from 'react';
 import Home from '../../components/home/Home';
-import { useSelector } from '../../../node_modules/react-redux/es/exports';
 
 const HomeForm = () => {
-  const { loginRes } = useSelector(({ auth }) => ({
-    loginRes: auth.loginRes,
-  }));
+  const nickname =
+    localStorage.getItem('nickname') !== ''
+      ? localStorage.getItem('nickname')
+      : null;
 
-  return <Home loginRes={loginRes} />;
+  return <Home nickname={nickname} />;
 };
 
 export default HomeForm;

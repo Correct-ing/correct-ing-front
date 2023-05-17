@@ -11,6 +11,3 @@ export const register = ({ id, name, password }) =>
 // token 재발급
 export const getNewToken = ({ accessToken, refreshToken }) =>
   client.post('/api/v1/users/token', { accessToken, refreshToken });
-
-// 로그인 상태 체크
-export const check = () => client.get(''); // 다시 해야됨
