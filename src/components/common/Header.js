@@ -179,6 +179,7 @@ const Header = ({ nickname, onLogout }) => {
                 isOpen={isSidebarOpen}
                 onClose={toggleSidebarClose}
                 nickname={nickname}
+                onLogout={onLogout}
               />
             </AuthWrap>
           ) : (
@@ -196,6 +197,7 @@ const Header = ({ nickname, onLogout }) => {
                 isOpen={isSidebarOpen}
                 onClose={toggleSidebarClose}
                 nickname={nickname}
+                onLogout={onLogout}
               />
             </AuthWrap>
           )}

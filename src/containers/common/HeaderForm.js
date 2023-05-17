@@ -8,7 +8,8 @@ const HeaderForm = () => {
       : null;
 
   const onLogout = () => {
-    console.log('로그아웃 api 추가해야함');
+    localStorage.clear();
+    window.location.replace('http://localhost:3000/');
   };
 
   return <Header nickname={nickname} onLogout={onLogout} />;

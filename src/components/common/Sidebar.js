@@ -8,7 +8,6 @@ import { IoIosClose } from 'react-icons/io';
 import { BsFillClipboard2CheckFill } from 'react-icons/bs';
 import { BsChatLeftTextFill } from 'react-icons/bs';
 import { useLocation } from 'react-router-dom';
-
 const sizes = {
   tablet: 1024,
   phone: 768,
@@ -124,7 +123,7 @@ const StyledButton = styled.button`
     margin: 0;
   }
 `;
-const Sidebar = ({ nickname, isOpen, onClose }) => {
+const Sidebar = ({ nickname, isOpen, onClose, onLogout }) => {
   const sidebarRef = useRef(null);
   const location = useLocation();
   useEffect(() => {
@@ -174,7 +173,7 @@ const Sidebar = ({ nickname, isOpen, onClose }) => {
         </StyledButton>
         <StyledButton>
           <ImExit size="25" />
-          <Link to="/game" onClick={onClose}>
+          <Link to="#" onClick={onLogout}>
             로그아웃
           </Link>
         </StyledButton>
