@@ -9,7 +9,7 @@ const HeaderForm = () => {
 
   const onLogout = () => {
     localStorage.clear();
-    window.location.replace('http://localhost:3000/');
+    window.location.replace('/login');
   };
 
   return <Header nickname={nickname} onLogout={onLogout} />;
