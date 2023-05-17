@@ -38,7 +38,8 @@ const TestWrap = styled.div`
   width: 75vw;
   height: 78vh;
   margin:2rem auto;
-  ${media.phone`width: 90vw; height: 60vh; margin-top:5rem;`};
+  margin-top: -2rem;
+  ${media.phone`width: 90vw; height: 60vh; margin-top:-5rem;`};
   svg{
     color: #6AC7B2;
   }
