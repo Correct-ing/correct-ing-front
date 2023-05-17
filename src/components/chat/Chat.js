@@ -10,7 +10,7 @@ import GptChat from './GptChat';
 import MyChat from './MyChat';
 
 const sizes = {
-  phone: 768,
+  phone: 850,
 };
 
 // 자동으로 media 쿼리 함수를 만들어 준다.
@@ -176,7 +176,7 @@ const ChatResume = styled.button`
   margin-left: 2rem;
   cursor: pointer;
   width: 5rem;
-  height: 5rem;
+  height: 1rem;
 `;
 
 // 채팅 중단 DIV
@@ -242,8 +242,8 @@ const Chat = () => {
   useEffect(() => {
     function handleResize() {
       const { innerWidth: width } = window;
-      setIsMobile(width < 768);
-      setIsDesktop(width >= 768);
+      setIsMobile(width < 850);
+      setIsDesktop(width >= 850);
     }
     window.addEventListener('resize', handleResize);
     handleResize(); // 초기값 설정
