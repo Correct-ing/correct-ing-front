@@ -79,20 +79,28 @@ const Game = () => {
   const [currentWord, setCurrentWord] = useState("");
   const [userInput, setUserInput] = useState("");
   const [score, setScore] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(10);
+  const [timeLeft, setTimeLeft] = useState(15);
   const [gameOver, setGameOver] = useState(false);
 
   useEffect(() => {
     if (timeLeft > -1) {
       const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
       return () => clearTimeout(timer);
-    } else if (timeLeft === -1){
+    } else if (timeLeft < 0){
       setGameOver(true);
     }
   }, [timeLeft]);
 
   const handleInput = (event) => {
     setUserInput(event.target.value);
+  };
+
+  const decreaseTime = () => {
+    setTimeLeft((prevTimeLeft) => prevTimeLeft - 0.3);
+  };
+
+  const resetTimer = () => {
+    setTimeLeft(15);
   };
 
   const handleKeyPress = (event) => {
@@ -103,7 +111,9 @@ const Game = () => {
         const nextWord = words[Math.floor(Math.random() * words.length)];
         setCurrentWord(nextWord);
         setUserInput("");
-        setTimeLeft(10);
+        setTimeLeft(15);
+        const multiplier = score >= 1 ? 2 : 1; // 첫 번째 맞춤일 때는 1, 그 이후로는 2를 곱하여 가중치 부여
+        decreaseTime(multiplier);
       }
       setUserInput("");
     }
@@ -111,7 +121,15 @@ const Game = () => {
 
   useEffect(() => {
     setCurrentWord(words[Math.floor(Math.random() * words.length)]);
+    resetTimer();
   }, []);
+
+  useEffect(() => {
+    if (score > 0) {
+      const updatedTimeLeft = 15 - (score * 0.3);
+      setTimeLeft(updatedTimeLeft);
+    }
+  }, [score]);
 
   const getBarColor = (timeLeft) => {
     if (timeLeft <= 2) {
@@ -155,7 +173,7 @@ const Game = () => {
               onChange={handleInput}
               onKeyPress={handleKeyPress}
             />
-          <p>남은 시간: {timeLeft}초</p>
+          <p>남은 시간: {timeLeft.toFixed(1)}초</p>
           <p>점수: {score}</p>
         </ProblemWrap>
         
