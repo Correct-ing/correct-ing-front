@@ -9,7 +9,7 @@ import { BsFillClipboard2CheckFill } from 'react-icons/bs';
 import { BsChatLeftTextFill } from 'react-icons/bs';
 import { ImEnter } from 'react-icons/im';
 import { useLocation } from 'react-router-dom';
-import { useSelector } from '../../../node_modules/react-redux/es/exports';
+
 const sizes = {
   tablet: 1024,
   phone: 768,
@@ -115,10 +115,7 @@ const StyledButton = styled.button`
   }
 `;
 const Sidebar = ({ nickname, isOpen: initialIsOpen, onClose, onLogout }) => {
-  const { loginRes } = useSelector(({ auth }) => ({
-    loginRes: auth.loginRes,
-  }));
-
+ 
   const sidebarRef = useRef(null);
   const location = useLocation();
   /*초기값을 'initialIsOpen' prop로 전달된 값으로 설정*/
