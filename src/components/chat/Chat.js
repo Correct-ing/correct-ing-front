@@ -1,8 +1,9 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
-// import axios from 'axios';
+import axios from 'axios';
 import { useState, useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
 // import { IoSendSharp } from 'react-icons/io5';
 // import { FiSearch } from 'react-icons/fi';
 import { FiChevronLeft } from 'react-icons/fi';
@@ -242,8 +243,77 @@ const Chat = () => {
   const [components, setComponents] = useState([]);
   const [userInput, setUserInput] = useState("");
   const chatRef = useRef(null);
-  
+  const [name, setName] = useState('');
+  const [category, setCategory] = useState('');
+  const { loginRes } = useSelector(({ auth }) => ({
+    form: auth.login, // 상태 값 설정
+    loginRes: auth.loginRes,
+    loginErr: auth.loginErr,
+  }));
+  const accessToken = loginRes.accessToken;
+  const [BUSINESS, setBusiness] = useState(false);
+  const [DAILY, setDaily] = useState(false);
+  const [EDUCATION, setEducation] = useState(false);
+  const [INTEREST, setInterest] = useState(false);
 
+/*
+  const createChatRoom = () => {
+    const data = {
+      name: name,
+      category: category
+    };
+
+    const headers = {
+      Authorization: `Bearer ${accessToken}` // Include access token in the request headers
+    };
+    
+    axios.post('http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/chat-rooms', data, { headers })
+      .then(response => {
+        console.log('Chat room created successfully:', response.data);
+        // Perform any additional actions on successful creation
+      })
+      .catch(error => {
+        console.error('Error creating chat room:', error);
+        // Handle the error case
+      });
+  };
+*/
+  useEffect(() => {
+
+    const headers = {
+      Authorization: `Bearer ${accessToken}` // Include access token in the request headers
+    };
+    
+    axios.get('http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/chat-rooms', { headers })
+      .then(response => {
+        console.log('Chat room get successfully:', response.data);
+        // Perform any additional actions on successful creation
+      
+      })
+      .catch(error => {
+        console.error('Error get chat room:', error);
+        // Handle the error case
+      });
+  }, []);
+/*
+  const delChatRoom = () => {
+
+    const headers = {
+      Authorization: `Bearer ${accessToken}` // Include access token in the request headers
+    };
+    
+    axios.get('http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/chat-rooms', { headers })
+      .then(response => {
+        console.log('Chat room get successfully:', response.data);
+        // Perform any additional actions on successful creation
+      })
+      .catch(error => {
+        console.error('Error get chat room:', error);
+        // Handle the error case
+      });
+  };
+  */
+ 
   const handleInput = (event) => {
     setUserInput(event.target.value);
   };
@@ -435,7 +505,7 @@ const Chat = () => {
               {/* Subject가 null일경우 출력*/}
               {!Subject && <ChatInfo> </ChatInfo>}
               
-              {components}
+              
             </ChatGptMiddle>
 
             <ChatGptBottom>
