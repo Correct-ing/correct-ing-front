@@ -28,7 +28,7 @@ const MainWrap = styled.div`
   position: fixed;
   display: flex;
   flex-direction: column;
-  justify-content:none;
+  justify-content: none;
   align-items: center;
   top: 0;
   right: 0;
@@ -115,7 +115,6 @@ const StyledButton = styled.button`
   }
 `;
 const Sidebar = ({ nickname, isOpen: initialIsOpen, onClose, onLogout }) => {
- 
   const sidebarRef = useRef(null);
   const location = useLocation();
   /*초기값을 'initialIsOpen' prop로 전달된 값으로 설정*/
@@ -135,8 +134,8 @@ const Sidebar = ({ nickname, isOpen: initialIsOpen, onClose, onLogout }) => {
     };
   }, [onClose]);
 
-/* 화면 크기가 변경될 때마다 isOpen 상태를 업데이트. 너비가 1025px 이상이면 isOpen 상태를 false로 변경 */
-    useEffect(() => {
+  /* 화면 크기가 변경될 때마다 isOpen 상태를 업데이트. 너비가 1025px 이상이면 isOpen 상태를 false로 변경 */
+  useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1025) {
         setIsOpen(false);
@@ -156,7 +155,6 @@ const Sidebar = ({ nickname, isOpen: initialIsOpen, onClose, onLogout }) => {
 
   return (
     <MainWrap ref={sidebarRef} isOpen={isOpen}>
-
       <LogoWrap>
         <div>
           <img src={correctLogo} alt="correcting 로고" />
@@ -187,23 +185,21 @@ const Sidebar = ({ nickname, isOpen: initialIsOpen, onClose, onLogout }) => {
             게임하기
           </Link>
         </StyledButton>
-        
+
         {nickname ? (
-       
           <StyledButton>
-          <ImExit size="25" />
-          <Link to="#" onClick={onLogout}>
-            로그아웃
-          </Link>
+            <ImExit size="25" />
+            <Link to="#" onClick={onLogout}>
+              로그아웃
+            </Link>
           </StyledButton>
-        ): (
+        ) : (
           <StyledButton>
-            <ImEnter size="25"/>
+            <ImEnter size="25" />
             <Link to="/login" onClick={onClose}>
               로그인
             </Link>
           </StyledButton>
-        
         )}
       </SelectWrap>
     </MainWrap>

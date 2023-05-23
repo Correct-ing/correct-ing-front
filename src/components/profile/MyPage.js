@@ -1,4 +1,4 @@
-import {React, useState, useEffect} from 'react';
+import { React, useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import MyChart from './MyChart';
 import MySubjectChart from './MySubjectChart';
@@ -8,7 +8,7 @@ import { FiChevronRight } from 'react-icons/fi';
 
 const sizes = {
   phone: 768,
-  tablet: 1000
+  tablet: 1000,
 };
 
 // 자동으로 media 쿼리 함수를 만들어 준다.
@@ -27,7 +27,6 @@ const MainWrap = styled.div`
   width: 100%;
   height: 45rem;
   align-items: center;
-  
 `;
 
 // 그래프 SECTION
@@ -39,11 +38,11 @@ const GraphInfoWrap = styled.section`
   height: 100%;
   background: white;
 
-  button{
+  button {
     border: none;
     background: white;
   }
-`
+`;
 
 // GRAPH DIV
 const GraphDiv = styled.section`
@@ -76,8 +75,7 @@ const GraphDivTop = styled.div`
     font-weight: 600;
     color: #243465;
   }
-
-`
+`;
 
 // GRAPH DIV MIDDLE
 const GraphDivMiddle = styled.div`
@@ -87,16 +85,15 @@ const GraphDivMiddle = styled.div`
   height: 23%;
   background-color: white;
   align-items: center;
-
-`
+`;
 
 // GRAPH MIDDLE SECTION
-const GraphMiddleSection= styled.div`
+const GraphMiddleSection = styled.div`
   display: flex;
   margin-left: -20rem;
   ${media.tablet`margin-left: -11rem;`};
   width: 4rem;
-`
+`;
 
 // SCORE, INFO SECTION
 const ScoreInfoWrap = styled.section`
@@ -107,7 +104,7 @@ const ScoreInfoWrap = styled.section`
   width: 55%;
   height: 100%;
   background: white;
-`
+`;
 
 // SCORE DIV
 const ScoreWrap = styled.div`
@@ -117,11 +114,11 @@ const ScoreWrap = styled.div`
   height: 70%;
   background: white;
 
-  button{
+  button {
     border: none;
     background: white;
   }
-`
+`;
 
 // SCORE DIV
 const ScoreDiv = styled.section`
@@ -138,7 +135,6 @@ const ScoreDiv = styled.section`
   border-radius: 1.5rem;
   background: #ffffff;
   box-shadow: 0rem 0.1rem 0.5rem 0.1rem rgba(0, 0, 0, 0.1);
-  
 `;
 
 // SCOREIMAGE DIV
@@ -150,22 +146,21 @@ const ScoreImageDiv = styled.div`
   background: white;
   width: 90%;
   height: 45%;
-  border-bottom: 0.1rem solid #D9D9D9;
+  border-bottom: 0.1rem solid #d9d9d9;
 
-  img{
+  img {
     display: flex;
     width: 7rem;
     height: 7rem;
   }
 
-  h2{
+  h2 {
     margin-top: 1rem;
     font-weight: 400;
     font-size: 1rem;
     color: #797979;
   }
-
-`
+`;
 
 // SCOREINFO DIV
 const ScoreInfoDiv = styled.div`
@@ -177,21 +172,21 @@ const ScoreInfoDiv = styled.div`
   width: 90%;
   height: 45%;
 
-  h2{
+  h2 {
     margin-top: 0.5rem;
     font-weight: 400;
     font-size: 1rem;
     color: #797979;
   }
 
-  h1{
+  h1 {
     margin-top: 1rem;
     font-weight: 700;
     font-size: 2rem;
     color: black;
   }
 
-  button{
+  button {
     margin-top: 2rem;
     width: 10rem;
     height: 3rem;
@@ -204,7 +199,7 @@ const ScoreInfoDiv = styled.div`
     border: none;
     cursor: pointer;
   }
-`
+`;
 
 // INFO DIV
 const InfoWrap = styled.div`
@@ -214,11 +209,10 @@ const InfoWrap = styled.div`
   height: 30%;
   background: white;
 
-  button{
+  button {
     border: none;
-
   }
-`
+`;
 
 // InfoSubject DIV
 const InfoSubjectDiv = styled.section`
@@ -243,22 +237,21 @@ const InfoSubjectTop = styled.div`
   background: white;
   width: 90%;
   height: 25%;
-  border-bottom: 0.1rem solid #D9D9D9;
+  border-bottom: 0.1rem solid #d9d9d9;
 
-  img{
+  img {
     display: flex;
     width: 7rem;
     height: 7rem;
   }
 
-  h2{
+  h2 {
     margin-top: 1rem;
     font-weight: 400;
     font-size: 1rem;
     color: #797979;
   }
-
-`
+`;
 
 // INFOSUBJECT MIDDLE DIV
 const InfoSubjectMiddle = styled.div`
@@ -270,21 +263,21 @@ const InfoSubjectMiddle = styled.div`
   width: 90%;
   height: 65%;
 
-  h2{
+  h2 {
     margin-top: 0.5rem;
     font-weight: 400;
     font-size: 1rem;
     color: #797979;
   }
 
-  h1{
+  h1 {
     margin-top: 1rem;
     font-weight: 700;
     font-size: 2rem;
     color: black;
   }
 
-  button{
+  button {
     margin-top: 1.5rem;
     width: 7rem;
     height: 2rem;
@@ -297,10 +290,9 @@ const InfoSubjectMiddle = styled.div`
     border: none;
     cursor: pointer;
   }
-`
+`;
 
 const MyPage = () => {
-
   const [isMobile, setIsMobile] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
@@ -316,7 +308,7 @@ const MyPage = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // 나중에 usestate로 변경 
+  // 나중에 usestate로 변경
   const data = [
     { label: '문법', value: 67 },
     { label: '어휘', value: 27 },
@@ -338,159 +330,173 @@ const MyPage = () => {
     { label: '', value: 79 },
   ];
 
-  // 2줄 넘으면 끊어야함 
-  const [GrammarFeed, setGrammarFeed] = useState("문법 피드백 내용");
-  const [VocaFeed, setVocaFeed] = useState("어휘 피드백 내용");
-  const [readingFeed, setReadingFeed] = useState("독해 피드백 내용");
+  // 2줄 넘으면 끊어야함
+  // const [GrammarFeed, setGrammarFeed] = useState("문법 피드백 내용");
+  // const [VocaFeed, setVocaFeed] = useState("어휘 피드백 내용");
+  // const [readingFeed, setReadingFeed] = useState("독해 피드백 내용");
 
-  const GraphButtonClick = () =>{
+  const GrammarFeed = '문법 피드백 내용';
+  const VocaFeed = '어휘 피드백 내용';
+  const readingFeed = '독해 피드백 내용';
+
+  const GraphButtonClick = () => {
     setIsClicked(true);
-  }
-  const InfoButtonClick = () =>{
+  };
+  const InfoButtonClick = () => {
     setIsClicked(false);
-  }
+  };
 
   const rank = 26.76;
 
   return (
-
     // PC 크기일때
     <MainWrap>
-      {isDesktop &&(<GraphInfoWrap>
-        <GraphDiv>
-          <GraphDivTop>
-            <h1>취약점 분석표</h1>
-            <MyChart data={data}></MyChart>
-            <h1>집중 분석</h1>
-          </GraphDivTop>
-          <GraphDivMiddle>
-            <GraphMiddleSection>
-              <MySubjectChart data={data1}></MySubjectChart>
-              <MySubjectChart data={data2}></MySubjectChart>
-              <MySubjectChart data={data3}></MySubjectChart>
-            </GraphMiddleSection>
-          </GraphDivMiddle>
-        </GraphDiv>
-      </GraphInfoWrap>)}
+      {isDesktop && (
+        <GraphInfoWrap>
+          <GraphDiv>
+            <GraphDivTop>
+              <h1>취약점 분석표</h1>
+              <MyChart data={data}></MyChart>
+              <h1>집중 분석</h1>
+            </GraphDivTop>
+            <GraphDivMiddle>
+              <GraphMiddleSection>
+                <MySubjectChart data={data1}></MySubjectChart>
+                <MySubjectChart data={data2}></MySubjectChart>
+                <MySubjectChart data={data3}></MySubjectChart>
+              </GraphMiddleSection>
+            </GraphDivMiddle>
+          </GraphDiv>
+        </GraphInfoWrap>
+      )}
 
-      {isDesktop &&(<ScoreInfoWrap>
-        <ScoreWrap>
-          <ScoreDiv>
-            <ScoreImageDiv>
-              <img src={correctLogo} alt="correcting 로고" />
-              <h2>나의 점수는</h2>
-            </ScoreImageDiv>
-            <ScoreInfoDiv>
-              <h2>2023.04.20 측정 결과</h2>
-              <h1>상위 {rank}%</h1>
-              <button>랭킹 보기</button>
-            </ScoreInfoDiv>
-          </ScoreDiv>
-        </ScoreWrap>
+      {isDesktop && (
+        <ScoreInfoWrap>
+          <ScoreWrap>
+            <ScoreDiv>
+              <ScoreImageDiv>
+                <img src={correctLogo} alt="correcting 로고" />
+                <h2>나의 점수는</h2>
+              </ScoreImageDiv>
+              <ScoreInfoDiv>
+                <h2>2023.04.20 측정 결과</h2>
+                <h1>상위 {rank}%</h1>
+                <button>랭킹 보기</button>
+              </ScoreInfoDiv>
+            </ScoreDiv>
+          </ScoreWrap>
 
-        <InfoWrap>
-          <InfoSubjectDiv>
-            <InfoSubjectTop>
-              <h1>문법</h1>
-              <InfoSubjectMiddle>
-                <h2>{GrammarFeed}</h2>
-                <button>복습하기</button>
-              </InfoSubjectMiddle>
-            </InfoSubjectTop>
-          </InfoSubjectDiv>
-            
-          <InfoSubjectDiv>
-            <InfoSubjectTop>
-              <h1>어휘</h1>
-              <InfoSubjectMiddle>
-                <h2>{VocaFeed}</h2>
-                <button>복습하기</button>
-              </InfoSubjectMiddle>
-            </InfoSubjectTop>
-          </InfoSubjectDiv>
+          <InfoWrap>
+            <InfoSubjectDiv>
+              <InfoSubjectTop>
+                <h1>문법</h1>
+                <InfoSubjectMiddle>
+                  <h2>{GrammarFeed}</h2>
+                  <button>복습하기</button>
+                </InfoSubjectMiddle>
+              </InfoSubjectTop>
+            </InfoSubjectDiv>
 
-          <InfoSubjectDiv>
-            <InfoSubjectTop>
-              <h1>독해</h1>
-              <InfoSubjectMiddle>
-                <h2>{readingFeed}</h2>
-                <button>복습하기</button>
-              </InfoSubjectMiddle>
-            </InfoSubjectTop>
-          </InfoSubjectDiv>
-        </InfoWrap>
-      </ScoreInfoWrap>)}
+            <InfoSubjectDiv>
+              <InfoSubjectTop>
+                <h1>어휘</h1>
+                <InfoSubjectMiddle>
+                  <h2>{VocaFeed}</h2>
+                  <button>복습하기</button>
+                </InfoSubjectMiddle>
+              </InfoSubjectTop>
+            </InfoSubjectDiv>
 
-      {/* 모바일 크기일때*/ }
-      {isMobile && !isClicked &&(<GraphInfoWrap>
-        <GraphDiv>
-          <GraphDivTop>
-            <h1>취약점 분석표</h1>
-            <MyChart data={data}></MyChart>
-            <h1>집중 분석</h1>
-          </GraphDivTop>
-          <GraphDivMiddle>
-            <GraphMiddleSection>
-              <MySubjectChart data={data1}></MySubjectChart>
-              <MySubjectChart data={data2}></MySubjectChart>
-              <MySubjectChart data={data3}></MySubjectChart>
-            </GraphMiddleSection>
-          </GraphDivMiddle>
-        </GraphDiv>
-        <button onClick={GraphButtonClick}><FiChevronRight size="4rem" color="#6AC7B2"></FiChevronRight></button>
-      </GraphInfoWrap>)}
+            <InfoSubjectDiv>
+              <InfoSubjectTop>
+                <h1>독해</h1>
+                <InfoSubjectMiddle>
+                  <h2>{readingFeed}</h2>
+                  <button>복습하기</button>
+                </InfoSubjectMiddle>
+              </InfoSubjectTop>
+            </InfoSubjectDiv>
+          </InfoWrap>
+        </ScoreInfoWrap>
+      )}
 
-      {isMobile && isClicked &&(<ScoreInfoWrap>
-        <ScoreWrap>
-          <button onClick={InfoButtonClick}><FiChevronLeft size="4rem" color="#6AC7B2"></FiChevronLeft></button>
-          <ScoreDiv>
-            <ScoreImageDiv>
-              <img src={correctLogo} alt="correcting 로고" />
-              <h2>나의 점수는</h2>
-            </ScoreImageDiv>
-            <ScoreInfoDiv>
-              <h2>2023.04.20 측정 결과</h2>
-              <h1>상위 {rank}%</h1>
-              <button>랭킹 보기</button>
-            </ScoreInfoDiv>
-          </ScoreDiv>
-        </ScoreWrap>
+      {/* 모바일 크기일때*/}
+      {isMobile && !isClicked && (
+        <GraphInfoWrap>
+          <GraphDiv>
+            <GraphDivTop>
+              <h1>취약점 분석표</h1>
+              <MyChart data={data}></MyChart>
+              <h1>집중 분석</h1>
+            </GraphDivTop>
+            <GraphDivMiddle>
+              <GraphMiddleSection>
+                <MySubjectChart data={data1}></MySubjectChart>
+                <MySubjectChart data={data2}></MySubjectChart>
+                <MySubjectChart data={data3}></MySubjectChart>
+              </GraphMiddleSection>
+            </GraphDivMiddle>
+          </GraphDiv>
+          <button onClick={GraphButtonClick}>
+            <FiChevronRight size="4rem" color="#6AC7B2"></FiChevronRight>
+          </button>
+        </GraphInfoWrap>
+      )}
 
-        <InfoWrap>
-          <InfoSubjectDiv>
-            <InfoSubjectTop>
-              <h1>문법</h1>
-              <InfoSubjectMiddle>
-                <h2>{GrammarFeed}</h2>
-                <button>복습하기</button>
-              </InfoSubjectMiddle>
-            </InfoSubjectTop>
-          </InfoSubjectDiv>
-            
-          <InfoSubjectDiv>
-            <InfoSubjectTop>
-              <h1>어휘</h1>
-              <InfoSubjectMiddle>
-                <h2>{VocaFeed}</h2>
-                <button>복습하기</button>
-              </InfoSubjectMiddle>
-            </InfoSubjectTop>
-          </InfoSubjectDiv>
+      {isMobile && isClicked && (
+        <ScoreInfoWrap>
+          <ScoreWrap>
+            <button onClick={InfoButtonClick}>
+              <FiChevronLeft size="4rem" color="#6AC7B2"></FiChevronLeft>
+            </button>
+            <ScoreDiv>
+              <ScoreImageDiv>
+                <img src={correctLogo} alt="correcting 로고" />
+                <h2>나의 점수는</h2>
+              </ScoreImageDiv>
+              <ScoreInfoDiv>
+                <h2>2023.04.20 측정 결과</h2>
+                <h1>상위 {rank}%</h1>
+                <button>랭킹 보기</button>
+              </ScoreInfoDiv>
+            </ScoreDiv>
+          </ScoreWrap>
 
-          <InfoSubjectDiv>
-            <InfoSubjectTop>
-              <h1>독해</h1>
-              <InfoSubjectMiddle>
-                <h2>{readingFeed}</h2>
-                <button>복습하기</button>
-              </InfoSubjectMiddle>
-            </InfoSubjectTop>
-          </InfoSubjectDiv>
-        </InfoWrap>
-      </ScoreInfoWrap>)}
+          <InfoWrap>
+            <InfoSubjectDiv>
+              <InfoSubjectTop>
+                <h1>문법</h1>
+                <InfoSubjectMiddle>
+                  <h2>{GrammarFeed}</h2>
+                  <button>복습하기</button>
+                </InfoSubjectMiddle>
+              </InfoSubjectTop>
+            </InfoSubjectDiv>
+
+            <InfoSubjectDiv>
+              <InfoSubjectTop>
+                <h1>어휘</h1>
+                <InfoSubjectMiddle>
+                  <h2>{VocaFeed}</h2>
+                  <button>복습하기</button>
+                </InfoSubjectMiddle>
+              </InfoSubjectTop>
+            </InfoSubjectDiv>
+
+            <InfoSubjectDiv>
+              <InfoSubjectTop>
+                <h1>독해</h1>
+                <InfoSubjectMiddle>
+                  <h2>{readingFeed}</h2>
+                  <button>복습하기</button>
+                </InfoSubjectMiddle>
+              </InfoSubjectTop>
+            </InfoSubjectDiv>
+          </InfoWrap>
+        </ScoreInfoWrap>
+      )}
     </MainWrap>
-    
-  )
+  );
 };
 
 export default MyPage;
