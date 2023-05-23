@@ -1,7 +1,8 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+import { v4 as uuidv4 } from 'uuid';
 // import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 // import { IoSendSharp } from 'react-icons/io5';
 // import { FiSearch } from 'react-icons/fi';
 import { FiChevronLeft } from 'react-icons/fi';
@@ -238,6 +239,33 @@ const Chat = () => {
   const [isSelect, setisOn] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
+  const [components, setComponents] = useState([]);
+  const [userInput, setUserInput] = useState("");
+  const chatRef = useRef(null);
+  
+
+  const handleInput = (event) => {
+    setUserInput(event.target.value);
+  };
+
+  useEffect(() => {
+    if (chatRef.current) {
+      chatRef.current.scrollTop = chatRef.current.scrollHeight;
+    }
+  }, [components]);
+
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      const input = userInput.trim();
+      const myComponent = <MyChat text={input} key={uuidv4()}></MyChat>;
+      setComponents(prevComponents => [...prevComponents, myComponent]);
+
+      const gptComponent = <GptChat text={'GPT 대답'} key={uuidv4()}></GptChat>;
+      setComponents(prevComponents => [...prevComponents, gptComponent]);
+
+      setUserInput("");
+    }
+  };
 
   useEffect(() => {
     function handleResize() {
@@ -322,23 +350,17 @@ const Chat = () => {
               <h1>{Subject}</h1>
             </ChatGptTop>
 
-            <ChatGptMiddle>
+            <ChatGptMiddle ref={chatRef}>
               {/* Subject가 null일경우 출력*/}
               {!Subject && <ChatInfo> </ChatInfo>}
-              {Subject && <GptChat text={'hello'}></GptChat>}
-              {Subject && <MyChat text={'hello'}></MyChat>}
-              {Subject && <GptChat text={'hello'}></GptChat>}
-              {Subject && <MyChat text={'hello'}></MyChat>}
-              {Subject && <GptChat text={'hello'}></GptChat>}
-              {Subject && <MyChat text={'hello'}></MyChat>}
-              {Subject && <GptChat text={'hello'}></GptChat>}
-              {Subject && <MyChat text={'hello'}></MyChat>}
-              {Subject && <GptChat text={'hello'}></GptChat>}
-              {Subject && <MyChat text={'hello'}></MyChat>}
+
+              {components}
+              
             </ChatGptMiddle>
 
             <ChatGptBottom>
-              <ChatInput placeholder="Type your message here"></ChatInput>
+              <ChatInput placeholder="Type your message here" onKeyPress={handleKeyPress} value={userInput}
+                onChange={handleInput}></ChatInput>
             </ChatGptBottom>
           </ChatGptWrap>
         </ChatSectionWrap>
@@ -409,23 +431,16 @@ const Chat = () => {
               <h1>{Subject}</h1>
             </ChatGptTop>
 
-            <ChatGptMiddle>
+            <ChatGptMiddle ref={chatRef}>
               {/* Subject가 null일경우 출력*/}
               {!Subject && <ChatInfo> </ChatInfo>}
-              {Subject && <GptChat text={'hello'}></GptChat>}
-              {Subject && <MyChat text={'hello'}></MyChat>}
-              {Subject && <GptChat text={'hello'}></GptChat>}
-              {Subject && <MyChat text={'hello'}></MyChat>}
-              {Subject && <GptChat text={'hello'}></GptChat>}
-              {Subject && <MyChat text={'hello'}></MyChat>}
-              {Subject && <GptChat text={'hello'}></GptChat>}
-              {Subject && <MyChat text={'hello'}></MyChat>}
-              {Subject && <GptChat text={'hello'}></GptChat>}
-              {Subject && <MyChat text={'hello'}></MyChat>}
+              
+              {components}
             </ChatGptMiddle>
 
             <ChatGptBottom>
-              <ChatInput placeholder="Type your message here"></ChatInput>
+              <ChatInput placeholder="Type your message here" onKeyPress={handleKeyPress} value={userInput}
+                onChange={handleInput}></ChatInput>
             </ChatGptBottom>
           </ChatGptWrap>
         </ChatSectionWrap>

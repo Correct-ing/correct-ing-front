@@ -10,24 +10,34 @@ const MainWrap = styled.div`
   justify-content: right;
 `;
 
-const Chat = styled.div`
-  display: flex;
-  // width 작성해야 함
-  height: 100%;
-  margin: 1rem 2rem;
-  background-color: rgba(127, 168, 157, 0.3);
-  border-radius: 10px;
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-  color: #333;
-  font-size: 16px;
-  text-align: center;
-  justify-content: center;
-`;
-
 const MyChat = ({ text }) => {
+
+  const getWidth = (text) => {
+    const textLength = text.length;
+    const minWidth = 50;
+    const width = Math.max(textLength * 10, minWidth);
+    return width;
+  };
+
+  const width = getWidth(text);
+
+  const chatStyle = {
+    display: 'flex',
+    height: '100%',
+    margin: '1rem 2rem',
+    backgroundColor: 'rgba(127, 168, 157, 0.3)',
+    borderRadius: '10px',
+    boxShadow: '2px 2px 5px rgba(0, 0, 0, 0.3)',
+    color: '#333',
+    fontSize: '16px',
+    textAlign: 'center',
+    justifyContent: 'center',
+    width: `${width}px`,
+  };
+
   return (
     <MainWrap>
-      <Chat>{text}</Chat>
+      <div style={chatStyle}>{text}</div>
     </MainWrap>
   );
 };

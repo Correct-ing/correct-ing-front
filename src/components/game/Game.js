@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from 'styled-components';
 
-// 나중에 usestate 수정
+// 50문제 랜덤
 const words = [
   "the quick brown fox jumps",
   "life is short make it",
@@ -33,7 +33,39 @@ const words = [
   "puzzles challenge and entertain me",
   "photography captures moments",
   "helping others fulfills me",
-
+  "learning is a lifelong journey",
+  "laughter is the best medicine",
+  "friends are the family we choose",
+  "creativity knows no bounds",
+  "adventure awaits at every corner",
+  "kindness costs nothing",
+  "hard work pays off",
+  "imagination is the key to innovation",
+  "failure is a stepping stone to success",
+  "patience is a virtue",
+  "simplicity is the ultimate sophistication",
+  "knowledge is power",
+  "time is precious, use it wisely",
+  "love conquers all",
+  "actions speak louder than words",
+  "change starts from within",
+  "happiness is a choice",
+  "beauty is in the eye of the beholder",
+  "forgiveness sets you free",
+  "hope is a powerful motivator",
+  "self-care is important for well-being",
+  "gratitude turns what we have into enough",
+  "embrace the unknown",
+  "positivity breeds positivity",
+  "success comes to those who persevere",
+  "inspiration can be found everywhere",
+  "learning from mistakes leads to growth",
+  "a journey of a thousand miles begins with a single step",
+  "challenges make you stronger",
+  "kindness is contagious",
+  "stay curious, keep learning",
+  "dreams have no limits",
+  "be the change you wish to see in the world",
 ];
 
 // GRAPH DIV
@@ -82,6 +114,13 @@ const ProblemWrap = styled.div`
       font-size: 3rem;
       margin: 5rem auto;
     }
+    button{
+      margin: 5rem auto;
+      width: 8rem;
+      height: 4rem;
+      border: none;
+      border-radius: 1rem;
+    }
 `;
 const AnswerWrap = styled.div`
     width: 100%;
@@ -101,9 +140,11 @@ const Game = () => {
   const [currentWord, setCurrentWord] = useState("");
   const [userInput, setUserInput] = useState("");
   const [score, setScore] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(15);
+  const [timeLeft, setTimeLeft] = useState(1000000);
   const [gameOver, setGameOver] = useState(false);
   const [inCorrect, setInCorrect] = useState(false);
+  const [gameStart, setGameStart] = useState(false);
+  const [count, setCount] = useState("");
 
   useEffect(() => {
     if (timeLeft > -1) {
@@ -123,9 +164,20 @@ const Game = () => {
     setTimeLeft((prevTimeLeft) => prevTimeLeft - 0.3);
   };
 
-  const resetTimer = () => {
-    setTimeLeft(15);
-  };
+  const startGame = () =>{
+    let countdown = 3;
+    const countdownInterval = setInterval(() => {
+      setCount(countdown);
+      countdown--;
+
+      if (countdown < 0) {
+        clearInterval(countdownInterval);
+        setGameStart(true);
+        setTimeLeft(15);
+      }
+    }, 1000);
+    
+  }
 
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
@@ -152,7 +204,6 @@ const Game = () => {
 
   useEffect(() => {
     setCurrentWord(words[Math.floor(Math.random() * words.length)]);
-    resetTimer();
   }, []);
 
   useEffect(() => {
@@ -190,30 +241,48 @@ const Game = () => {
     );
   }
 
-  return (
-    <div>
+  if (!gameStart){
+    return(
       <GameDiv>
-        <TimeBarDiv style={barStyle}/>
+        <h1>{count}</h1>
         <ProblemWrap>
+          
           <AnswerWrap>
-            <p>{currentWord}</p>
+            <p>이 곳에 나타나는 문장을 똑같이 타이핑 해주세요!</p>
           </AnswerWrap>
-            <TextInput
-              type="text"
-              value={userInput}
-              onChange={handleInput}
-              onKeyPress={handleKeyPress}
-            />
-          <p>남은 시간: {timeLeft.toFixed(1)}초</p>
-          <p>점수: {score}</p>
-          {inCorrect && (<p style={{ color: 'red' }}>틀렸습니다!</p>)}
-        </ProblemWrap>
-        
-      </GameDiv>
-      
-    </div>
-  );
-};
 
+          <button onClick={startGame}>시작하기</button>
+
+        </ProblemWrap>
+
+      </GameDiv>
+    )
+  } else {
+
+    return (
+      <div>
+        <GameDiv>
+          <TimeBarDiv style={barStyle}/>
+          <ProblemWrap>
+            <AnswerWrap>
+              <p>{currentWord}</p>
+            </AnswerWrap>
+              <TextInput
+                type="text"
+                value={userInput}
+                onChange={handleInput}
+                onKeyPress={handleKeyPress}
+              />
+            <p>남은 시간: {timeLeft.toFixed(1)}초</p>
+            <p>점수: {score}</p>
+            {inCorrect && (<p style={{ color: 'red' }}>틀렸습니다!</p>)}
+          </ProblemWrap>
+
+        </GameDiv>
+
+      </div>
+    );
+  };
+}
 export default Game;
 
