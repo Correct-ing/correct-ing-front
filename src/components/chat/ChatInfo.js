@@ -19,7 +19,7 @@ import correctLogo from '../../assets/correct-logo.png';
 
 const InfoWrap = styled.div`
   width: 100%;
-  height: 100%;
+  height: 80%;
   text-align: center;
   justify-content: center;
 `;
@@ -28,7 +28,7 @@ const ImageWrap = styled.div`
   display: flex;
 
   img {
-    margin: 3rem auto;
+    margin: 1rem auto;
     width: 10rem;
     height: 10rem;
   }

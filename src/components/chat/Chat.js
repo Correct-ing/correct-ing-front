@@ -394,7 +394,7 @@ const handleKeyPress = async (event) => {
   if (event.key === "Enter") {
     // 비활성화
     setIsInputDisabled(true);
-
+    setUserInput("");
     try {
       const myToken = accessToken; // Replace with your access token or retrieve it from the appropriate source
       const url = `http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/chats/${chatRoomId}?prompt=${input}`;
@@ -465,22 +465,25 @@ const handleKeyPress = async (event) => {
     setComponents([]);
     if(resolvedValue){
       setRoomId(resolvedValue);
-      if(chatRoomId==resolvedValue){
+      if(chatRoomId===resolvedValue){
         getChatting();
       }
     } else {
       alert("방이 존재하지 않습니다, NEW 버튼으로 생성해주세요!");
+      setisOn(false);
+      setSubject(false);
     }
     
 
   };
 
+  
   useEffect(()=>{
     if(chatRoomId!==false){
       getChatting();
-
     }
-  }, [chatRoomId])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chatRoomId]);
 
   return (
     <MainWrap>
@@ -616,7 +619,7 @@ const handleKeyPress = async (event) => {
             <ChatGptMiddle ref={chatRef}>
               {/* Subject가 null일경우 출력*/}
               {!Subject && <ChatInfo> </ChatInfo>}
-              {components}
+              {Subject && components}
               
             </ChatGptMiddle>
 
