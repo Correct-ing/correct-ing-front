@@ -388,7 +388,6 @@ const delChatRoom = (event) => {
           
   };
 
-
   /* 채팅 입력 시 */
 const handleKeyPress = async (event) => {
   const input = event.target.value;
