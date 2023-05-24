@@ -147,6 +147,7 @@ const RecordList = styled.li`
   }
 
   button {
+    margin-left: 1rem;
   }
 `;
 // 채팅 상단 DIV
@@ -236,6 +237,7 @@ const ChatInput = styled.input`
 `;
 
 const Chat = () => {
+  const [chatRoomId, setRoomId] = useState(false);
   const [Subject, setSubject] = useState();
   const [isSelect, setisOn] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -243,99 +245,200 @@ const Chat = () => {
   const [components, setComponents] = useState([]);
   const [userInput, setUserInput] = useState("");
   const chatRef = useRef(null);
-  const [name, setName] = useState('');
-  const [category, setCategory] = useState('');
+  const [isInputDisabled, setIsInputDisabled] = useState(false);
   const { loginRes } = useSelector(({ auth }) => ({
     form: auth.login, // 상태 값 설정
     loginRes: auth.loginRes,
     loginErr: auth.loginErr,
   }));
   const accessToken = loginRes.accessToken;
-  const [BUSINESS, setBusiness] = useState(false);
-  const [DAILY, setDaily] = useState(false);
-  const [EDUCATION, setEducation] = useState(false);
-  const [INTEREST, setInterest] = useState(false);
+  const userId = localStorage.getItem('nickname') !== ''
+                ? localStorage.getItem('nickname')
+                : null;
 
-/*
-  const createChatRoom = () => {
-    const data = {
-      name: name,
-      category: category
-    };
+  /* 채팅방 생성 */
+  const createChatRoom = (event) => {
+    const text = event.target.value;
 
     const headers = {
       Authorization: `Bearer ${accessToken}` // Include access token in the request headers
     };
-    
-    axios.post('http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/chat-rooms', data, { headers })
-      .then(response => {
-        console.log('Chat room created successfully:', response.data);
-        // Perform any additional actions on successful creation
-      })
+
+      // Check if a chat room already exists with the provided text
+      findChatRoom(text)
+      .then(existingRoom => {
+        if (!existingRoom) {
+          const data = {
+            name: userId,
+            category: text.toString()
+          };
+  
+          axios.post('http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/chat-rooms', data, { headers: headers })
+           .then(response => {
+             console.log('Chat room created successfully:', response.data);
+             return findChatRoom(data.category); // Return the Promise for chaining
+           })
+           .catch(error => {
+             console.error('Error creating chat room:', error);
+             // Handle the error case
+           });
+       } else {
+        alert('방이 이미 존재합니다.');
+         // Handle the case when a chat room already exists
+      }
+    })
       .catch(error => {
-        console.error('Error creating chat room:', error);
-        // Handle the error case
+        console.error('Error finding chat room:', error);
+        // Handle the error case for finding chat room
       });
+
   };
-*/
-  useEffect(() => {
+
+  /* 카테고리로 채팅방 ID 찾기 */
+  const findChatRoom = async (text) => {
 
     const headers = {
       Authorization: `Bearer ${accessToken}` // Include access token in the request headers
     };
-    
-    axios.get('http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/chat-rooms', { headers })
-      .then(response => {
-        console.log('Chat room get successfully:', response.data);
-        // Perform any additional actions on successful creation
+
+    try {
+      const response = await axios.get('http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/chat-rooms', { headers });
+      console.log('Chat room get successfully:', response.data);
+  
+      const chatRooms = await response.data;
+      for (const chatRoom of chatRooms) {
+        if (chatRoom.category === text) {
+          
+          return chatRoom.chatRoomId;
+        }
+      }
+  
+      return null; // 카테고리에 해당하는 채팅방을 찾지 못한 경우 null 반환
+    } catch (error) {
+      console.error('Error get chat room:', error);
+      // Handle the error case
+      return null; // 에러 발생 시 null 반환
+    }
+  };
+
+ /* 채팅방 삭제 */
+const delChatRoom = (event) => {
+  findChatRoom(event.target.value)
+    .then(text => {
+      if (text === null) {
+        alert("삭제할 방이 없습니다.");
+        throw new Error("삭제할 방이 없습니다."); // Throw an error to skip the subsequent chain
+      }
       
-      })
-      .catch(error => {
-        console.error('Error get chat room:', error);
-        // Handle the error case
-      });
-  }, []);
-/*
-  const delChatRoom = () => {
+      const headers = {
+        Authorization: `Bearer ${accessToken}`
+      };
+      return axios.delete('http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/chat-rooms/' + text, { headers: headers })
+        .then(response => {
+          console.log('Chat room deleted successfully:', response.data);
+          // 추가적인 작업 수행
 
-    const headers = {
-      Authorization: `Bearer ${accessToken}` // Include access token in the request headers
-    };
-    
-    axios.get('http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/chat-rooms', { headers })
-      .then(response => {
-        console.log('Chat room get successfully:', response.data);
-        // Perform any additional actions on successful creation
-      })
-      .catch(error => {
-        console.error('Error get chat room:', error);
-        // Handle the error case
-      });
-  };
-  */
- 
+          setSubject(false);
+          setComponents([]);
+        });
+    })
+    .catch(error => {
+      if (error.message !== "삭제할 방이 없습니다.") {
+        console.error('Error deleting chat room:', error);
+        // 에러 처리
+      }
+    });
+};
+
+
   const handleInput = (event) => {
     setUserInput(event.target.value);
   };
 
   useEffect(() => {
-    if (chatRef.current) {
+    if (chatRef.current ) {
       chatRef.current.scrollTop = chatRef.current.scrollHeight;
     }
   }, [components]);
 
-  const handleKeyPress = (event) => {
-    if (event.key === "Enter") {
-      const input = userInput.trim();
-      const myComponent = <MyChat text={input} key={uuidv4()}></MyChat>;
-      setComponents(prevComponents => [...prevComponents, myComponent]);
+  // get 채팅 내용 
+  const getChatting = async() =>{
+    const headers = {
+      Authorization: `Bearer ${accessToken}` // Include access token in the request headers
+    };
+    setComponents([]);
+    const url = `http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/chats/${chatRoomId}`;
+    const response = await axios.get(url, { headers });
 
-      const gptComponent = <GptChat text={'GPT 대답'} key={uuidv4()}></GptChat>;
-      setComponents(prevComponents => [...prevComponents, gptComponent]);
-
-      setUserInput("");
-    }
+    console.log('Chat successfully:', response.data);
+    const textArray = response.data;
+    textArray.forEach(text => {
+      if (text.question) {
+        // Do something for question category
+        const newComponent = <MyChat text={text.question} key={uuidv4()}/>;
+        setComponents(prevComponents => [...prevComponents, newComponent]);
+      } 
+      if (text.answer) {
+        // Do something for answer category
+        const newComponent = <GptChat text={text.answer} key={uuidv4()} />;
+        setComponents(prevComponents => [...prevComponents, newComponent]);
+      }
+      // Add more conditions for other categories if needed
+    });
+          
   };
+
+
+  /* 채팅 입력 시 */
+const handleKeyPress = async (event) => {
+  const input = event.target.value;
+  if (event.key === "Enter") {
+    // 비활성화
+    setIsInputDisabled(true);
+
+    try {
+      const myToken = accessToken; // Replace with your access token or retrieve it from the appropriate source
+      const url = `http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/chats/${chatRoomId}?prompt=${input}`;
+      const data = {
+        // 바디에 추가할 데이터
+      };
+
+      const retryCount = 20;
+      let attempt = 1;
+      let response;
+      
+      while (attempt <= retryCount) {
+        try {
+          response = await axios.post(url, data, {
+            headers: {
+              Authorization: `Bearer ${myToken}`,
+            },
+          });
+          break;
+        } catch (error) {
+          console.error(error);
+          console.log(`Retry attempt ${attempt}/${retryCount}`);
+          attempt++;
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+        }
+      }
+
+      if (response) {
+        getChatting();
+        setTimeout(() => {
+          setIsInputDisabled(false);
+        }, 3000);
+      } else {
+        alert("내부 오류입니다. 잠시후 다시 입력해주세요");
+        setIsInputDisabled(false);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+  }
+};
+
 
   useEffect(() => {
     function handleResize() {
@@ -348,11 +451,37 @@ const Chat = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  const clickResume = () =>{
+    setSubject(null);
+    setisOn(!isSelect);
+  }
+  
+  
   // List 클릭 시 토글
-  const ListClick = (name, e) => {
+  const ListClick = async (name, e) => {
+    const uppercaseName = name.toUpperCase();
     setSubject(name);
     setisOn(!isSelect);
+    const resolvedValue = await findChatRoom(uppercaseName);
+    setComponents([]);
+    if(resolvedValue){
+      setRoomId(resolvedValue);
+      if(chatRoomId==resolvedValue){
+        getChatting();
+      }
+    } else {
+      alert("방이 존재하지 않습니다, NEW 버튼으로 생성해주세요!");
+    }
+    
+
   };
+
+  useEffect(()=>{
+    if(chatRoomId!==false){
+      getChatting();
+
+    }
+  }, [chatRoomId])
 
   return (
     <MainWrap>
@@ -376,15 +505,11 @@ const Chat = () => {
               >
                 <h1>Business</h1>
                 <h2>6:56 PM</h2>
+                
               </RecordList>
-              <RecordList
-                onClick={(e) => {
-                  ListClick('Daily Life', e);
-                }}
-              >
-                <h1>Daily Life</h1>
-                <h2>Yesterday</h2>
-              </RecordList>
+              <button value="BUSINESS" onClick={delChatRoom}>DEL</button>
+              <button value="BUSINESS" onClick={createChatRoom}>NEW</button>
+          
               <RecordList
                 onClick={(e) => {
                   ListClick('Education', e);
@@ -392,15 +517,11 @@ const Chat = () => {
               >
                 <h1>Education</h1>
                 <h2>Yesterday</h2>
+                
               </RecordList>
-              <RecordList
-                onClick={(e) => {
-                  ListClick('Interest', e);
-                }}
-              >
-                <h1>Interest</h1>
-                <h2>Tuesday</h2>
-              </RecordList>
+              <button value="EDUCATION" onClick={delChatRoom}>DEL</button>
+              <button value="EDUCATION" onClick={createChatRoom}>NEW</button>
+              
             </ChatListBottom>
           </ChatListWrap>
         </ListSectionWrap>
@@ -412,7 +533,7 @@ const Chat = () => {
             <ChatGptTop>
               <ChatResume
                 onClick={(e) => {
-                  ListClick(null, e);
+                  clickResume();
                 }}
               >
                 <FiChevronLeft size="4rem" color="#6AC7B2"></FiChevronLeft>
@@ -429,8 +550,8 @@ const Chat = () => {
             </ChatGptMiddle>
 
             <ChatGptBottom>
-              <ChatInput placeholder="Type your message here" onKeyPress={handleKeyPress} value={userInput}
-                onChange={handleInput}></ChatInput>
+              {Subject &&(<ChatInput placeholder="Type your message here" onKeyPress={handleKeyPress} value={userInput}
+                onChange={handleInput}></ChatInput>)}
             </ChatGptBottom>
           </ChatGptWrap>
         </ChatSectionWrap>
@@ -457,15 +578,11 @@ const Chat = () => {
               >
                 <h1>Business</h1>
                 <h2>6:56 PM</h2>
+                
               </RecordList>
-              <RecordList
-                onClick={(e) => {
-                  ListClick('Daily Life', e);
-                }}
-              >
-                <h1>Daily Life</h1>
-                <h2>Yesterday</h2>
-              </RecordList>
+              <button value="BUSINESS" onClick={delChatRoom}>DEL</button>
+              <button value="BUSINESS" onClick={createChatRoom}>NEW</button>
+
               <RecordList
                 onClick={(e) => {
                   ListClick('Education', e);
@@ -473,15 +590,11 @@ const Chat = () => {
               >
                 <h1>Education</h1>
                 <h2>Yesterday</h2>
+                
               </RecordList>
-              <RecordList
-                onClick={(e) => {
-                  ListClick('Interest', e);
-                }}
-              >
-                <h1>Interest</h1>
-                <h2>Tuesday</h2>
-              </RecordList>
+              <button value="EDUCATION" onClick={delChatRoom}>DEL</button>
+              <button value="EDUCATION" onClick={createChatRoom}>NEW</button>
+             
             </ChatListBottom>
           </ChatListWrap>
         </ListSectionWrap>
@@ -493,7 +606,7 @@ const Chat = () => {
             <ChatGptTop>
               <ChatResume
                 onClick={(e) => {
-                  ListClick(null, e);
+                  clickResume();
                 }}
               >
                 <FiChevronLeft size="4rem" color="#6AC7B2"></FiChevronLeft>
@@ -504,13 +617,14 @@ const Chat = () => {
             <ChatGptMiddle ref={chatRef}>
               {/* Subject가 null일경우 출력*/}
               {!Subject && <ChatInfo> </ChatInfo>}
-              
+              {components}
               
             </ChatGptMiddle>
 
             <ChatGptBottom>
-              <ChatInput placeholder="Type your message here" onKeyPress={handleKeyPress} value={userInput}
-                onChange={handleInput}></ChatInput>
+              {!isInputDisabled && Subject &&(<ChatInput placeholder="Type your message here" onKeyPress={handleKeyPress} value={userInput}
+                onChange={handleInput}></ChatInput>)}
+              {isInputDisabled && Subject &&(<ChatInput placeholder='Please wait (최대 1분)' disabled></ChatInput>)}
             </ChatGptBottom>
           </ChatGptWrap>
         </ChatSectionWrap>
