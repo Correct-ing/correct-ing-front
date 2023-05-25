@@ -125,6 +125,7 @@ const RecordList = styled.li`
   width: 90%;
   height: 4rem;
   margin: 1rem auto;
+  
 
   h1 {
     width: 100%;
@@ -134,6 +135,11 @@ const RecordList = styled.li`
     font-weight: 600;
     font-size: 1.5rem;
     border-bottom: 0.1rem solid rgba(130, 130, 130, 0.4);
+    cursor: pointer;
+
+  &:hover {
+    color: red;
+  }
   }
 
   h2 {
@@ -142,8 +148,13 @@ const RecordList = styled.li`
     font-family: 'Roboto';
     font-style: normal;
     font-weight: 300;
-    font-size: 1rem;
+    font-size: 1.5rem;
     border-bottom: 0.1rem solid rgba(130, 130, 130, 0.4);
+    cursor: pointer;
+
+  &:hover {
+    color: red;
+  }
   }
 
   button {
@@ -257,9 +268,7 @@ const Chat = () => {
                 : null;
 
   /* 채팅방 생성 */
-  const createChatRoom = (event) => {
-    const text = event.target.value;
-
+  const createChatRoom = (text) => {
     const headers = {
       Authorization: `Bearer ${accessToken}` // Include access token in the request headers
     };
@@ -323,10 +332,9 @@ const Chat = () => {
 
  /* 채팅방 삭제 */
 const delChatRoom = (event) => {
-  findChatRoom(event.target.value)
+  findChatRoom(event)
     .then(text => {
       if (text === null) {
-        alert("삭제할 방이 없습니다.");
         throw new Error("삭제할 방이 없습니다."); // Throw an error to skip the subsequent chain
       }
       
@@ -402,7 +410,7 @@ const handleKeyPress = async (event) => {
         // 바디에 추가할 데이터
       };
 
-      const retryCount = 20;
+      const retryCount = 5;
       let attempt = 1;
       let response;
       
@@ -469,9 +477,8 @@ const handleKeyPress = async (event) => {
         getChatting();
       }
     } else {
-      alert("방이 존재하지 않습니다, NEW 버튼으로 생성해주세요!");
-      setisOn(false);
-      setSubject(false);
+      createChatRoom(uppercaseName);
+      
     }
     
 
@@ -500,29 +507,24 @@ const handleKeyPress = async (event) => {
             </ChatListMiddle>
 
             <ChatListBottom>
-              <RecordList
-                onClick={(e) => {
-                  ListClick('Business', e);
-                }}
-              >
-                <h1>Business</h1>
-                <h2>6:56 PM</h2>
+              <RecordList>
+                <h2 onClick={(e) => { delChatRoom('BUSINESS', e)}}>x</h2>
+
+                  <h1 onClick={(e) => {
+                    ListClick('Business', e);
+                    
+                  }}>Business</h1>
                 
-              </RecordList>
-              <button value="BUSINESS" onClick={delChatRoom}>DEL</button>
-              <button value="BUSINESS" onClick={createChatRoom}>NEW</button>
-          
-              <RecordList
-                onClick={(e) => {
-                  ListClick('Education', e);
-                }}
-              >
-                <h1>Education</h1>
-                <h2>Yesterday</h2>
+                </RecordList>
                 
-              </RecordList>
-              <button value="EDUCATION" onClick={delChatRoom}>DEL</button>
-              <button value="EDUCATION" onClick={createChatRoom}>NEW</button>
+                <RecordList>
+                  <h2 onClick={(e) => { delChatRoom('EDUCATION', e)}}>x</h2>
+
+                  <h1 onClick={(e) => {
+                    ListClick('Education', e);
+                    
+                  }}>Education</h1>
+                </RecordList>
               
             </ChatListBottom>
           </ChatListWrap>
@@ -573,29 +575,25 @@ const handleKeyPress = async (event) => {
             </ChatListMiddle>
 
             <ChatListBottom>
-              <RecordList
-                onClick={(e) => {
-                  ListClick('Business', e);
-                }}
-              >
-                <h1>Business</h1>
-                <h2>6:56 PM</h2>
-                
-              </RecordList>
-              <button value="BUSINESS" onClick={delChatRoom}>DEL</button>
-              <button value="BUSINESS" onClick={createChatRoom}>NEW</button>
+              <RecordList>
+                <h2 onClick={(e) => { delChatRoom('BUSINESS', e)}}>x</h2>
 
-              <RecordList
-                onClick={(e) => {
-                  ListClick('Education', e);
-                }}
-              >
-                <h1>Education</h1>
-                <h2>Yesterday</h2>
-                
+                <h1 onClick={(e) => {
+                  ListClick('Business', e);
+                  
+                }}>Business</h1>
+
               </RecordList>
-              <button value="EDUCATION" onClick={delChatRoom}>DEL</button>
-              <button value="EDUCATION" onClick={createChatRoom}>NEW</button>
+
+              <RecordList>
+                <h2 onClick={(e) => { delChatRoom('EDUCATION', e)}}>x</h2>
+
+                <h1 onClick={(e) => {
+                  ListClick('Education', e);
+                  
+                }}>Education</h1>
+              </RecordList>
+              
              
             </ChatListBottom>
           </ChatListWrap>

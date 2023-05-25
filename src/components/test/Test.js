@@ -172,7 +172,10 @@ const Test = () => {
           </IntroWrap>
          
           <ProblemWrap>
-              <AnswerWrap></AnswerWrap>
+              <AnswerWrap>
+                test
+              </AnswerWrap>
+              test
           </ProblemWrap>
       
           <ButtonWrap>
