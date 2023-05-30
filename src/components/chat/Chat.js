@@ -284,7 +284,6 @@ const Chat = () => {
   
           axios.post('http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/chat-rooms', data, { headers: headers })
            .then(response => {
-             console.log('Chat room created successfully:', response.data);
              return findChatRoom(data.category); // Return the Promise for chaining
            })
            .catch(error => {
@@ -292,7 +291,6 @@ const Chat = () => {
              // Handle the error case
            });
        } else {
-        alert('방이 이미 존재합니다.');
          // Handle the case when a chat room already exists
       }
     })
@@ -311,9 +309,7 @@ const Chat = () => {
     };
 
     try {
-      const response = await axios.get('http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/chat-rooms', { headers });
-      console.log('Chat room get successfully:', response.data);
-  
+      const response = await axios.get('http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/chat-rooms', { headers });  
       const chatRooms = await response.data;
       for (const chatRoom of chatRooms) {
         if (chatRoom.category === text) {
@@ -343,7 +339,6 @@ const delChatRoom = (event) => {
       };
       return axios.delete('http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/chat-rooms/' + text, { headers: headers })
         .then(response => {
-          console.log('Chat room deleted successfully:', response.data);
           // 추가적인 작업 수행
 
           setSubject(false);
@@ -378,7 +373,6 @@ const delChatRoom = (event) => {
     const url = `http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/chats/${chatRoomId}`;
     const response = await axios.get(url, { headers });
 
-    console.log('Chat successfully:', response.data);
     const textArray = response.data;
     textArray.forEach(text => {
       if (text.question) {
@@ -478,7 +472,7 @@ const handleKeyPress = async (event) => {
       }
     } else {
       createChatRoom(uppercaseName);
-      
+      ListClick(uppercaseName);
     }
     
 
@@ -554,8 +548,9 @@ const handleKeyPress = async (event) => {
             </ChatGptMiddle>
 
             <ChatGptBottom>
-              {Subject &&(<ChatInput placeholder="Type your message here" onKeyPress={handleKeyPress} value={userInput}
+              {!isInputDisabled && Subject &&(<ChatInput placeholder="Type your message here" onKeyPress={handleKeyPress} value={userInput}
                 onChange={handleInput}></ChatInput>)}
+              {isInputDisabled && Subject &&(<ChatInput placeholder='Please wait' disabled></ChatInput>)}
             </ChatGptBottom>
           </ChatGptWrap>
         </ChatSectionWrap>
@@ -624,7 +619,7 @@ const handleKeyPress = async (event) => {
             <ChatGptBottom>
               {!isInputDisabled && Subject &&(<ChatInput placeholder="Type your message here" onKeyPress={handleKeyPress} value={userInput}
                 onChange={handleInput}></ChatInput>)}
-              {isInputDisabled && Subject &&(<ChatInput placeholder='Please wait (최대 1분)' disabled></ChatInput>)}
+              {isInputDisabled && Subject &&(<ChatInput placeholder='Please wait' disabled></ChatInput>)}
             </ChatGptBottom>
           </ChatGptWrap>
         </ChatSectionWrap>
