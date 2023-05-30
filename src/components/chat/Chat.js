@@ -373,6 +373,7 @@ const delChatRoom = (event) => {
     const url = `http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/chats/${chatRoomId}`;
     const response = await axios.get(url, { headers });
 
+    console.log('Chat successfully:', response.data);
     const textArray = response.data;
     textArray.forEach(text => {
       if (text.question) {
@@ -520,6 +521,24 @@ const handleKeyPress = async (event) => {
                   }}>Education</h1>
                 </RecordList>
               
+                <RecordList>
+                <h2 onClick={(e) => { delChatRoom('TRAVEL', e)}}>x</h2>
+
+                <h1 onClick={(e) => {
+                  ListClick('Travel', e);
+                  
+                }}>Travel</h1>
+              </RecordList>
+
+              <RecordList>
+                <h2 onClick={(e) => { delChatRoom('HOBBY', e)}}>x</h2>
+
+                <h1 onClick={(e) => {
+                  ListClick('Hobby', e);
+                  
+                }}>Hobby</h1>
+              </RecordList>
+              
             </ChatListBottom>
           </ChatListWrap>
         </ListSectionWrap>
@@ -589,6 +608,23 @@ const handleKeyPress = async (event) => {
                 }}>Education</h1>
               </RecordList>
               
+              <RecordList>
+                <h2 onClick={(e) => { delChatRoom('TRAVEL', e)}}>x</h2>
+
+                <h1 onClick={(e) => {
+                  ListClick('Travel', e);
+                  
+                }}>Travel</h1>
+              </RecordList>
+
+              <RecordList>
+                <h2 onClick={(e) => { delChatRoom('HOBBY', e)}}>x</h2>
+
+                <h1 onClick={(e) => {
+                  ListClick('Hobby', e);
+                  
+                }}>Hobby</h1>
+              </RecordList>
              
             </ChatListBottom>
           </ChatListWrap>
