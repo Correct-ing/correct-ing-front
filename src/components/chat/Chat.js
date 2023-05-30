@@ -256,6 +256,9 @@ const Chat = () => {
   const [components, setComponents] = useState([]);
   const [userInput, setUserInput] = useState("");
   const chatRef = useRef(null);
+  const records = ['Business', 'Education', 'Travel', 'Hobby'];
+  const [searchText, setSearchText] = useState('');
+  const [filteredRecords, setFilteredRecords] = useState(records);
   const [isInputDisabled, setIsInputDisabled] = useState(false);
   const { loginRes } = useSelector(({ auth }) => ({
     form: auth.login, // 상태 값 설정
@@ -479,6 +482,12 @@ const handleKeyPress = async (event) => {
 
   };
 
+  useEffect(() => {
+    const result = records.filter(record => 
+      record.toLowerCase().includes(searchText.toLowerCase())
+    );
+    setFilteredRecords(result);
+  }, [searchText]);
   
   useEffect(()=>{
     if(chatRoomId!==false){
@@ -585,46 +594,21 @@ const handleKeyPress = async (event) => {
             </ChatListTop>
 
             <ChatListMiddle>
-              <ChatText placeholder="Search" />
+              <ChatText placeholder="Search" value={searchText} onChange={e=> setSearchText(e.target.value)}/>
             </ChatListMiddle>
 
             <ChatListBottom>
-              <RecordList>
-                <h2 onClick={(e) => { delChatRoom('BUSINESS', e)}}>x</h2>
 
+
+            {filteredRecords.map((record, index) => (
+              <RecordList key={index}>
+                <h2 onClick={(e) => { delChatRoom(record.toUpperCase(), e)}}>x</h2>
                 <h1 onClick={(e) => {
-                  ListClick('Business', e);
+                  ListClick(record, e);
                   
-                }}>Business</h1>
-
+                }}>{record}</h1>
               </RecordList>
-
-              <RecordList>
-                <h2 onClick={(e) => { delChatRoom('EDUCATION', e)}}>x</h2>
-
-                <h1 onClick={(e) => {
-                  ListClick('Education', e);
-                  
-                }}>Education</h1>
-              </RecordList>
-              
-              <RecordList>
-                <h2 onClick={(e) => { delChatRoom('TRAVEL', e)}}>x</h2>
-
-                <h1 onClick={(e) => {
-                  ListClick('Travel', e);
-                  
-                }}>Travel</h1>
-              </RecordList>
-
-              <RecordList>
-                <h2 onClick={(e) => { delChatRoom('HOBBY', e)}}>x</h2>
-
-                <h1 onClick={(e) => {
-                  ListClick('Hobby', e);
-                  
-                }}>Hobby</h1>
-              </RecordList>
+            ))}
              
             </ChatListBottom>
           </ChatListWrap>
