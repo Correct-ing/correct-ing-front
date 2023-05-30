@@ -487,6 +487,7 @@ const handleKeyPress = async (event) => {
       record.toLowerCase().includes(searchText.toLowerCase())
     );
     setFilteredRecords(result);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchText]);
   
   useEffect(()=>{
@@ -605,7 +606,7 @@ const handleKeyPress = async (event) => {
                 <h2 onClick={(e) => { delChatRoom(record.toUpperCase(), e)}}>x</h2>
                 <h1 onClick={(e) => {
                   ListClick(record, e);
-                  
+
                 }}>{record}</h1>
               </RecordList>
             ))}
