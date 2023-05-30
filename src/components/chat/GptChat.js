@@ -21,7 +21,6 @@ const MainWrap = styled.div`
   margin: 1rem 0.5rem;
   display: flex;
   width: 90%;
-  height: 10%;
   align-items: center;
 `;
 
@@ -47,6 +46,7 @@ const GptChat = ({ text }) => {
     fontSize: '16px',
     textAlign: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
     width: `${width}px`,
   };
 

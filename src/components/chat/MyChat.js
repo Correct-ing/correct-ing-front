@@ -31,6 +31,7 @@ const MyChat = ({ text }) => {
     color: '#333',
     fontSize: '16px',
     textAlign: 'center',
+    alignItems: 'center',
     justifyContent: 'center',
     width: `${width}px`,
   };
