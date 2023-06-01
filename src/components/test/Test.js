@@ -158,7 +158,7 @@ const Close = styled(RiCloseLine)`
     margin-left: 1.2rem;
 `;
 const Test = () => {
-  const [problems] = [
+  const [problems, setProblems] = useState([
     {
       problem: 'Choose the correct spelling:',
       options: ['Beleive', 'Believe', 'Beleve', 'Bleieve'],
@@ -212,11 +212,12 @@ const Test = () => {
       question: '문제 1',
       answer: '답 1',
     },
-  ]; // 서버에서 가져온 문제 목록을 담을 상태 변수
+  ]); // 서버에서 가져온 문제 목록을 담을 상태 변수
     const [currentProblemIndex, setCurrentProblemIndex] = useState(0); // 현재 문제의 인덱스
     const [userAnswer, setUserAnswer] = useState(null); // 사용자의 입력 값을 담을 상태 변수
     const [isAnswerCorrect, setIsAnswerCorrect] = useState(null); // 정답 맞춤 여부를 담을 상태 변수
-    
+    const currentProblem = problems[currentProblemIndex];
+
     const handleAnswerSelection = (selectedOption) => {
       setUserAnswer(selectedOption);
       setIsAnswerCorrect(selectedOption === problems[currentProblemIndex].answer);
@@ -239,7 +240,6 @@ const Test = () => {
         setIsAnswerCorrect(null);
       }
     };
-    const currentProblem = problems[currentProblemIndex];
   
     const handleCheckAnswer = () => {
       if (problems.length > 0 && currentProblemIndex < problems.length) {
