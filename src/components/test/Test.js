@@ -158,16 +158,18 @@ const Close = styled(RiCloseLine)`
     margin-left: 1.2rem;
 `;
 const Test = () => {
-  const [problems, setProblems] = useState([
+  const [problems] = [
     {
-      category: '품사',
-      question: '문제 1',
-      answer: '답 1',
+      problem: 'Choose the correct spelling:',
+      options: ['Beleive', 'Believe', 'Beleve', 'Bleieve'],
+      answer: 1,
+      category: 'Spelling',
     },
     {
-      category: '품사',
-      question: '문제 1',
-      answer: '답 1',
+      problem: 'Select the synonym of "happy":',
+      options: ['Joyful', 'Sad', 'Angry', 'Tired'],
+      answer: 0,
+      category: 'Vocabulary',
     },
     {
       category: '품사',
@@ -210,27 +212,15 @@ const Test = () => {
       question: '문제 1',
       answer: '답 1',
     },
-  ]); // 서버에서 가져온 문제 목록을 담을 상태 변수
+  ]; // 서버에서 가져온 문제 목록을 담을 상태 변수
     const [currentProblemIndex, setCurrentProblemIndex] = useState(0); // 현재 문제의 인덱스
-    const [userAnswer, setUserAnswer] = useState(''); // 사용자의 입력 값을 담을 상태 변수
+    const [userAnswer, setUserAnswer] = useState(null); // 사용자의 입력 값을 담을 상태 변수
     const [isAnswerCorrect, setIsAnswerCorrect] = useState(null); // 정답 맞춤 여부를 담을 상태 변수
-
-    useEffect(() => {
-      // 서버에서 문제 목록을 가져오는 비동기 함수
-      const fetchProblems = async () => {
-        try {
-          const response = await fetch('http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/tests');
-          const data = await response.json();
-          setProblems(data); // 가져온 문제 목록을 상태 변수에 설정
-        } catch (error) {
-          console.log(error);
-        }
-      };
-  
-      fetchProblems();
-    }, []);
-  
-
+    
+    const handleAnswerSelection = (selectedOption) => {
+      setUserAnswer(selectedOption);
+      setIsAnswerCorrect(selectedOption === problems[currentProblemIndex].answer);
+    };
   
     const handleNext = () => {
       handleCheckAnswer();
@@ -249,9 +239,7 @@ const Test = () => {
         setIsAnswerCorrect(null);
       }
     };
-    const handleInputChange = (e) => {
-      setUserAnswer(e.target.value); // 사용자가 입력하는 동안 입력 값을 업데이트합니다.
-    };
+    const currentProblem = problems[currentProblemIndex];
   
     const handleCheckAnswer = () => {
       if (problems.length > 0 && currentProblemIndex < problems.length) {
@@ -263,12 +251,6 @@ const Test = () => {
         }
       }
     };
-
-    if (problems.length === 0) {
-      // 문제가 아직 로딩되지 않았을 때 표시할 내용
-      return <div>Loading...</div>;
-    }
-    const currentProblem = problems[currentProblemIndex]; // 현재 문제 객체
   
   return (
     <MainWrap>
@@ -292,10 +274,18 @@ const Test = () => {
          
           <ProblemWrap>
               <QuestionWrap>
-              <p>{currentProblem.question}</p>
+              <p>{currentProblem.problem}</p>
               </QuestionWrap>
               <AnswerWrap>
-              <TextInput value={userAnswer} onChange={handleInputChange} />
+              {currentProblem.options.map((option, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleAnswerSelection(index)}
+                  disabled={userAnswer !== null}
+                >
+                {option}
+                </button>
+              ))}
               </AnswerWrap>
               {isAnswerCorrect !== null && (
               <div>
