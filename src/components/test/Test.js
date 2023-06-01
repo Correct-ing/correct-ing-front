@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
+import axios from 'axios';
 import styled, { css } from 'styled-components';
 import correctLogo from '../../assets/correct-logo.png';
 import { MdNavigateBefore } from 'react-icons/md';
@@ -118,11 +119,29 @@ const ProblemWrap = styled.div`
     border: 1px solid #D9D9D9;
     margin-top: 1rem;
 `;
-const AnswerWrap = styled.div`
+const TextInput = styled.input`
+  font-size: 2rem;
+  width: 50%;
+  margin: 2rem;
+  padding: 1rem;
+  border-radius: 1rem;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+  ${media.phone`width: 55%; margin:1rem;`};
+`;
+const QuestionWrap = styled.div`
     width: 100%;
     height:50%;
     background-color:#EAF5F3;
     border-radius: 50px 50px 0px 0px;
+`;
+const AnswerWrap = styled.div`
+    width: 100%;
+    height:50%;
+    background-color:#FFFFFF;
+    border-radius: 0px 0px 50px 50px;
+    justify-content: center;
+    align-items: center;  
 `;
 const ProgressNumber = styled.span`
     display: flex;
@@ -139,26 +158,126 @@ const Close = styled(RiCloseLine)`
     margin-left: 1.2rem;
 `;
 const Test = () => {
-    const [status, setStatus] = useState(0); // 진행 상황을 나타내는 상태 값
+  const [problems, setProblems] = useState([
+    {
+      category: '품사',
+      question: '문제 1',
+      answer: '답 1',
+    },
+    {
+      category: '품사',
+      question: '문제 1',
+      answer: '답 1',
+    },
+    {
+      category: '품사',
+      question: '문제 1',
+      answer: '답 1',
+    },
+    {
+      category: '품사',
+      question: '문제 1',
+      answer: '답 1',
+    },
+    {
+      category: '품사',
+      question: '문제 2',
+      answer: '답 2',
+    },
+    
+    {
+      category: '품사',
+      question: '문제 10',
+      answer: '답 10',
+    },
+    {
+      category: '품사',
+      question: '문제 1',
+      answer: '답 1',
+    },
+    {
+      category: '품사',
+      question: '문제 1',
+      answer: '답 1',
+    },
+    {
+      category: '품사',
+      question: '문제 1',
+      answer: '답 1',
+    },
+    {
+      category: '품사',
+      question: '문제 1',
+      answer: '답 1',
+    },
+  ]); // 서버에서 가져온 문제 목록을 담을 상태 변수
+    const [currentProblemIndex, setCurrentProblemIndex] = useState(0); // 현재 문제의 인덱스
+    const [userAnswer, setUserAnswer] = useState(''); // 사용자의 입력 값을 담을 상태 변수
+    const [isAnswerCorrect, setIsAnswerCorrect] = useState(null); // 정답 맞춤 여부를 담을 상태 변수
+
+    useEffect(() => {
+      // 서버에서 문제 목록을 가져오는 비동기 함수
+      const fetchProblems = async () => {
+        try {
+          const response = await fetch('http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/tests');
+          const data = await response.json();
+          setProblems(data); // 가져온 문제 목록을 상태 변수에 설정
+        } catch (error) {
+          console.log(error);
+        }
+      };
+  
+      fetchProblems();
+    }, []);
+  
+
   
     const handleNext = () => {
-        if(status<10) {
-            setStatus(status + 1); // 다음 버튼을 클릭할 때마다 상태를 업데이트
-        }
+      handleCheckAnswer();
+      if (currentProblemIndex < problems.length - 1) {
+        handleCheckAnswer(); // 다음 버튼을 누르기 전에 정답 확인 동작 수행
+        setCurrentProblemIndex(currentProblemIndex + 1);
+        setUserAnswer('');
+        setIsAnswerCorrect(null);
+      }
+        
     };
     const handlePrev = () => {
-        if (status > 0) {
-            setStatus(status - 1); // 다음 버튼을 클릭할 때마다 상태를 업데이트
-        }
+      if (currentProblemIndex > 0) {
+        setCurrentProblemIndex(currentProblemIndex - 1);
+        setUserAnswer('');
+        setIsAnswerCorrect(null);
+      }
     };
+    const handleInputChange = (e) => {
+      setUserAnswer(e.target.value); // 사용자가 입력하는 동안 입력 값을 업데이트합니다.
+    };
+  
+    const handleCheckAnswer = () => {
+      if (problems.length > 0 && currentProblemIndex < problems.length) {
+        const currentProblem = problems[currentProblemIndex];
+        if (userAnswer.toLowerCase() === currentProblem.answer.toLowerCase()) {
+          setIsAnswerCorrect(true);
+        } else {
+          setIsAnswerCorrect(false);
+        }
+      }
+    };
+
+    if (problems.length === 0) {
+      // 문제가 아직 로딩되지 않았을 때 표시할 내용
+      return <div>Loading...</div>;
+    }
+    const currentProblem = problems[currentProblemIndex]; // 현재 문제 객체
+  
   return (
     <MainWrap>
       <TestWrap>
         <IngWrap>
             <Icon1 size="50"/>
             <StyledStatusBar>
-                <Progress style={{ width: `${(status / 10) * 100}%` }}/>
-                <ProgressNumber>{status}/10</ProgressNumber>
+                <Progress style={{ width: `${((currentProblemIndex + 1) / problems.length) * 100}%` }} />
+                <ProgressNumber>{currentProblemIndex + 1}/{problems.length}</ProgressNumber>
             </StyledStatusBar>
             <Link to="/"><Close size="40"/></Link>
         </IngWrap>
@@ -172,12 +291,23 @@ const Test = () => {
           </IntroWrap>
          
           <ProblemWrap>
+              <QuestionWrap>
+              <p>{currentProblem.question}</p>
+              </QuestionWrap>
               <AnswerWrap>
-                test
+              <TextInput value={userAnswer} onChange={handleInputChange} />
               </AnswerWrap>
-              test
+              {isAnswerCorrect !== null && (
+              <div>
+                {isAnswerCorrect ? (
+                  <p>맞았습니다!</p>
+                ) : (
+                  <p>틀렸습니다!</p>
+                )}
+              </div>
+            )}
           </ProblemWrap>
-      
+          
           <ButtonWrap>
               <IoArrowBackCircle size="50" onClick={handlePrev}/>
               <IoArrowForwardCircle size="50" onClick={handleNext}/>
