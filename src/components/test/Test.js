@@ -120,7 +120,7 @@ const ProblemWrap = styled.div`
   border: 1px solid #d9d9d9;
   margin-top: 1rem;
 
-  div {
+  div:last-child {
     display: flex;
     align-items: center;
     justify-content: center;
