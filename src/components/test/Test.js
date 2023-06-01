@@ -6,6 +6,8 @@ import { RiCloseLine } from 'react-icons/ri';
 import { IoArrowForwardCircle } from 'react-icons/io5';
 import { IoArrowBackCircle } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
 
 const sizes = {
     tablet: 1024,
@@ -208,6 +210,13 @@ const Test = () => {
     const [isAnswerCorrect, setIsAnswerCorrect] = useState(null); // 정답 맞춤 여부를 담을 상태 변수
     const currentProblem = problems[currentProblemIndex];
 
+    const { loginRes } = useSelector(({ auth }) => ({
+      form: auth.login, // 상태 값 설정
+      loginRes: auth.loginRes,
+      loginErr: auth.loginErr,
+    }));
+    const accessToken = loginRes.accessToken;
+
     const handleAnswerSelection = (selectedOption) => {
       setUserAnswer(selectedOption);
       setIsAnswerCorrect(selectedOption === problems[currentProblemIndex].answer);
@@ -218,17 +227,10 @@ const Test = () => {
       if (currentProblemIndex < problems.length - 1) {
         setCurrentProblemIndex(currentProblemIndex + 1);
         setUserAnswer(null);
-        setIsAnswerCorrect(null);
       }
         
     };
-    const handlePrev = () => {
-      if (currentProblemIndex > 0) {
-        setCurrentProblemIndex(currentProblemIndex - 1);
-        setUserAnswer(null);
-        setIsAnswerCorrect(null);
-      }
-    };
+
   
     const handleCheckAnswer = () => {
       if (userAnswer !== null) {
@@ -240,6 +242,33 @@ const Test = () => {
         }
       }
     };
+
+    useEffect(() => {
+      const headers = {
+        Authorization: `Bearer ${accessToken}` // Include access token in the request headers
+      };
+
+      if (!isAnswerCorrect) {
+           alert(isAnswerCorrect);
+
+        const data = {
+          category: "string",
+          question: "example question",
+          answer: "example answer",
+          userAnswer: "example user answer"
+        };
+  
+        axios.post('http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/tests', data, { headers: headers })
+          .then(response => {
+            alert("저장됨");
+          })
+          .catch(error => {
+            console.error("Error saving data:", error);
+          });
+
+      }
+    }, [isAnswerCorrect]);
+    
   
   return (
     <MainWrap>
@@ -288,7 +317,6 @@ const Test = () => {
           </ProblemWrap>
           
           <ButtonWrap>
-              <IoArrowBackCircle size="50" onClick={handlePrev}/>
               <IoArrowForwardCircle size="50" onClick={handleNext}/>
           </ButtonWrap>
         </TestMiddleWrap>
