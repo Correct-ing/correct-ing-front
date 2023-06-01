@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from 'styled-components';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 // 50문제 랜덤
 const words = [
@@ -68,11 +70,37 @@ const words = [
   "be the change you wish to see in the world",
 ];
 
+const MainDiv = styled.div`
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: row;
+`;
+
+const RankDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 4rem;
+  width: 20%;
+  height: 32rem;
+  background-color: black;
+  align-items: center;
+  border-radius: 5rem;
+  border-radius: 50px;
+  border: 1px solid #D9D9D9;
+  background: #ffffff;
+
+  h1{
+    margin: 2rem auto;
+  }
+`;
+
 // GRAPH DIV
 const GameDiv = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 3rem auto;
+  margin-top: 3rem;
+  margin-left: -3rem;
   width: 80%;
   height: 40rem;
   background-color: black;
@@ -114,12 +142,24 @@ const ProblemWrap = styled.div`
       font-size: 3rem;
       margin: 5rem auto;
     }
-    button{
+    button {
       margin: 5rem auto;
       width: 8rem;
       height: 4rem;
       border: none;
       border-radius: 1rem;
+      background-color: #ccc;
+      transition: background-color 0.3s, cursor 0.3s;
+      cursor: pointer;
+    }
+    
+    button:hover {
+      background-color: #aaa;
+    }
+    
+    button:active {
+      background-color: #888;
+      cursor: grabbing;
     }
 `;
 const AnswerWrap = styled.div`
@@ -144,7 +184,14 @@ const Game = () => {
   const [gameOver, setGameOver] = useState(false);
   const [inCorrect, setInCorrect] = useState(false);
   const [gameStart, setGameStart] = useState(false);
+  const [rankData, setRankData] = useState([]);
   const [count, setCount] = useState("");
+  const { loginRes } = useSelector(({ auth }) => ({
+    form: auth.login, // 상태 값 설정
+    loginRes: auth.loginRes,
+    loginErr: auth.loginErr,
+  }));
+  const accessToken = loginRes.accessToken;
 
   useEffect(() => {
     if (timeLeft > -1) {
@@ -154,6 +201,7 @@ const Game = () => {
       setTimeLeft(0);
       setGameOver(true);
     }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timeLeft]);
 
   const handleInput = (event) => {
@@ -229,6 +277,54 @@ const Game = () => {
     backgroundColor: getBarColor(timeLeft),
   };
 
+  const saveScore = async () =>{
+    const url = 'http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/games';
+    
+    try {
+      const response = await axios.post(
+        url,
+        null,
+        {
+          params: {
+            score,
+          },
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      // Handle response if needed
+      console.log(response.data);
+
+    } catch (error) {
+      // Handle error if needed
+      console.error(error);
+    }
+  }
+
+  const getRank = async () =>{
+    try {
+      const headers = {
+        Authorization: `Bearer ${accessToken}`,
+      };
+
+      const response = await axios.get('http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/games', { headers });
+      const data = response.data;
+
+      setRankData(data); // 데이터를 상태로 업데이트합니다.
+
+    } catch (error) {
+      console.error('Error fetching games:', error);
+    }
+  }
+
+  useEffect(() => {
+    getRank();
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // 컴포넌트가 마운트되었을 때 한 번만 데이터를 가져오기 위해 useEffect 사용
+
+
   if (gameOver) {
     return (
       <GameDiv>
@@ -236,6 +332,7 @@ const Game = () => {
           <h1>게임 오버</h1>
           <br/>
           <h1>최종 점수: {score}</h1>
+          <button onClick={saveScore}>점수 저장</button>
         </ProblemWrap>
       </GameDiv>
     );
@@ -243,24 +340,54 @@ const Game = () => {
 
   if (!gameStart){
     return(
-      <GameDiv>
-        <h1>{count}</h1>
-        <ProblemWrap>
-          
-          <AnswerWrap>
-            <p>이 곳에 나타나는 문장을 똑같이 타이핑 해주세요!</p>
-          </AnswerWrap>
+      <MainDiv>
+        <RankDiv>
 
-          <button onClick={startGame}>시작하기</button>
+        <h1>Top 5</h1>
+        {rankData.map((item, index) => {
+          if (index < 5) {
+            return (
+              <h1 key={index}> {index + 1}위: {item.name} - {item.score}Point</h1>
+            );
+          } else {
+            return null; // 4 이후에는 아무것도 렌더링하지 않음
+          }
+        })}
+       
+        </RankDiv>
+        <GameDiv>
+          <h1>{count}</h1>
+          <ProblemWrap>
 
-        </ProblemWrap>
+            <AnswerWrap>
+              <p>이 곳에 나타나는 문장을 똑같이 타이핑 해주세요!</p>
+            </AnswerWrap>
 
-      </GameDiv>
+            <button onClick={startGame}>시작하기</button>
+
+          </ProblemWrap>
+
+        </GameDiv>
+      </MainDiv>
     )
   } else {
 
     return (
-      <div>
+      <MainDiv>
+        <RankDiv>
+
+          <h1>Top 5</h1>
+          {rankData.map((item, index) => {
+            if (index < 5) {
+              return (
+                <h1 key={index}> {index + 1}위: {item.name} - {item.score}Point</h1>
+              );
+            } else {
+              return null; // 4 이후에는 아무것도 렌더링하지 않음
+            }
+          })}
+
+        </RankDiv>
         <GameDiv>
           <TimeBarDiv style={barStyle}/>
           <ProblemWrap>
@@ -280,7 +407,7 @@ const Game = () => {
 
         </GameDiv>
 
-      </div>
+      </MainDiv>
     );
   };
 }
