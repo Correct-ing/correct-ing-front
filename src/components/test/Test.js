@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
 import styled, { css } from 'styled-components';
 import correctLogo from '../../assets/correct-logo.png';
 import { MdNavigateBefore } from 'react-icons/md';
@@ -119,16 +118,7 @@ const ProblemWrap = styled.div`
     border: 1px solid #D9D9D9;
     margin-top: 1rem;
 `;
-const TextInput = styled.input`
-  font-size: 2rem;
-  width: 50%;
-  margin: 2rem;
-  padding: 1rem;
-  border-radius: 1rem;
-  border: 1px solid #ccc;
-  margin-bottom: 10px;
-  ${media.phone`width: 55%; margin:1rem;`};
-`;
+
 const QuestionWrap = styled.div`
     width: 100%;
     height:50%;
@@ -226,9 +216,8 @@ const Test = () => {
     const handleNext = () => {
       handleCheckAnswer();
       if (currentProblemIndex < problems.length - 1) {
-        handleCheckAnswer(); // 다음 버튼을 누르기 전에 정답 확인 동작 수행
         setCurrentProblemIndex(currentProblemIndex + 1);
-        setUserAnswer('');
+        setUserAnswer(null);
         setIsAnswerCorrect(null);
       }
         
@@ -236,15 +225,15 @@ const Test = () => {
     const handlePrev = () => {
       if (currentProblemIndex > 0) {
         setCurrentProblemIndex(currentProblemIndex - 1);
-        setUserAnswer('');
+        setUserAnswer(null);
         setIsAnswerCorrect(null);
       }
     };
   
     const handleCheckAnswer = () => {
-      if (problems.length > 0 && currentProblemIndex < problems.length) {
+      if (userAnswer !== null) {
         const currentProblem = problems[currentProblemIndex];
-        if (userAnswer.toLowerCase() === currentProblem.answer.toLowerCase()) {
+        if (userAnswer === currentProblem.answer) {
           setIsAnswerCorrect(true);
         } else {
           setIsAnswerCorrect(false);
