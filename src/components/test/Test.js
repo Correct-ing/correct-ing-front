@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import correctLogo from '../../assets/correct-logo.png';
 import { MdNavigateBefore } from 'react-icons/md';
 import { RiCloseLine } from 'react-icons/ri';
 import { IoArrowForwardCircle } from 'react-icons/io5';
-import { IoArrowBackCircle } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+// import TestChart from './TestChart';
+import axios from 'axios';
 
 const sizes = {
   tablet: 1024,
@@ -117,12 +119,58 @@ const ProblemWrap = styled.div`
   border-radius: 50px;
   border: 1px solid #d9d9d9;
   margin-top: 1rem;
+
+  div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    p {
+      margin-top: 2.5rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+  }
 `;
-const AnswerWrap = styled.div`
+
+const QuestionWrap = styled.div`
   width: 100%;
   height: 50%;
   background-color: #eaf5f3;
   border-radius: 50px 50px 0px 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  p {
+    font-weight: 700;
+    font-size: 1.4rem;
+  }
+`;
+const AnswerWrap = styled.div`
+  width: 100%;
+  height: 50%;
+  background-color: #ffffff;
+  border-radius: 0px 0px 50px 50px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  gap: 3rem;
+
+  button {
+    border: none;
+    background-color: inherit;
+    font-weight: 700;
+    font-size: 1.3rem;
+    cursor: pointer;
+    padding: 0.5rem 0.8rem;
+    border-radius: 0.5rem;
+    box-shadow: 0px 4px 5px 2px #eaf5f3;
+
+    &:hover {
+      color: #6ac7b2;
+    }
+  }
 `;
 const ProgressNumber = styled.span`
   display: flex;
@@ -139,26 +187,148 @@ const Close = styled(RiCloseLine)`
   margin-left: 1.2rem;
 `;
 const Test = () => {
-  const [status, setStatus] = useState(0); // 진행 상황을 나타내는 상태 값
+  const data = [
+    { label: '문법', value: 67 },
+    { label: '어휘', value: 27 },
+    { label: '독해', value: 21 },
+  ];
+  const [problems, setProblems] = useState([
+    {
+      problem: 'Choose the correct spelling',
+      options: ['Beleive', 'Believe', 'Beleve', 'Bleieve'],
+      answer: 1,
+      category: 'Spelling',
+    },
+    {
+      problem: 'Select the synonym of "happy"',
+      options: ['Joyful', 'Sad', 'Angry', 'Tired'],
+      answer: 0,
+      category: 'Vocabulary',
+    },
+    {
+      category: '품사',
+      question: '문제 1',
+      answer: '답 1',
+    },
+    {
+      category: '품사',
+      question: '문제 1',
+      answer: '답 1',
+    },
+    {
+      category: '품사',
+      question: '문제 2',
+      answer: '답 2',
+    },
+
+    {
+      category: '품사',
+      question: '문제 10',
+      answer: '답 10',
+    },
+    {
+      category: '품사',
+      question: '문제 1',
+      answer: '답 1',
+    },
+    {
+      category: '품사',
+      question: '문제 1',
+      answer: '답 1',
+    },
+    {
+      category: '품사',
+      question: '문제 1',
+      answer: '답 1',
+    },
+    {
+      category: '품사',
+      question: '문제 1',
+      answer: '답 1',
+    },
+  ]); // 서버에서 가져온 문제 목록을 담을 상태 변수
+  const [currentProblemIndex, setCurrentProblemIndex] = useState(0); // 현재 문제의 인덱스
+  const [userAnswer, setUserAnswer] = useState(null); // 사용자의 입력 값을 담을 상태 변수
+  const [isAnswerCorrect, setIsAnswerCorrect] = useState(null); // 정답 맞춤 여부를 담을 상태 변수
+  const currentProblem = problems[currentProblemIndex];
+
+  const { loginRes } = useSelector(({ auth }) => ({
+    form: auth.login, // 상태 값 설정
+    loginRes: auth.loginRes,
+    loginErr: auth.loginErr,
+  }));
+  const accessToken = loginRes.accessToken;
+
+  const handleAnswerSelection = (selectedOption) => {
+    setUserAnswer(selectedOption);
+    setIsAnswerCorrect(selectedOption === problems[currentProblemIndex].answer);
+  };
 
   const handleNext = () => {
-    if (status < 10) {
-      setStatus(status + 1); // 다음 버튼을 클릭할 때마다 상태를 업데이트
+    handleCheckAnswer();
+    if (currentProblemIndex < problems.length - 1) {
+      setCurrentProblemIndex(currentProblemIndex + 1);
+      setUserAnswer(null);
     }
   };
-  const handlePrev = () => {
-    if (status > 0) {
-      setStatus(status - 1); // 다음 버튼을 클릭할 때마다 상태를 업데이트
+
+  const handleCheckAnswer = () => {
+    if (userAnswer !== null) {
+      const currentProblem = problems[currentProblemIndex];
+      if (userAnswer === currentProblem.answer) {
+        setIsAnswerCorrect(true);
+      } else {
+        setIsAnswerCorrect(false);
+      }
     }
   };
+
+  useEffect(() => {
+    const headers = {
+      Authorization: `Bearer ${accessToken}`, // Include access token in the request headers
+    };
+
+    if (!isAnswerCorrect) {
+      // alert(isAnswerCorrect);
+
+      const data = {
+        category: 'string',
+        question: 'example question',
+        answer: 'example answer',
+        userAnswer: 'example user answer',
+      };
+
+      axios
+        .post(
+          'http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/tests',
+          data,
+          { headers: headers },
+        )
+        .then((response) => {
+          alert('저장됨');
+        })
+        .catch((error) => {
+          console.error('Error saving data:', error);
+        });
+    }
+  }, [isAnswerCorrect]);
+
   return (
     <MainWrap>
       <TestWrap>
         <IngWrap>
           <Icon1 size="50" />
           <StyledStatusBar>
-            <Progress style={{ width: `${(status / 10) * 100}%` }} />
-            <ProgressNumber>{status}/10</ProgressNumber>
+            <Progress
+              style={{
+                width: `${
+                  ((currentProblemIndex + 1) / problems.length) * 100
+                }%`,
+              }}
+            />
+            <ProgressNumber>
+              {currentProblemIndex + 1}/{problems.length}
+            </ProgressNumber>
           </StyledStatusBar>
           <Link to="/">
             <Close size="40" />
@@ -174,16 +344,38 @@ const Test = () => {
           </IntroWrap>
 
           <ProblemWrap>
-            <AnswerWrap>test</AnswerWrap>
-            test
+            <QuestionWrap>
+              <p>{currentProblem.problem}</p>
+            </QuestionWrap>
+            <AnswerWrap>
+              {currentProblem.options.map((option, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleAnswerSelection(index)}
+                  disabled={userAnswer !== null}
+                >
+                  {option}
+                </button>
+              ))}
+            </AnswerWrap>
+            {isAnswerCorrect !== null && (
+              <div>
+                {isAnswerCorrect ? (
+                  <p style={{ color: '#6ac7b2' }}>맞았습니다!</p>
+                ) : (
+                  <p style={{ color: 'red' }}>틀렸습니다!</p>
+                )}
+              </div>
+            )}
           </ProblemWrap>
 
           <ButtonWrap>
-            <IoArrowBackCircle size="50" onClick={handlePrev} />
             <IoArrowForwardCircle size="50" onClick={handleNext} />
           </ButtonWrap>
         </TestMiddleWrap>
       </TestWrap>
+
+      {/*<TestChart data={data}></TestChart>*/}
     </MainWrap>
   );
 };
