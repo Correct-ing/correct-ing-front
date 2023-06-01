@@ -185,6 +185,7 @@ const Game = () => {
   const [inCorrect, setInCorrect] = useState(false);
   const [gameStart, setGameStart] = useState(false);
   const [rankData, setRankData] = useState([]);
+  const [buttonVisible, setButtonVisible] = useState(true);
   const [count, setCount] = useState("");
   const { loginRes } = useSelector(({ auth }) => ({
     form: auth.login, // 상태 값 설정
@@ -301,6 +302,8 @@ const Game = () => {
       // Handle error if needed
       console.error(error);
     }
+    alert("점수가 기록되었습니다!");
+    setButtonVisible(false);
   }
 
   const getRank = async () =>{
@@ -313,7 +316,7 @@ const Game = () => {
       const data = response.data;
 
       setRankData(data); // 데이터를 상태로 업데이트합니다.
-
+      getRank();
     } catch (error) {
       console.error('Error fetching games:', error);
     }
@@ -327,14 +330,33 @@ const Game = () => {
 
   if (gameOver) {
     return (
-      <GameDiv>
-        <ProblemWrap>
-          <h1>게임 오버</h1>
-          <br/>
-          <h1>최종 점수: {score}</h1>
-          <button onClick={saveScore}>점수 저장</button>
-        </ProblemWrap>
-      </GameDiv>
+      <MainDiv>
+        <RankDiv>
+
+          <h1>Top 5</h1>
+          {rankData.map((item, index) => {
+            if (index < 5) {
+              return (
+                <h1 key={index}> {index + 1}위: {item.name} - {item.score}Point</h1>
+              );
+            } else {
+              return null; // 4 이후에는 아무것도 렌더링하지 않음
+            }
+          })}
+
+        </RankDiv>
+        <GameDiv>
+          <ProblemWrap>
+            <h1>게임 오버</h1>
+            <br/>
+            <h1>최종 점수: {score}</h1>
+            {buttonVisible && (
+              <button onClick={saveScore}>점수 저장</button>
+            )}
+          </ProblemWrap>
+        </GameDiv>
+      </MainDiv>
+      
     );
   }
 
@@ -343,16 +365,16 @@ const Game = () => {
       <MainDiv>
         <RankDiv>
 
-        <h1>Top 5</h1>
-        {rankData.map((item, index) => {
-          if (index < 5) {
-            return (
-              <h1 key={index}> {index + 1}위: {item.name} - {item.score}Point</h1>
-            );
-          } else {
-            return null; // 4 이후에는 아무것도 렌더링하지 않음
-          }
-        })}
+          <h1>Top 5</h1>
+          {rankData.map((item, index) => {
+            if (index < 5) {
+              return (
+                <h1 key={index}> {index + 1}위: {item.name} - {item.score}Point</h1>
+              );
+            } else {
+              return null; // 4 이후에는 아무것도 렌더링하지 않음
+            }
+          })}
        
         </RankDiv>
         <GameDiv>
