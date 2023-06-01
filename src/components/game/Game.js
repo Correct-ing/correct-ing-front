@@ -82,7 +82,7 @@ const RankDiv = styled.div`
   flex-direction: column;
   margin: 4rem;
   width: 20%;
-  height: 32rem;
+  height: 45rem;
   background-color: black;
   align-items: center;
   border-radius: 5rem;
@@ -102,7 +102,7 @@ const GameDiv = styled.div`
   margin-top: 3rem;
   margin-left: -3rem;
   width: 80%;
-  height: 40rem;
+  height: 56rem;
   background-color: black;
   align-items: center;
   border-radius: 5rem;
