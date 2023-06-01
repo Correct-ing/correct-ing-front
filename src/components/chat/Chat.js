@@ -376,7 +376,6 @@ const delChatRoom = (event) => {
     const url = `http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/chats/${chatRoomId}`;
     const response = await axios.get(url, { headers });
 
-    console.log('Chat successfully:', response.data);
     const textArray = response.data;
     textArray.forEach(text => {
       if (text.question) {
