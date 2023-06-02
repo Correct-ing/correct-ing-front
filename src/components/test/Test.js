@@ -8,6 +8,7 @@ import { RiCloseLine } from 'react-icons/ri';
 import { IoArrowForwardCircle } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
 import TestChart from './TestChart';
+import { renderToString } from 'react-dom/server';
 
 const sizes = {
     tablet: 1024,
@@ -196,7 +197,7 @@ const Test = () => {
   const problems = [
     {
       category: '구식문법',
-      question: (
+      question: renderToString(
         <div>
         Choose the correct word form to complete the following sentence.
         <br/><br />
@@ -208,7 +209,7 @@ const Test = () => {
     },
     {
       category: '시제',
-      question: (
+      question: renderToString(
         <div>
         Choose the correct verb tense to complete the following sentence.
         <br/><br />
@@ -221,7 +222,7 @@ const Test = () => {
     },
     {
       category: '구식문법',
-      question: (
+      question: renderToString(
         <div>
         Identify the correct form of the verb to complete the sentence.
         <br/><br />
@@ -234,7 +235,7 @@ const Test = () => {
     },
     {
       category: '구식문법',
-      question: (
+      question: renderToString(
         <div>
           Identify the grammatical error in the following sentence.<br /><br />
           "Each of the students in the class are required to submit their project by Friday."
@@ -246,10 +247,10 @@ const Test = () => {
     },
     {
       category: '접속법',
-      question: (
+      question: renderToString(
         <div>
-          Choose the correct conjunction to complete the following sentence.<br /><br />
-          "I have a lot of work to do, ____ I'll stay late at the office."
+          Choose the correct conjunction to complete the following sentence.<br /><br/>
+          "I have a lot of work to do, ____ I\'ll stay late at the office."
         </div>
       ),
       options: ['hence', 'consequently', 'accordingly', 'therefore'],
@@ -271,7 +272,7 @@ const Test = () => {
     },
     {
       category: '시제',
-      question: (
+      question: renderToString(
         <div>
           Choose the correct verb tense to complete the following sentence.<br /><br />
           "He acted as if he _______ the answer to the question."
@@ -283,7 +284,7 @@ const Test = () => {
     },
     {
       category: '시제',
-      question: (
+      question: renderToString(
         <div>
           Choose the correct form of the verb to complete the sentence.<br /><br />
           "The concert __________ canceled due to bad weather."
@@ -295,7 +296,7 @@ const Test = () => {
     },
     {
       category: '접속법',
-      question: (
+      question: renderToString(
         <div>
           Choose the correct conjunction to complete the following sentence.<br />
           <br />
@@ -308,7 +309,7 @@ const Test = () => {
     },
     {
       category: '구식문법',
-      question: (
+      question: renderToString(
         <div>
           Choose the correct relative pronoun to complete the following sentence.<br />
           <br />
@@ -329,9 +330,9 @@ const Test = () => {
     const [conjuction, setConjuction] = useState(0);
     const [correctAnswerIndex, setCorrectAnswerIndex] = useState(null);
     const data = [
-      { label: '구식문법', value: (grammar / (grammar + verb + conjuction))},
-      { label: '시제', value: (verb / (grammar + verb + conjuction)) },
-      { label: '접속법', value: (conjuction / (grammar + verb + conjuction)) }
+      { label: '구식문법', question: '질문1', answer: '답변1',value: (grammar / (grammar + verb + conjuction))},
+      { label: '시제', question: '질문2', answer: '답변2',value: (verb / (grammar + verb + conjuction)) },
+      { label: '접속법', question: '질문3', answer: '답변3',value: (conjuction / (grammar + verb + conjuction)) }
 
     ];
 
