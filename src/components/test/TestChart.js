@@ -6,13 +6,11 @@ import styled from 'styled-components';
 ChartJS.register(ArcElement, Tooltip, Legend, LinearScale, BarController, BarElement, CategoryScale, ChartDataLabels);
 
 const ChartDiv = styled.div`
-  margin: -1.5rem auto;
+  margin: 2rem auto;
   width: 45rem;
   height: 30rem;
-  justify-content: center;
-  background-color: black;
+  background-color: #ffffff;
   border-radius: 1rem;
-  background: #ffffff;
 `;
 
 const TestChart = (props) => {
@@ -22,7 +20,7 @@ const TestChart = (props) => {
   useEffect(() => {
     if (chartRef.current) {
       if (chartInstanceRef.current) {
-        // 기존 차트 인스턴스가 존재하는 경우 제거
+        // Remove the existing chart instance if it exists
         chartInstanceRef.current.destroy();
       }
 
@@ -46,6 +44,7 @@ const TestChart = (props) => {
                 'rgba(255, 206, 86, 1)',
               ],
               borderWidth: 1,
+              borderRadius: 10, // Add the borderRadius property for rounded bars
             },
           ],
         },
@@ -63,7 +62,7 @@ const TestChart = (props) => {
               anchor: 'end',
               align: 'end',
               formatter: (value, context) => {
-                return (value * 100).toFixed(2) + "%";
+                return (value * 100).toFixed(2) + '%';
               },
             },
           },
@@ -78,10 +77,11 @@ const TestChart = (props) => {
               type: 'linear',
               grid: {
                 display: true,
+                color: '#ebedf0',
               },
               ticks: {
                 callback: (value) => {
-                  return (value * 100).toFixed(0) + "%";
+                  return (value * 100).toFixed(0) + '%';
                 },
               },
             },
@@ -89,7 +89,7 @@ const TestChart = (props) => {
         },
       });
 
-      chartInstanceRef.current = chart; // 차트 인스턴스 저장
+      chartInstanceRef.current = chart; // Save the chart instance
     }
   }, [props.data]);
 
