@@ -2,9 +2,14 @@ import { React, useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import MyChart from './MyChart';
 import MySubjectChart from './MySubjectChart';
+import MyGameChart from './MyGameChart';
 import correctLogo from '../../assets/correct-logo.png';
 import { FiChevronLeft } from 'react-icons/fi';
 import { FiChevronRight } from 'react-icons/fi';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
+import usestate from '../../../node_modules/usestate/index';
+
 
 const sizes = {
   phone: 768,
@@ -111,8 +116,9 @@ const ScoreWrap = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  height: 70%;
+  height: 55%;
   background: white;
+  ${media.tablet`height: 60%`};
 
   button {
     border: none;
@@ -125,14 +131,13 @@ const ScoreDiv = styled.section`
   display: flex;
   flex-direction: column;
   margin: 3rem auto;
-  margin-top: 4rem;
   ${media.tablet`margin-left: 5rem`};
   width: 50%;
   height: 80%;
   justify-content: center;
   background-color: black;
   border: 1px solid rgba(250, 250, 250, 0.2);
-  border-radius: 1.5rem;
+  border-radius: 5rem;
   background: #ffffff;
   box-shadow: 0rem 0.1rem 0.5rem 0.1rem rgba(0, 0, 0, 0.1);
 `;
@@ -143,9 +148,10 @@ const ScoreImageDiv = styled.div`
   margin: 1rem auto;
   align-items: center;
   flex-direction: column;
-  background: white;
   width: 90%;
   height: 45%;
+  
+  padding-bottom: 20px;
   border-bottom: 0.1rem solid #d9d9d9;
 
   img {
@@ -155,9 +161,9 @@ const ScoreImageDiv = styled.div`
   }
 
   h2 {
-    margin-top: 1rem;
-    font-weight: 400;
-    font-size: 1rem;
+    margin-top: 1.2rem;
+    font-weight: 500;
+    font-size: 1.2rem;
     color: #797979;
   }
 `;
@@ -165,17 +171,16 @@ const ScoreImageDiv = styled.div`
 // SCOREINFO DIV
 const ScoreInfoDiv = styled.div`
   display: flex;
-  margin: 1rem auto;
+  margin: 0.2rem auto;
   align-items: center;
   flex-direction: column;
-  background: white;
   width: 90%;
   height: 45%;
 
   h2 {
     margin-top: 0.5rem;
-    font-weight: 400;
-    font-size: 1rem;
+    font-weight: 500;
+    font-size: 1.2rem;
     color: #797979;
   }
 
@@ -206,8 +211,10 @@ const InfoWrap = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  height: 30%;
+  height: 40%;
   background: white;
+
+  justify-content: center;
 
   button {
     border: none;
@@ -296,6 +303,15 @@ const MyPage = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
+  const [rankData, setRankData] = useState([]);
+  const [subjectData, setSubjectData] = useState([]);
+  const [gameData, setGameData] = useState([]);
+  const { loginRes } = useSelector(({ auth }) => ({
+    form: auth.login, // 상태 값 설정
+    loginRes: auth.loginRes,
+    loginErr: auth.loginErr,
+  }));
+  const accessToken = loginRes.accessToken;
 
   useEffect(() => {
     function handleResize() {
@@ -305,8 +321,90 @@ const MyPage = () => {
     }
     window.addEventListener('resize', handleResize);
     handleResize(); // 초기값 설정
+    getRank();
+    saveData();
+    saveGameData();
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  const getRank = async () => {
+    try {
+      const headers = {
+        Authorization: `Bearer ${accessToken}`,
+      };
+
+      const response = await axios.get(
+        'http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/games/me',
+        { headers },
+      );
+      const data = response.data;
+
+      setRankData(data); // 데이터를 상태로 업데이트합니다.
+      getRank();
+    } catch (error) {
+      console.error('Error fetching games:', error);
+    }
+  };
+
+  const saveData = async () => {
+    try {
+      const headers = {
+        Authorization: `Bearer ${accessToken}`,
+      };
+
+      const response = await axios.get(
+        'http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/weakness/me',
+        { headers },
+      );
+      const data = response.data;
+
+      setSubjectData(data); // 데이터를 상태로 업데이트합니다.
+      saveData();
+
+      // Handle response if needed
+      // console.log(response.data);
+    } catch (error) {
+      // Handle error if needed
+      console.error(error);
+    }
+  };
+
+  const saveGameData = async () => {
+    try {
+      const headers = {
+        Authorization: `Bearer ${accessToken}`,
+      };
+
+      const response = await axios.get(
+        'http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/games',
+        { headers },
+      );
+      const data = response.data;
+
+      setGameData(data); // 데이터를 상태로 업데이트합니다.
+      saveGameData();
+
+      // Handle response if needed
+      console.log(response.data);
+    } catch (error) {
+      // Handle error if needed
+      console.error(error);
+    }
+  };
+
+  let subjectArray;
+
+  if (subjectData.weaknessPercentages && typeof subjectData.weaknessPercentages === 'object') {
+    subjectArray = Object.entries(subjectData.weaknessPercentages).map(([label, value]) => ({ label, value }));
+  } else {
+    subjectArray = [
+      { label: '문법', value: 67 },
+      { label: '어휘', value: 27 },
+      { label: '독해', value: 21 },
+    ];
+  }
+
+  subjectArray.sort((a, b) => b.value - a.value);
 
   // 나중에 usestate로 변경
   const data = [
@@ -316,19 +414,20 @@ const MyPage = () => {
   ];
 
   const data1 = [
-    { label: '문법', value: 67 },
-    { label: '', value: 33 },
+    subjectArray[0]
   ];
 
   const data2 = [
-    { label: '어휘', value: 27 },
-    { label: '', value: 73 },
+    subjectArray[1]
   ];
 
   const data3 = [
-    { label: '독해', value: 21 },
-    { label: '', value: 79 },
+    subjectArray[2]
   ];
+
+  const data4 = [
+    subjectArray[3]
+  ]
 
   // 2줄 넘으면 끊어야함
   // const [GrammarFeed, setGrammarFeed] = useState("문법 피드백 내용");
@@ -346,8 +445,6 @@ const MyPage = () => {
     setIsClicked(false);
   };
 
-  const rank = 26.76;
-
   return (
     // PC 크기일때
     <MainWrap>
@@ -356,7 +453,7 @@ const MyPage = () => {
           <GraphDiv>
             <GraphDivTop>
               <h1>취약점 분석표</h1>
-              <MyChart data={data}></MyChart>
+              <MyChart data={subjectArray}></MyChart>
               <h1>집중 분석</h1>
             </GraphDivTop>
             <GraphDivMiddle>
@@ -379,15 +476,16 @@ const MyPage = () => {
                 <h2>나의 점수는</h2>
               </ScoreImageDiv>
               <ScoreInfoDiv>
-                <h2>2023.04.20 측정 결과</h2>
-                <h1>상위 {rank}%</h1>
-                <button>랭킹 보기</button>
+                <h2>측정 결과</h2>
+                <h1>{rankData.rank + 1} 위</h1>
+                {/* <button>랭킹 보기</button> */}
               </ScoreInfoDiv>
             </ScoreDiv>
           </ScoreWrap>
 
           <InfoWrap>
-            <InfoSubjectDiv>
+            <MyGameChart data={gameData}></MyGameChart>
+            {/* <InfoSubjectDiv>
               <InfoSubjectTop>
                 <h1>문법</h1>
                 <InfoSubjectMiddle>
@@ -415,7 +513,7 @@ const MyPage = () => {
                   <button>복습하기</button>
                 </InfoSubjectMiddle>
               </InfoSubjectTop>
-            </InfoSubjectDiv>
+            </InfoSubjectDiv> */}
           </InfoWrap>
         </ScoreInfoWrap>
       )}
@@ -426,14 +524,15 @@ const MyPage = () => {
           <GraphDiv>
             <GraphDivTop>
               <h1>취약점 분석표</h1>
-              <MyChart data={data}></MyChart>
+              <MyChart data={subjectArray}></MyChart>
               <h1>집중 분석</h1>
             </GraphDivTop>
             <GraphDivMiddle>
               <GraphMiddleSection>
                 <MySubjectChart data={data1}></MySubjectChart>
+                <MySubjectChart data={data1}></MySubjectChart>
                 <MySubjectChart data={data2}></MySubjectChart>
-                <MySubjectChart data={data3}></MySubjectChart>
+                {/* <MySubjectChart data={data1}></MySubjectChart> */}
               </GraphMiddleSection>
             </GraphDivMiddle>
           </GraphDiv>
@@ -455,15 +554,16 @@ const MyPage = () => {
                 <h2>나의 점수는</h2>
               </ScoreImageDiv>
               <ScoreInfoDiv>
-                <h2>2023.04.20 측정 결과</h2>
-                <h1>상위 {rank}%</h1>
-                <button>랭킹 보기</button>
+                <h2>측정 결과</h2>
+                <h1>{rankData.rank + 1} 위</h1>
+                {/* <button>랭킹 보기</button> */}
               </ScoreInfoDiv>
             </ScoreDiv>
           </ScoreWrap>
 
           <InfoWrap>
-            <InfoSubjectDiv>
+            <MyGameChart data={gameData}></MyGameChart>
+            {/* <InfoSubjectDiv>
               <InfoSubjectTop>
                 <h1>문법</h1>
                 <InfoSubjectMiddle>
@@ -491,7 +591,7 @@ const MyPage = () => {
                   <button>복습하기</button>
                 </InfoSubjectMiddle>
               </InfoSubjectTop>
-            </InfoSubjectDiv>
+            </InfoSubjectDiv> */}
           </InfoWrap>
         </ScoreInfoWrap>
       )}
