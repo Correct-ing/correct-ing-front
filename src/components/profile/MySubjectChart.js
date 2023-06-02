@@ -35,13 +35,15 @@ const ChartDiv = styled.div`
   margin-top: 2rem;
 
   h1{
-    margin: 1rem auto;
+    margin: 1.5rem auto;
+    font-size: 1.3rem;
   }
 
   h2{
-    margin: 1rem auto;
-    text-decoration-line: underline;
-    cursor: pointer;
+    margin: 0.5rem auto;
+    font-weight: 600;
+    color: #243465;
+    font-size: 1.8rem;
   }
 `;
 
@@ -53,8 +55,9 @@ const MySubjectChart = (props) => {
     labels: '',
     datasets: [
       {
-        data: props.data.map((data) => data.value),
-        backgroundColor: props.data.map((data, index) => index === 0 ? '#2EC4B6' : 'gray'),
+        data: [props.data[0].value, 100-(props.data[0].value)],
+        backgroundColor: ['#2EC4B6', 'gray'],
+        // backgroundColor: props.data.map((data, index) => index === 0 ? '#2EC4B6' : 'gray'),
         borderColor: [
           'rgba(255, 99, 132, 1)',
           'rgba(54, 162, 235, 1)',
@@ -91,11 +94,10 @@ const MySubjectChart = (props) => {
     <ChartDiv>
       <Doughnut data={data}/>
       <h1>{props.data.map((data) => data.label)}</h1>
-      <h2>분석 보기</h2>
+      <h2>{props.data[0].value}%</h2>
     </ChartDiv>
   )
 
 }
 
 export default MySubjectChart;
-
