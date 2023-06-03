@@ -94,7 +94,7 @@ const MySubjectChart = (props) => {
     <ChartDiv>
       <Doughnut data={data}/>
       <h1>{props.data.map((data) => data.label)}</h1>
-      <h2>{props.data[0].value}%</h2>
+      <h2>{(props.data[0].value).toFixed(1)}%</h2>
     </ChartDiv>
   )
 
