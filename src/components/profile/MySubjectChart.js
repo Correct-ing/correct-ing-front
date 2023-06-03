@@ -20,12 +20,15 @@ const sizes = {
     return acc;
   }, {});
 
+  const ChartBlock = styled.div`
+    display: flex;
+  `
+
 // CHART DIV
 const ChartDiv = styled.div`
   display: flex;
   flex-direction: column;
   width: 5rem;
-  height: 5rem;
   justify-content: center;
   text-align: center;
   background-color: black;
@@ -56,7 +59,7 @@ const MySubjectChart = (props) => {
     datasets: [
       {
         data: [props.data[0].value, 100-(props.data[0].value)],
-        backgroundColor: ['#2EC4B6', 'gray'],
+        backgroundColor: ['#2EC4B6', '#B4ABAB'],
         // backgroundColor: props.data.map((data, index) => index === 0 ? '#2EC4B6' : 'gray'),
         borderColor: [
           'rgba(255, 99, 132, 1)',
@@ -91,13 +94,24 @@ const MySubjectChart = (props) => {
   };
 
   return (
+    <ChartBlock>
     <ChartDiv>
       <Doughnut data={data}/>
-      <h1>{props.data.map((data) => data.label)}</h1>
+      <h1>{(props.data[0].label)}</h1>
       <h2>{(props.data[0].value).toFixed(1)}%</h2>
     </ChartDiv>
+    <ChartDiv>
+      <Doughnut data={data}/>
+      <h1>{(props.data[1].label)}</h1>
+      <h2>{(props.data[1].value).toFixed(1)}%</h2>
+    </ChartDiv>    
+    <ChartDiv>
+      <Doughnut data={data}/>
+      <h1>{(props.data[2].label)}</h1>
+      <h2>{(props.data[2].value).toFixed(1)}%</h2>
+    </ChartDiv>
+    </ChartBlock>
   )
-
 }
 
 export default MySubjectChart;

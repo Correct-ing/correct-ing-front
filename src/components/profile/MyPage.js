@@ -314,6 +314,7 @@ const MyPage = () => {
   const [speech, setISSpeech] = useState(0);
   const [correct, setIsCorrect] = useState(0);
 
+  const [topRank, setTopRank] = useState([]);
 
   const data = [
     { label: '구식문법', value: (grammar / (grammar + wordOrder + part + form + negative + tense + method + irregular + speech + correct))},
@@ -344,6 +345,11 @@ const MyPage = () => {
     window.addEventListener('resize', handleResize);
     handleResize(); // 초기값 설정
     getSubjectChart();
+
+    const TopRankList = data.sort(function (a, b) {
+	    return b.value - a.value;
+    });
+    setTopRank(TopRankList)
 
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -418,12 +424,8 @@ const MyPage = () => {
               <h1>취약점 분석표</h1>
                 <MyChart data={data}></MyChart>
               <h1>집중 분석</h1>
+                <MySubjectChart data={topRank}/>
             </GraphDivTop>
-            <GraphDivMiddle>
-              <GraphMiddleSection>
-
-              </GraphMiddleSection>
-            </GraphDivMiddle>
           </GraphDiv>
         </GraphInfoWrap>
       )}
@@ -522,35 +524,6 @@ const MyPage = () => {
 
           <InfoWrap>
  
-            {/* <InfoSubjectDiv>
-              <InfoSubjectTop>
-                <h1>문법</h1>
-                <InfoSubjectMiddle>
-                  <h2>{GrammarFeed}</h2>
-                  <button>복습하기</button>
-                </InfoSubjectMiddle>
-              </InfoSubjectTop>
-            </InfoSubjectDiv>
-
-            <InfoSubjectDiv>
-              <InfoSubjectTop>
-                <h1>어휘</h1>
-                <InfoSubjectMiddle>
-                  <h2>{VocaFeed}</h2>
-                  <button>복습하기</button>
-                </InfoSubjectMiddle>
-              </InfoSubjectTop>
-            </InfoSubjectDiv>
-
-            <InfoSubjectDiv>
-              <InfoSubjectTop>
-                <h1>독해</h1>
-                <InfoSubjectMiddle>
-                  <h2>{readingFeed}</h2>
-                  <button>복습하기</button>
-                </InfoSubjectMiddle>
-              </InfoSubjectTop>
-            </InfoSubjectDiv> */}
           </InfoWrap>
         </ScoreInfoWrap>
       )}

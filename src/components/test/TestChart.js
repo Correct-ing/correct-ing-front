@@ -62,7 +62,7 @@ const TestChart = (props) => {
     };
   
     fetchData();
-  },);
+  },[accessToken]);
 
   useEffect(() => {
     if (chartRef.current) {
@@ -148,8 +148,8 @@ const TestChart = (props) => {
       </ChartDiv>
     <ListContainer>
     <h2 style={{ textAlign: 'center', fontSize: '1.5rem' }}>틀린 문제 보기</h2>
-          {data.map((dataItem) => (
-            <ListItem key={dataItem.id}>
+          {data.map((dataItem,index) => (
+            <ListItem key={index}>
               <strong>Question: </strong>
               <div dangerouslySetInnerHTML={{ __html: dataItem.question }} />
               <br />

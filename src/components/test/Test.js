@@ -201,7 +201,7 @@ const Test = () => {
         <div>
         Choose the correct word form to complete the following sentence.
         <br/><br />
-        "She is a _______ actress who has won numerous awards.""
+        "She is a _______ actress who has won numerous awards."
         </div>
       ),
       options:  ['talent', 'talented', 'talently', 'talenting'],
@@ -512,7 +512,7 @@ const Test = () => {
          
           <ProblemWrap>
               <QuestionWrap>
-              <div>{currentProblem.question}</div>
+              <div dangerouslySetInnerHTML={{ __html: currentProblem.question }} />
               </QuestionWrap>
               <AnswerWrap>
               {currentProblem.options.map((option, index) => (
@@ -546,7 +546,7 @@ const Test = () => {
 
       {isSolved && (<div>
         <TestChart data={data}></TestChart>
-      </div>)};
+      </div>)}
     </MainWrap>
   );
 };
