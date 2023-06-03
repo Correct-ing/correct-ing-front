@@ -28,6 +28,7 @@ const MyChart = (props) => {
           '#2EC4B6',
           '#0A9396',
           '#023047',
+          '#011627'
         ],
         borderColor: [
           'rgba(255, 99, 132, 1)',
@@ -39,12 +40,12 @@ const MyChart = (props) => {
           color: 'white',
           font: {
             weight: 'bold',
-            size: 14,
+            size: 20,
           },
           anchor: '1rem',
-          align: '5rem',
+          align: '3rem',
           formatter: (value, context) => {
-            return value + "%";
+            return value.toFixed(1) + "%";
           },
         },
       },
