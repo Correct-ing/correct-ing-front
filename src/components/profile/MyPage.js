@@ -303,9 +303,31 @@ const MyPage = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
-  const [rankData, setRankData] = useState([]);
-  const [subjectData, setSubjectData] = useState([]);
-  const [gameData, setGameData] = useState([]);
+  const [grammar, setIsGrammar] = useState(0);
+  const [wordOrder, setIsOrder] = useState(0);
+  const [part, setIsPart] = useState(0);
+  const [form, setIsForm] = useState(0);
+  const [negative, setIsNegative] = useState(0);
+  const [tense, setISTense] = useState(0);
+  const [method, setISMethod] = useState(0);
+  const [irregular, setISIrregular] = useState(0);
+  const [speech, setISSpeech] = useState(0);
+  const [correct, setIsCorrect] = useState(0);
+
+
+  const data = [
+    { label: '구식문법', value: (grammar / (grammar + wordOrder + part + form + negative + tense + method + irregular + speech + correct))},
+    { label: '어순', value: (wordOrder / (grammar + wordOrder + part + form + negative + tense + method + irregular + speech + correct)) },
+    { label: '품사', value: (part / (grammar + wordOrder + part + form + negative + tense + method + irregular + speech + correct)) },
+    { label: '형식', value: (form / (grammar + wordOrder + part + form + negative + tense + method + irregular + speech + correct)) },
+    { label: '부정문', value: (negative / (grammar + wordOrder + part + form + negative + tense + method + irregular + speech + correct)) },
+    { label: '시제', value: (tense / (grammar + wordOrder + part + form + negative + tense + method + irregular + speech + correct)) },
+    { label: '접속법', value: (method / (grammar + wordOrder + part + form + negative + tense + method + irregular + speech + correct)) },
+    { label: '불규칙_활용', value: (irregular / (grammar + wordOrder + part + form + negative + tense + method + irregular + speech + correct)) },
+    { label: '화법', value: (speech / (grammar + wordOrder + part + form + negative + tense + method + irregular + speech + correct)) },
+
+  ];
+
   const { loginRes } = useSelector(({ auth }) => ({
     form: auth.login, // 상태 값 설정
     loginRes: auth.loginRes,
@@ -321,122 +343,63 @@ const MyPage = () => {
     }
     window.addEventListener('resize', handleResize);
     handleResize(); // 초기값 설정
-    getRank();
-    saveData();
-    saveGameData();
+    getSubjectChart();
+
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const getRank = async () => {
-    try {
-      const headers = {
-        Authorization: `Bearer ${accessToken}`,
-      };
+  const getSubjectChart = () => {
+    
+    const fetchData = async () => {
+      try {
+        const headers = {
+          'accept': 'application/json;charset=UTF-8',
+          'Authorization': `Bearer ${accessToken}`
+        };
 
-      const response = await axios.get(
-        'http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/games/me',
-        { headers },
-      );
-      const data = response.data;
+        const response = await axios.get(
+          'http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/weakness/me',
+          { headers }
+        );
+        const weaknessPercentages = response.data.weaknessPercentages;
+  
+        // 형식에 해당하는 값들을 저장할 배열
+        const result = [];
+      
+        // 형식 순서대로 값을 배열에 저장
+        result.push(weaknessPercentages["품사"] || 0);
+        result.push(weaknessPercentages["어순"] || 0);
+        result.push(weaknessPercentages["형식"] || 0);
+        result.push(weaknessPercentages["시제"] || 0);
+        result.push(weaknessPercentages["화법"] || 0);
+        result.push(weaknessPercentages["접속법"] || 0);
+        result.push(weaknessPercentages["부정문"] || 0);
+        result.push(weaknessPercentages["불규칙_활용"] || 0);
+        result.push(weaknessPercentages["구식문법"] || 0);
+        result.push(weaknessPercentages["정답"] || 0);
 
-      setRankData(data); // 데이터를 상태로 업데이트합니다.
-      getRank();
-    } catch (error) {
-      console.error('Error fetching games:', error);
-    }
-  };
+        setIsPart(result[0]);
+        setIsOrder(result[1]);
+        setIsForm(result[2]);
+        setISTense(result[3]);
+        setISSpeech(result[4]);
+        setISMethod(result[5]);
+        setIsNegative(result[6]);
+        setISIrregular(result[7]);
+        setIsGrammar(result[8]);
+        setIsCorrect(result[9]);
 
-  const saveData = async () => {
-    try {
-      const headers = {
-        Authorization: `Bearer ${accessToken}`,
-      };
+       
 
-      const response = await axios.get(
-        'http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/weakness/me',
-        { headers },
-      );
-      const data = response.data;
+      } catch (error) {
+        alert(error.message);
+      }
+    };
 
-      setSubjectData(data); // 데이터를 상태로 업데이트합니다.
-      saveData();
+    fetchData();
 
-      // Handle response if needed
-      // console.log(response.data);
-    } catch (error) {
-      // Handle error if needed
-      console.error(error);
-    }
-  };
-
-  const saveGameData = async () => {
-    try {
-      const headers = {
-        Authorization: `Bearer ${accessToken}`,
-      };
-
-      const response = await axios.get(
-        'http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/games',
-        { headers },
-      );
-      const data = response.data;
-
-      setGameData(data); // 데이터를 상태로 업데이트합니다.
-      saveGameData();
-
-      // Handle response if needed
-      console.log(response.data);
-    } catch (error) {
-      // Handle error if needed
-      console.error(error);
-    }
-  };
-
-  let subjectArray;
-
-  if (subjectData.weaknessPercentages && typeof subjectData.weaknessPercentages === 'object') {
-    subjectArray = Object.entries(subjectData.weaknessPercentages).map(([label, value]) => ({ label, value }));
-  } else {
-    subjectArray = [
-      { label: '문법', value: 67 },
-      { label: '어휘', value: 27 },
-      { label: '독해', value: 21 },
-    ];
   }
 
-  subjectArray.sort((a, b) => b.value - a.value);
-
-  // 나중에 usestate로 변경
-  const data = [
-    { label: '문법', value: 67 },
-    { label: '어휘', value: 27 },
-    { label: '독해', value: 21 },
-  ];
-
-  const data1 = [
-    subjectArray[0]
-  ];
-
-  const data2 = [
-    subjectArray[1]
-  ];
-
-  const data3 = [
-    subjectArray[2]
-  ];
-
-  const data4 = [
-    subjectArray[3]
-  ]
-
-  // 2줄 넘으면 끊어야함
-  // const [GrammarFeed, setGrammarFeed] = useState("문법 피드백 내용");
-  // const [VocaFeed, setVocaFeed] = useState("어휘 피드백 내용");
-  // const [readingFeed, setReadingFeed] = useState("독해 피드백 내용");
-
-  const GrammarFeed = '문법 피드백 내용';
-  const VocaFeed = '어휘 피드백 내용';
-  const readingFeed = '독해 피드백 내용';
 
   const GraphButtonClick = () => {
     setIsClicked(true);
@@ -453,14 +416,12 @@ const MyPage = () => {
           <GraphDiv>
             <GraphDivTop>
               <h1>취약점 분석표</h1>
-              <MyChart data={subjectArray}></MyChart>
+                <MyChart data={data}></MyChart>
               <h1>집중 분석</h1>
             </GraphDivTop>
             <GraphDivMiddle>
               <GraphMiddleSection>
-                <MySubjectChart data={data1}></MySubjectChart>
-                <MySubjectChart data={data2}></MySubjectChart>
-                <MySubjectChart data={data3}></MySubjectChart>
+
               </GraphMiddleSection>
             </GraphDivMiddle>
           </GraphDiv>
@@ -477,14 +438,14 @@ const MyPage = () => {
               </ScoreImageDiv>
               <ScoreInfoDiv>
                 <h2>측정 결과</h2>
-                <h1>{rankData.rank + 1} 위</h1>
+
                 {/* <button>랭킹 보기</button> */}
               </ScoreInfoDiv>
             </ScoreDiv>
           </ScoreWrap>
 
           <InfoWrap>
-            <MyGameChart data={gameData}></MyGameChart>
+  
             {/* <InfoSubjectDiv>
               <InfoSubjectTop>
                 <h1>문법</h1>
@@ -524,14 +485,12 @@ const MyPage = () => {
           <GraphDiv>
             <GraphDivTop>
               <h1>취약점 분석표</h1>
-              <MyChart data={subjectArray}></MyChart>
+              
               <h1>집중 분석</h1>
             </GraphDivTop>
             <GraphDivMiddle>
               <GraphMiddleSection>
-                <MySubjectChart data={data1}></MySubjectChart>
-                <MySubjectChart data={data1}></MySubjectChart>
-                <MySubjectChart data={data2}></MySubjectChart>
+                
                 {/* <MySubjectChart data={data1}></MySubjectChart> */}
               </GraphMiddleSection>
             </GraphDivMiddle>
@@ -555,14 +514,14 @@ const MyPage = () => {
               </ScoreImageDiv>
               <ScoreInfoDiv>
                 <h2>측정 결과</h2>
-                <h1>{rankData.rank + 1} 위</h1>
+
                 {/* <button>랭킹 보기</button> */}
               </ScoreInfoDiv>
             </ScoreDiv>
           </ScoreWrap>
 
           <InfoWrap>
-            <MyGameChart data={gameData}></MyGameChart>
+ 
             {/* <InfoSubjectDiv>
               <InfoSubjectTop>
                 <h1>문법</h1>

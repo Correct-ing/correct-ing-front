@@ -20,7 +20,7 @@ const MyChart = (props) => {
   ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
   const data = {
-    labels: '',
+    labels: props.data.map((data) => data.label),
     datasets: [
       {
         data: props.data.map((data) => data.value),
@@ -28,7 +28,12 @@ const MyChart = (props) => {
           '#2EC4B6',
           '#0A9396',
           '#023047',
-          '#011627'
+          '#011627',
+          '#F72585',
+          '#7209B7',
+          '#3A0CA3',
+          '#4361EE',
+          '#4CC9F0'
         ],
         borderColor: [
           'rgba(255, 99, 132, 1)',
@@ -52,9 +57,17 @@ const MyChart = (props) => {
     ],
   };
 
+  const options = {
+    plugins: {
+      datalabels: {
+        display: false, // Set display to false to hide the labels
+      },
+    },
+  };
+
   return (
     <ChartDiv>
-      <Pie data={data} />
+      <Pie data={data} options={options}/>
     </ChartDiv>
   )
 
