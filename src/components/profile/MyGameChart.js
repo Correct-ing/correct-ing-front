@@ -1,10 +1,11 @@
-import React from 'react';
+
 import { Bar } from 'react-chartjs-2';
 import { Chart, BarController, BarElement, CategoryScale, LinearScale, Tooltip } from 'chart.js';
 
 Chart.register(BarController, BarElement, CategoryScale, LinearScale, Tooltip);
 
 const MyGameChart = (props) => {
+
   if (!props.data || props.data.length === 0) {
     // 데이터가 없는 경우에 대한 처리
     return <div>No data available</div>;
@@ -14,10 +15,11 @@ const MyGameChart = (props) => {
   const names = props.data.map((item) => item.name);
   const scores = props.data.map((item) => item.score);
 
-  const emphasizedNickname = 'minpyo';
+
+  const emphasizedNickname = localStorage.getItem('nickname');
 
   const backgroundColors = names.map((name) =>
-    name === emphasizedNickname ? '#2EC4B6' : 'gray'
+    name === emphasizedNickname ? '#2EC4B6' : '#CAE7E2'
   );
 
   // 막대 그래프에 사용할 데이터 설정
@@ -25,7 +27,7 @@ const MyGameChart = (props) => {
     labels: names,
     datasets: [
       {
-        label: 'Test Score',
+
         data: scores,
         backgroundColor: backgroundColors,
         borderColor: 'rgba(75, 192, 192, 1)',
@@ -43,6 +45,9 @@ const MyGameChart = (props) => {
       },
     },
     plugins: {
+      legend: {
+        display: false
+      },
       datalabels: {
         color: '#243465', // Set the font color for the scores
       },
@@ -52,7 +57,11 @@ const MyGameChart = (props) => {
     },
   };
 
-  return <Bar data={chartData} options={chartOptions} />;
+  return (
+  <>
+    <Bar data={chartData} options={chartOptions} />
+  </>
+  );
 };
 
 export default MyGameChart;

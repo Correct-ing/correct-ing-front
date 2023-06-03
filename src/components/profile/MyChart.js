@@ -6,11 +6,9 @@ import { Pie } from 'react-chartjs-2';
 
 // SCORE DIV
 const ChartDiv = styled.div`
-  margin: -1.5rem auto;
-  width: 16rem;
-  height: 16rem;
+  width: 17rem;
+  height: 17rem;
   justify-content: center;
-  background-color: black;
   border-radius: 1rem;
   background: #ffffff;
 `;
@@ -25,15 +23,15 @@ const MyChart = (props) => {
       {
         data: props.data.map((data) => data.value),
         backgroundColor: [
-          '#2EC4B6',
-          '#0A9396',
-          '#023047',
-          '#011627',
-          '#F72585',
-          '#7209B7',
-          '#3A0CA3',
-          '#4361EE',
-          '#4CC9F0'
+          '#6AC7B2',
+          '#040C0A',
+          '#C0E8DF',
+          '#41AC94',
+          '#37947F',
+          '#0E241F',
+          '#9BDACC',
+          '#51BEA5',
+          '#1C493F'
         ],
         borderColor: [
           'rgba(255, 99, 132, 1)',

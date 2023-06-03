@@ -4,11 +4,8 @@ import MyChart from './MyChart';
 import MySubjectChart from './MySubjectChart';
 import MyGameChart from './MyGameChart';
 import correctLogo from '../../assets/correct-logo.png';
-import { FiChevronLeft } from 'react-icons/fi';
-import { FiChevronRight } from 'react-icons/fi';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-import usestate from '../../../node_modules/usestate/index';
 
 
 const sizes = {
@@ -30,274 +27,127 @@ const media = Object.keys(sizes).reduce((acc, label) => {
 const MainWrap = styled.div`
   display: flex;
   width: 100%;
-  height: 45rem;
+  height: calc(100vh - 10vh);
   align-items: center;
+  justify-content: center;
+  margin: 2rem 1rem;
+  gap: 5rem;
 `;
 
 // 그래프 SECTION
 const GraphInfoWrap = styled.section`
   display: flex;
-  width: 45%;
-  ${media.tablet`width: 80%`};
-  ${media.tablet`margin: 1rem auto`};
-  height: 100%;
-  background: white;
-
-  button {
-    border: none;
-    background: white;
-  }
-`;
-
-// GRAPH DIV
-const GraphDiv = styled.section`
-  display: flex;
   flex-direction: column;
-  margin: 3rem auto;
-  width: 80%;
+  justify-content: center;
+  align-items: center;
+  width: 40%;
   height: 90%;
-  background-color: black;
-  border-radius: 5rem;
-  background: #ffffff;
+  background: white;
   box-shadow: 0rem 0.1rem 0.5rem 0.1rem rgba(0, 0, 0, 0.1);
+  border-radius: 5rem;
 `;
+
 
 // GRAPH DIV TOP
 const GraphDivTop = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
   width: 100%;
-  height: 65%;
   border-radius: 5rem;
-  background-color: white;
 
   h1 {
-    position: flex;
-    font-style: normal;
     font-size: 1.5rem;
-    display: flex;
-    margin: 2.5rem 3rem;
-    font-weight: 600;
+    margin-bottom: 1rem;
+    font-weight: 700;
     color: #243465;
   }
 `;
 
-// GRAPH DIV MIDDLE
-const GraphDivMiddle = styled.div`
+const GraphDivBottom = styled.div`
+  margin-top: 2rem;
   display: flex;
   flex-direction: column;
-  width: 100%;
-  height: 23%;
-  background-color: white;
   align-items: center;
+
+  h1 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    color: #243465;
+  }
+
 `;
 
-// GRAPH MIDDLE SECTION
-const GraphMiddleSection = styled.div`
-  display: flex;
-  margin-left: -20rem;
-  ${media.tablet`margin-left: -11rem;`};
-  width: 4rem;
-`;
+
 
 // SCORE, INFO SECTION
 const ScoreInfoWrap = styled.section`
   display: flex;
   flex-direction: column;
-  ${media.tablet`width: 80%`};
-  ${media.tablet`margin: 1rem auto`};
-  width: 55%;
-  height: 100%;
-  background: white;
-`;
-
-// SCORE DIV
-const ScoreWrap = styled.div`
-  display: flex;
   align-items: center;
-  width: 100%;
-  height: 55%;
+  justify-content: center;
+  width: 40%;
+  height: 90%;
   background: white;
-  ${media.tablet`height: 60%`};
-
-  button {
-    border: none;
-    background: white;
-  }
+  box-shadow: 0rem 0.1rem 0.5rem 0.1rem rgba(0, 0, 0, 0.1);
+  border-radius: 5rem;
+  gap: 2rem;
 `;
+
 
 // SCORE DIV
 const ScoreDiv = styled.section`
   display: flex;
   flex-direction: column;
-  margin: 3rem auto;
-  ${media.tablet`margin-left: 5rem`};
-  width: 50%;
-  height: 80%;
-  justify-content: center;
-  background-color: black;
-  border: 1px solid rgba(250, 250, 250, 0.2);
-  border-radius: 5rem;
-  background: #ffffff;
+  width: 45%;
+  height: 40%;
+  align-items: center;
+  border-radius: 3rem;
+  background-color: #ffffff;
   box-shadow: 0rem 0.1rem 0.5rem 0.1rem rgba(0, 0, 0, 0.1);
 `;
 
 // SCOREIMAGE DIV
 const ScoreImageDiv = styled.div`
   display: flex;
-  margin: 1rem auto;
+  width: 80%;
+  height: 60%;
   align-items: center;
   flex-direction: column;
-  width: 90%;
-  height: 45%;
-  
-  padding-bottom: 20px;
+  justify-content: center;
   border-bottom: 0.1rem solid #d9d9d9;
 
   img {
-    display: flex;
-    width: 7rem;
-    height: 7rem;
+    width: 6rem;
+    height: 6rem;
+    margin: 1rem 0 1rem 0;
   }
 
   h2 {
-    margin-top: 1.2rem;
-    font-weight: 500;
-    font-size: 1.2rem;
+    font-weight: 400;
+    font-size: 1.1rem;
     color: #797979;
+    margin-bottom: 1rem;
+    letter-spacing: 0.05rem;
   }
 `;
 
 // SCOREINFO DIV
 const ScoreInfoDiv = styled.div`
-  display: flex;
-  margin: 0.2rem auto;
-  align-items: center;
-  flex-direction: column;
-  width: 90%;
-  height: 45%;
-
-  h2 {
-    margin-top: 0.5rem;
-    font-weight: 500;
-    font-size: 1.2rem;
-    color: #797979;
-  }
-
-  h1 {
-    margin-top: 1rem;
-    font-weight: 700;
-    font-size: 2rem;
-    color: black;
-  }
-
-  button {
-    margin-top: 2rem;
-    width: 10rem;
-    height: 3rem;
-    background: #142231;
-    border-radius: 3rem;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 1.4rem;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-`;
-
-// INFO DIV
-const InfoWrap = styled.div`
-  display: flex;
-  align-items: center;
-  width: 100%;
-  height: 40%;
-  background: white;
-
-  justify-content: center;
-
-  button {
-    border: none;
-  }
-`;
-
-// InfoSubject DIV
-const InfoSubjectDiv = styled.section`
-  margin: 3rem auto;
-  margin-top: 2rem;
-  width: 25%;
-  height: 80%;
-  justify-content: center;
-  background-color: black;
-  border: 0.1rem solid rgba(250, 250, 250, 0.2);
-  border-radius: 3rem;
-  background: #ffffff;
-  box-shadow: 0rem 0.1rem 0.5rem 0.1rem rgba(0, 0, 0, 0.1);
-`;
-
-// INFOSUBJECT TOP DIV
-const InfoSubjectTop = styled.div`
-  display: flex;
-  margin: 1rem auto;
-  align-items: center;
-  flex-direction: column;
-  background: white;
-  width: 90%;
-  height: 25%;
-  border-bottom: 0.1rem solid #d9d9d9;
-
-  img {
     display: flex;
-    width: 7rem;
-    height: 7rem;
-  }
+    align-items: center;
+    justify-content: center;
+    height: 40%;
 
-  h2 {
-    margin-top: 1rem;
-    font-weight: 400;
-    font-size: 1rem;
-    color: #797979;
-  }
-`;
-
-// INFOSUBJECT MIDDLE DIV
-const InfoSubjectMiddle = styled.div`
-  display: flex;
-  margin: 2rem auto;
-  align-items: center;
-  flex-direction: column;
-  background: white;
-  width: 90%;
-  height: 65%;
-
-  h2 {
-    margin-top: 0.5rem;
-    font-weight: 400;
-    font-size: 1rem;
-    color: #797979;
-  }
-
-  h1 {
-    margin-top: 1rem;
+  p {
     font-weight: 700;
     font-size: 2rem;
-    color: black;
-  }
-
-  button {
-    margin-top: 1.5rem;
-    width: 7rem;
-    height: 2rem;
-    background: #142231;
-    border-radius: 3rem;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 1.4rem;
-    color: white;
-    border: none;
-    cursor: pointer;
+    color: #142231;
   }
 `;
+
+
 
 const MyPage = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -313,19 +163,19 @@ const MyPage = () => {
   const [irregular, setISIrregular] = useState(0);
   const [speech, setISSpeech] = useState(0);
   const [correct, setIsCorrect] = useState(0);
-
-  const [topRank, setTopRank] = useState([]);
+  const [rankData, setRankData] = useState(0);
+  const [myRankData, setMyRankData] = useState(0);
 
   const data = [
-    { label: '구식문법', value: (grammar / (grammar + wordOrder + part + form + negative + tense + method + irregular + speech + correct))},
-    { label: '어순', value: (wordOrder / (grammar + wordOrder + part + form + negative + tense + method + irregular + speech + correct)) },
-    { label: '품사', value: (part / (grammar + wordOrder + part + form + negative + tense + method + irregular + speech + correct)) },
-    { label: '형식', value: (form / (grammar + wordOrder + part + form + negative + tense + method + irregular + speech + correct)) },
-    { label: '부정문', value: (negative / (grammar + wordOrder + part + form + negative + tense + method + irregular + speech + correct)) },
-    { label: '시제', value: (tense / (grammar + wordOrder + part + form + negative + tense + method + irregular + speech + correct)) },
-    { label: '접속법', value: (method / (grammar + wordOrder + part + form + negative + tense + method + irregular + speech + correct)) },
-    { label: '불규칙_활용', value: (irregular / (grammar + wordOrder + part + form + negative + tense + method + irregular + speech + correct)) },
-    { label: '화법', value: (speech / (grammar + wordOrder + part + form + negative + tense + method + irregular + speech + correct)) },
+    { label: '구식문법', value: (grammar / (grammar + wordOrder + part + form + negative + tense + method + irregular + speech + correct))*100, color: '#6AC7B2'},
+    { label: '어순', value: (wordOrder / (grammar + wordOrder + part + form + negative + tense + method + irregular + speech + correct))*100, color: '#040C0A' },
+    { label: '품사', value: (part / (grammar + wordOrder + part + form + negative + tense + method + irregular + speech + correct))*100, color: '#C0E8DF' },
+    { label: '형식', value: (form / (grammar + wordOrder + part + form + negative + tense + method + irregular + speech + correct))*100, color: '#41AC94' },
+    { label: '부정문', value: (negative / (grammar + wordOrder + part + form + negative + tense + method + irregular + speech + correct))*100 , color: '#37947F'},
+    { label: '시제', value: (tense / (grammar + wordOrder + part + form + negative + tense + method + irregular + speech + correct))*100, color: '#0E241F' },
+    { label: '접속법', value: (method / (grammar + wordOrder + part + form + negative + tense + method + irregular + speech + correct))*100 , color: '#9BDACC'},
+    { label: '불규칙_활용', value: (irregular / (grammar + wordOrder + part + form + negative + tense + method + irregular + speech + correct))*100 , color: '#51BEA5'},
+    { label: '화법', value: (speech / (grammar + wordOrder + part + form + negative + tense + method + irregular + speech + correct))*100 , color: '#1C493F'},
 
   ];
 
@@ -346,11 +196,6 @@ const MyPage = () => {
     handleResize(); // 초기값 설정
     getSubjectChart();
 
-    const TopRankList = data.sort(function (a, b) {
-	    return b.value - a.value;
-    });
-    setTopRank(TopRankList)
-
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
@@ -368,6 +213,7 @@ const MyPage = () => {
           { headers }
         );
         const weaknessPercentages = response.data.weaknessPercentages;
+        
   
         // 형식에 해당하는 값들을 저장할 배열
         const result = [];
@@ -400,131 +246,71 @@ const MyPage = () => {
       } catch (error) {
         alert(error.message);
       }
+
     };
 
+    const fetchRankData = async () => {
+      try {
+        const response = await axios.get('http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/games', {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        const data = response.data;
+        setRankData(data);
+      } catch (error) {
+        console.error('Error retrieving data:', error);
+      }
+    };
+
+    const fetchMyRankData = async () => {
+      try {
+        const response = await axios.get('http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/games/me', {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        const data = response.data;
+        console.log(response);
+        setMyRankData(data);
+      } catch (error) {
+        console.error('Error retrieving data:', error);
+      }
+    };  
     fetchData();
-
+    fetchRankData();
+    fetchMyRankData();
   }
-
-
-  const GraphButtonClick = () => {
-    setIsClicked(true);
-  };
-  const InfoButtonClick = () => {
-    setIsClicked(false);
-  };
 
   return (
     // PC 크기일때
     <MainWrap>
       {isDesktop && (
         <GraphInfoWrap>
-          <GraphDiv>
             <GraphDivTop>
               <h1>취약점 분석표</h1>
                 <MyChart data={data}></MyChart>
+                </GraphDivTop>
+                <GraphDivBottom>
               <h1>집중 분석</h1>
-                <MySubjectChart data={topRank}/>
-            </GraphDivTop>
-          </GraphDiv>
+                <MySubjectChart data={data}/>
+          </GraphDivBottom>
         </GraphInfoWrap>
       )}
 
       {isDesktop && (
         <ScoreInfoWrap>
-          <ScoreWrap>
             <ScoreDiv>
               <ScoreImageDiv>
                 <img src={correctLogo} alt="correcting 로고" />
                 <h2>나의 점수는</h2>
               </ScoreImageDiv>
               <ScoreInfoDiv>
-                <h2>측정 결과</h2>
-
-                {/* <button>랭킹 보기</button> */}
-              </ScoreInfoDiv>
+                <p>{myRankData.rank}등</p>
+              </ScoreInfoDiv>       
             </ScoreDiv>
-          </ScoreWrap>
+              <MyGameChart data={rankData}/>
 
-          <InfoWrap>
-  
-            {/* <InfoSubjectDiv>
-              <InfoSubjectTop>
-                <h1>문법</h1>
-                <InfoSubjectMiddle>
-                  <h2>{GrammarFeed}</h2>
-                  <button>복습하기</button>
-                </InfoSubjectMiddle>
-              </InfoSubjectTop>
-            </InfoSubjectDiv>
-
-            <InfoSubjectDiv>
-              <InfoSubjectTop>
-                <h1>어휘</h1>
-                <InfoSubjectMiddle>
-                  <h2>{VocaFeed}</h2>
-                  <button>복습하기</button>
-                </InfoSubjectMiddle>
-              </InfoSubjectTop>
-            </InfoSubjectDiv>
-
-            <InfoSubjectDiv>
-              <InfoSubjectTop>
-                <h1>독해</h1>
-                <InfoSubjectMiddle>
-                  <h2>{readingFeed}</h2>
-                  <button>복습하기</button>
-                </InfoSubjectMiddle>
-              </InfoSubjectTop>
-            </InfoSubjectDiv> */}
-          </InfoWrap>
-        </ScoreInfoWrap>
-      )}
-
-      {/* 모바일 크기일때*/}
-      {isMobile && !isClicked && (
-        <GraphInfoWrap>
-          <GraphDiv>
-            <GraphDivTop>
-              <h1>취약점 분석표</h1>
-              
-              <h1>집중 분석</h1>
-            </GraphDivTop>
-            <GraphDivMiddle>
-              <GraphMiddleSection>
-                
-                {/* <MySubjectChart data={data1}></MySubjectChart> */}
-              </GraphMiddleSection>
-            </GraphDivMiddle>
-          </GraphDiv>
-          <button onClick={GraphButtonClick}>
-            <FiChevronRight size="4rem" color="#6AC7B2"></FiChevronRight>
-          </button>
-        </GraphInfoWrap>
-      )}
-
-      {isMobile && isClicked && (
-        <ScoreInfoWrap>
-          <ScoreWrap>
-            <button onClick={InfoButtonClick}>
-              <FiChevronLeft size="4rem" color="#6AC7B2"></FiChevronLeft>
-            </button>
-            <ScoreDiv>
-              <ScoreImageDiv>
-                <img src={correctLogo} alt="correcting 로고" />
-                <h2>나의 점수는</h2>
-              </ScoreImageDiv>
-              <ScoreInfoDiv>
-                <h2>측정 결과</h2>
-
-                {/* <button>랭킹 보기</button> */}
-              </ScoreInfoDiv>
-            </ScoreDiv>
-          </ScoreWrap>
-
-          <InfoWrap>
- 
-          </InfoWrap>
         </ScoreInfoWrap>
       )}
     </MainWrap>
