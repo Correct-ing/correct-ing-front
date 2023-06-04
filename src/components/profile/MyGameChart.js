@@ -1,10 +1,16 @@
 import { Bar } from 'react-chartjs-2';
-import { Chart, BarController, BarElement, CategoryScale, LinearScale, Tooltip } from 'chart.js';
+import {
+  Chart,
+  BarController,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+} from 'chart.js';
 
 Chart.register(BarController, BarElement, CategoryScale, LinearScale, Tooltip);
 
 const MyGameChart = (props) => {
-
   if (!props.data || props.data.length === 0) {
     // 데이터가 없는 경우에 대한 처리
     return <div>No data available</div>;
@@ -24,11 +30,10 @@ const MyGameChart = (props) => {
   // 데이터 배열에서 name과 score를 분리합니다.
   const names = props.data.map((item) => item.name);
 
-
-  const emphasizedNickname = localStorage.getItem('nickname');
+  const emphasizedNickname = localStorage.getItem('id');
 
   const backgroundColors = names.map((name) =>
-    name === emphasizedNickname ? '#2EC4B6' : '#CAE7E2'
+    name === emphasizedNickname ? '#2EC4B6' : '#CAE7E2',
   );
 
   // 막대 그래프에 사용할 데이터 설정
@@ -36,7 +41,6 @@ const MyGameChart = (props) => {
     labels: groupedNames,
     datasets: [
       {
-
         data: groupedScores,
         backgroundColor: backgroundColors,
         borderColor: 'rgba(75, 192, 192, 1)',
@@ -44,7 +48,7 @@ const MyGameChart = (props) => {
       },
     ],
   };
-//console.log(chartData);
+  //console.log(chartData);
   // 막대 그래프 옵션 설정
   const chartOptions = {
     responsive: true,
@@ -55,7 +59,7 @@ const MyGameChart = (props) => {
     },
     plugins: {
       legend: {
-        display: false
+        display: false,
       },
       datalabels: {
         color: '#243465', // Set the font color for the scores
@@ -67,9 +71,9 @@ const MyGameChart = (props) => {
   };
 
   return (
-  <>
-    <Bar data={chartData} options={chartOptions} />
-  </>
+    <>
+      <Bar data={chartData} options={chartOptions} />
+    </>
   );
 };
 
