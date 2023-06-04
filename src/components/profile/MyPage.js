@@ -7,7 +7,6 @@ import correctLogo from '../../assets/correct-logo.png';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 
-
 const sizes = {
   phone: 768,
   tablet: 1000,
@@ -47,7 +46,6 @@ const GraphInfoWrap = styled.section`
   border-radius: 5rem;
 `;
 
-
 // GRAPH DIV TOP
 const GraphDivTop = styled.div`
   display: flex;
@@ -76,10 +74,7 @@ const GraphDivBottom = styled.div`
     font-weight: 700;
     color: #243465;
   }
-
 `;
-
-
 
 // SCORE, INFO SECTION
 const ScoreInfoWrap = styled.section`
@@ -93,15 +88,20 @@ const ScoreInfoWrap = styled.section`
   box-shadow: 0rem 0.1rem 0.5rem 0.1rem rgba(0, 0, 0, 0.1);
   border-radius: 5rem;
   gap: 2rem;
-`;
 
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #243465;
+  }
+`;
 
 // SCORE DIV
 const ScoreDiv = styled.section`
   display: flex;
   flex-direction: column;
   width: 45%;
-  height: 40%;
+  height: 30%;
   align-items: center;
   border-radius: 3rem;
   background-color: #ffffff;
@@ -119,8 +119,8 @@ const ScoreImageDiv = styled.div`
   border-bottom: 0.1rem solid #d9d9d9;
 
   img {
-    width: 6rem;
-    height: 6rem;
+    width: 4rem;
+    height: 4rem;
     margin: 1rem 0 1rem 0;
   }
 
@@ -135,10 +135,10 @@ const ScoreImageDiv = styled.div`
 
 // SCOREINFO DIV
 const ScoreInfoDiv = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 40%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40%;
 
   p {
     font-weight: 700;
@@ -146,8 +146,6 @@ const ScoreInfoDiv = styled.div`
     color: #142231;
   }
 `;
-
-
 
 const MyPage = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -167,16 +165,159 @@ const MyPage = () => {
   const [myRankData, setMyRankData] = useState(0);
 
   const data = [
-    { label: '구식문법', value: (grammar / (grammar + wordOrder + part + form + negative + tense + method + irregular + speech + correct))*100, color: '#6AC7B2'},
-    { label: '어순', value: (wordOrder / (grammar + wordOrder + part + form + negative + tense + method + irregular + speech + correct))*100, color: '#040C0A' },
-    { label: '품사', value: (part / (grammar + wordOrder + part + form + negative + tense + method + irregular + speech + correct))*100, color: '#C0E8DF' },
-    { label: '형식', value: (form / (grammar + wordOrder + part + form + negative + tense + method + irregular + speech + correct))*100, color: '#41AC94' },
-    { label: '부정문', value: (negative / (grammar + wordOrder + part + form + negative + tense + method + irregular + speech + correct))*100 , color: '#37947F'},
-    { label: '시제', value: (tense / (grammar + wordOrder + part + form + negative + tense + method + irregular + speech + correct))*100, color: '#0E241F' },
-    { label: '접속법', value: (method / (grammar + wordOrder + part + form + negative + tense + method + irregular + speech + correct))*100 , color: '#9BDACC'},
-    { label: '불규칙_활용', value: (irregular / (grammar + wordOrder + part + form + negative + tense + method + irregular + speech + correct))*100 , color: '#51BEA5'},
-    { label: '화법', value: (speech / (grammar + wordOrder + part + form + negative + tense + method + irregular + speech + correct))*100 , color: '#1C493F'},
-
+    {
+      label: '구식문법',
+      value:
+        (grammar /
+          (grammar +
+            wordOrder +
+            part +
+            form +
+            negative +
+            tense +
+            method +
+            irregular +
+            speech +
+            correct)) *
+        100,
+      color: '#6AC7B2',
+    },
+    {
+      label: '어순',
+      value:
+        (wordOrder /
+          (grammar +
+            wordOrder +
+            part +
+            form +
+            negative +
+            tense +
+            method +
+            irregular +
+            speech +
+            correct)) *
+        100,
+      color: '#040C0A',
+    },
+    {
+      label: '품사',
+      value:
+        (part /
+          (grammar +
+            wordOrder +
+            part +
+            form +
+            negative +
+            tense +
+            method +
+            irregular +
+            speech +
+            correct)) *
+        100,
+      color: '#C0E8DF',
+    },
+    {
+      label: '형식',
+      value:
+        (form /
+          (grammar +
+            wordOrder +
+            part +
+            form +
+            negative +
+            tense +
+            method +
+            irregular +
+            speech +
+            correct)) *
+        100,
+      color: '#41AC94',
+    },
+    {
+      label: '부정문',
+      value:
+        (negative /
+          (grammar +
+            wordOrder +
+            part +
+            form +
+            negative +
+            tense +
+            method +
+            irregular +
+            speech +
+            correct)) *
+        100,
+      color: '#37947F',
+    },
+    {
+      label: '시제',
+      value:
+        (tense /
+          (grammar +
+            wordOrder +
+            part +
+            form +
+            negative +
+            tense +
+            method +
+            irregular +
+            speech +
+            correct)) *
+        100,
+      color: '#0E241F',
+    },
+    {
+      label: '접속법',
+      value:
+        (method /
+          (grammar +
+            wordOrder +
+            part +
+            form +
+            negative +
+            tense +
+            method +
+            irregular +
+            speech +
+            correct)) *
+        100,
+      color: '#9BDACC',
+    },
+    {
+      label: '불규칙_활용',
+      value:
+        (irregular /
+          (grammar +
+            wordOrder +
+            part +
+            form +
+            negative +
+            tense +
+            method +
+            irregular +
+            speech +
+            correct)) *
+        100,
+      color: '#51BEA5',
+    },
+    {
+      label: '화법',
+      value:
+        (speech /
+          (grammar +
+            wordOrder +
+            part +
+            form +
+            negative +
+            tense +
+            method +
+            irregular +
+            speech +
+            correct)) *
+        100,
+      color: '#1C493F',
+    },
   ];
 
   const { loginRes } = useSelector(({ auth }) => ({
@@ -200,35 +341,33 @@ const MyPage = () => {
   }, []);
 
   const getSubjectChart = () => {
-    
     const fetchData = async () => {
       try {
         const headers = {
-          'accept': 'application/json;charset=UTF-8',
-          'Authorization': `Bearer ${accessToken}`
+          accept: 'application/json;charset=UTF-8',
+          Authorization: `Bearer ${accessToken}`,
         };
 
         const response = await axios.get(
           'http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/weakness/me',
-          { headers }
+          { headers },
         );
         const weaknessPercentages = response.data.weaknessPercentages;
-        
-  
+
         // 형식에 해당하는 값들을 저장할 배열
         const result = [];
-      
+
         // 형식 순서대로 값을 배열에 저장
-        result.push(weaknessPercentages["품사"] || 0);
-        result.push(weaknessPercentages["어순"] || 0);
-        result.push(weaknessPercentages["형식"] || 0);
-        result.push(weaknessPercentages["시제"] || 0);
-        result.push(weaknessPercentages["화법"] || 0);
-        result.push(weaknessPercentages["접속법"] || 0);
-        result.push(weaknessPercentages["부정문"] || 0);
-        result.push(weaknessPercentages["불규칙_활용"] || 0);
-        result.push(weaknessPercentages["구식문법"] || 0);
-        result.push(weaknessPercentages["정답"] || 0);
+        result.push(weaknessPercentages['품사'] || 0);
+        result.push(weaknessPercentages['어순'] || 0);
+        result.push(weaknessPercentages['형식'] || 0);
+        result.push(weaknessPercentages['시제'] || 0);
+        result.push(weaknessPercentages['화법'] || 0);
+        result.push(weaknessPercentages['접속법'] || 0);
+        result.push(weaknessPercentages['부정문'] || 0);
+        result.push(weaknessPercentages['불규칙_활용'] || 0);
+        result.push(weaknessPercentages['구식문법'] || 0);
+        result.push(weaknessPercentages['정답'] || 0);
 
         setIsPart(result[0]);
         setIsOrder(result[1]);
@@ -240,22 +379,21 @@ const MyPage = () => {
         setISIrregular(result[7]);
         setIsGrammar(result[8]);
         setIsCorrect(result[9]);
-
-       
-
       } catch (error) {
         alert(error.message);
       }
-
     };
 
     const fetchRankData = async () => {
       try {
-        const response = await axios.get('http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/games', {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
+        const response = await axios.get(
+          'http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/games',
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
           },
-        });
+        );
         const data = response.data;
         setRankData(data);
       } catch (error) {
@@ -265,52 +403,55 @@ const MyPage = () => {
 
     const fetchMyRankData = async () => {
       try {
-        const response = await axios.get('http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/games/me', {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
+        const response = await axios.get(
+          'http://correcting-env.eba-harr53pi.ap-northeast-2.elasticbeanstalk.com/api/v1/games/me',
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
           },
-        });
+        );
         const data = response.data;
         console.log(response);
         setMyRankData(data);
       } catch (error) {
         console.error('Error retrieving data:', error);
       }
-    };  
+    };
     fetchData();
     fetchRankData();
     fetchMyRankData();
-  }
+  };
 
   return (
     // PC 크기일때
     <MainWrap>
       {isDesktop && (
         <GraphInfoWrap>
-            <GraphDivTop>
-              <h1>취약점 분석표</h1>
-                <MyChart data={data}></MyChart>
-                </GraphDivTop>
-                <GraphDivBottom>
-              <h1>집중 분석</h1>
-                <MySubjectChart data={data}/>
+          <GraphDivTop>
+            <h1>취약점 분석표</h1>
+            <MyChart data={data}></MyChart>
+          </GraphDivTop>
+          <GraphDivBottom>
+            <h1>집중 분석</h1>
+            <MySubjectChart data={data} />
           </GraphDivBottom>
         </GraphInfoWrap>
       )}
 
       {isDesktop && (
         <ScoreInfoWrap>
-            <ScoreDiv>
-              <ScoreImageDiv>
-                <img src={correctLogo} alt="correcting 로고" />
-                <h2>나의 점수는</h2>
-              </ScoreImageDiv>
-              <ScoreInfoDiv>
-                <p>{myRankData.rank}등</p>
-              </ScoreInfoDiv>       
-            </ScoreDiv>
-              <MyGameChart data={rankData}/>
-
+          <ScoreDiv>
+            <ScoreImageDiv>
+              <img src={correctLogo} alt="correcting 로고" />
+              <h2>나의 점수는</h2>
+            </ScoreImageDiv>
+            <ScoreInfoDiv>
+              <p>{myRankData.rank}등</p>
+            </ScoreInfoDiv>
+          </ScoreDiv>
+          <h3>랭킹 10</h3>
+          <MyGameChart data={rankData} />
         </ScoreInfoWrap>
       )}
     </MainWrap>

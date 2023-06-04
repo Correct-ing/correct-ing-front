@@ -7,7 +7,6 @@ import client from '../../lib/api/client';
 
 const LoginForm = () => {
   const [error, setError] = useState(null); // 에러 메세지 설정
-  const [userId, setUserId] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { form, loginRes, loginErr } = useSelector(({ auth }) => ({
@@ -39,8 +38,6 @@ const LoginForm = () => {
       setError('빈 칸을 모두 입력하세요.');
       return;
     }
-
-    setUserId([id]);
     dispatch(login({ id, password })); // 로그인 api 호출
   };
 
@@ -65,7 +62,6 @@ const LoginForm = () => {
       console.log(loginRes);
 
       localStorage.clear(); // localStorage 초기화
-      localStorage.setItem('id', userId);
       localStorage.setItem('nickname', loginRes.name); // 사용자 닉네임 localStorage에 저장
 
       client.defaults.headers.common[
@@ -74,7 +70,7 @@ const LoginForm = () => {
 
       navigate('/');
     }
-  }, [loginRes, loginErr, navigate, userId]);
+  }, [loginRes, loginErr, navigate]);
 
   return (
     <Login form={form} onChange={onChange} onSubmit={onSubmit} error={error} />
