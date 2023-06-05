@@ -205,7 +205,7 @@ const Test = () => {
         </div>
       ),
       options:  ['talent', 'talented', 'talently', 'talenting'],
-      answer: 2,
+      answer: 1,
     },
     {
       category: '시제',
@@ -217,7 +217,7 @@ const Test = () => {
         </div>
       ),
       options: ['goes', 'went', 'has gone', 'will go'],
-      answer: 2,
+      answer: 1,
       
     },
     {
@@ -242,7 +242,7 @@ const Test = () => {
         </div>
       ),
       options: ['Each', 'students', 'are', 'their'],
-      answer: 3
+      answer: 2
       
     },
     {
@@ -279,7 +279,7 @@ const Test = () => {
         </div>
       ),
       options: ['know', 'knew', 'has known', 'will know'],
-      answer: 2,
+      answer: 1,
       
     },
     {
@@ -317,7 +317,7 @@ const Test = () => {
         </div>
       ),
       options: ['that', 'which', 'who', 'whom'],
-      answer: 2,
+      answer: 1,
     },
   ]; // 서버에서 가져온 문제 목록을 담을 상태 변수
     const [currentProblemIndex, setCurrentProblemIndex] = useState(0); // 현재 문제의 인덱스
